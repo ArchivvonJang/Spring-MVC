@@ -1,0 +1,22 @@
+@charset "UTF-8";
+	ul, li{ margin:0; padding:0; list-style:none;}
+	h2{text-align:center; margin: 20px 0 40px 0;}
+	.wordcut{
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys;
+	}
+	.btn{background-color:white; border:1px solid gray; color:gray; height:33px;  border-radius:0px;}
+	#subject{
+		width:80%
+	}
+	#subject a{
+		color:black;
+	}
+	.btn a{color:gray;}
+	#btnLine{text-align:center;}
+	label, .label{margin-right:10px; color:black; font-size:1em;}
+	input[type=text], input[type=password]{
+		border:1px solid lightgray;
+		height:33px;
+		font-size:1em;
+	}
+	

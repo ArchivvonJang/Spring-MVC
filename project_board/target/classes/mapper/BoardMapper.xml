@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.myproject.myapp.dao.BoardDAO">
+ 	<select id="boardAllRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="com.myproject.myapp.vo.BoardVO">
+ 		select*from
+	 		(select*from
+		 		(select no, subject, userid, userpwd,hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate
+		 		from board 
+		 		<choose>
+		 			<when test='searchWord!=null'>
+		 				where subject like '%${searchWord}%'
+		 			</when>
+		 		</choose>
+		 		order by no desc)
+	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no)
+				where <![CDATA[rownum<=]]>
+				<if test="pageNum==totalPage">${lastPageRecord}</if>
+	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
+	     order by no desc 
+ 	</select>
+ 	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">
+		select count(no) totalRecord from board 
+					<choose>
+			 			<when test='searchWord!=null'>
+			 				where subject like '%${searchWord}%'
+			 			</when>
+			 		</choose>		 	      
+	</select>
+	 	<insert id="boardInsert" parameterType="com.myproject.myapp.vo.BoardVO">
+ 		insert into board(no, subject, content, userid, userpwd)
+ 		values(boardsq.nextval, #{subject}, #{content}, #{userid},#{userpwd})
+ 	</insert>
+ 	<select id="boardSelect" resultType="com.myproject.myapp.vo.BoardVO">
+ 		select no, userid, subject, content, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate from board where no=#{param1}
+ 	</select>
+ 	<update id="boardUpdate" parameterType="com.myproject.myapp.vo.BoardVO">
+ 		update board set subject=#{subject}, content=#{content},userid=#{userid},userpwd=#{userpwd} where no=#{no} 
+ 	</update>
+ 	<delete id="boardDelete">
+ 		delete from board where no=#{param1}
+ 	</delete>
+ 	<update id="hitCnt" parameterType="com.myproject.myapp.vo.BoardVO">
+ 		update board set hit=hit+1 where no=#{param1}
+ 	</update>
+  </mapper>
