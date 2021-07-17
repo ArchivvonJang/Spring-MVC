@@ -12,10 +12,10 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 <style>
 	.menu{margin-right:10px; font-weight: bold;}
-	#content{overflow:scroll; border:1px solid lightgray; padding:10px;}
+	#content{ border:1px solid lightgray; padding:10px; white-space:normal; word-break:break-all; word-break:break-word;   }
 	#btnLine{margin-top:10px;}
 	.menuLine{margin: 10px 0 15px 0;}
-	#sub{font-size:1em; border: 1px solid lightgray; height:40px; line-height:40px; padding-left:10px;}
+	#sub{font-size:1em; border: 1px solid lightgray; height:40px; line-height:40px; padding-left:10px; white-space:normal; word-break:break-all; word-break:break-word;   }
 </style>
 <script type="text/javascript">
 	// $(function(){	}); 아래랑 같은기능을 하는 다른표기법
@@ -37,9 +37,10 @@
 			<li class="menuLine"><span class="menu">작성자</span> ${vo.userid}</li>
 			<li class="menuLine"><span class="menu">등록일</span> ${vo.writedate}</li>
 			<li class="menuLine"><span class="menu">조회수</span> ${vo.hit}</li>
-			<br/>
-			<li class="menuLine" id="sub" class="wordcut" >${vo.subject}</li>
-			<li id="content">${vo.content}</li>
+			<li class="menuLine" id="sub" >${vo.subject}</li>
+			<li id="content" >${vo.content}</li>
+			</div>
+			
 		</ul>
 		<div id="btnLine">
 			<button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button>
