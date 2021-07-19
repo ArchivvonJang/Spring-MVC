@@ -288,12 +288,14 @@ $(function(){
 			return false;
 		} 
 		if(userpwd==' ' || userpwd==null){
-			alert("비밀번호를 입력해주세요.");
+			//alert("비밀번호를 입력해주세요.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
 			return false;
 		}
 		if($('#userpwd')==null){
-			alert("비밀번호를 입력해주세요.");
+			//alert("비밀번호를 입력해주세요.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
 			return false;
 		}
@@ -368,12 +370,15 @@ $(function(){
 		}
 		//비밀번호 4자리 숫자만 입력하도록 조건 걸어놓기
 		if($("#userpwd").val().length < 4){
-			alert("비밀번호는 4자리 숫자를 입력해주세요.");
+			
+			alert('비밀번호는 4자리를 입력해주세요.');
+			//alert("비밀번호는 4자리 숫자를 입력해주세요.");
 			$("#userpwd").focus();
 			return false;
 		}
 		if(userpwd.length<4){
-			alert("비밀번호는 4자리 숫자를 입력해주세요.");
+			alert('비밀번호는 4자리를 입력해주세요.');
+			//alert("비밀번호는 4자리 숫자를 입력해주세요.");
 			return false;
 			$('#userpwd').focus(); 	
 		}
@@ -423,11 +428,13 @@ $(function(){
 		
 		//비밀번호
 		if(!pwdreg.test(document.getElementById("userpwd").value)){
-			alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			return false;
 		}
 		if(!pwdreg.match(document.getElementById("userpwd").value)){
-			alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			return false;
 		}
 		if(none.test(document.getElementById("userpwd").value)){
