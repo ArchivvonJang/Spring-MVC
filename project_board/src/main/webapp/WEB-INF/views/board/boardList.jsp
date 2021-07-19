@@ -36,6 +36,10 @@
 	form{text-align:right; height:33px; }
 	#btnLine{text-align:right; }
 	.btn{margin:10px 0 15px 0; height:33px;} 
+	#sub{
+		white-space:normal;  text-overflow:ellipsis;
+		 overflow: hidden;
+	 }
 	/* 페이징처리부분 */
 	.page_wrap {
 		text-align:center;
@@ -101,6 +105,10 @@
 			}
 			return true;
 		});
+		if(${sapvo.totalRecord == 0}){
+			alert("검색 결과가 없습니다.");		
+			history.back();
+		}
 	});
 </script>
 </head>
@@ -130,8 +138,8 @@
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
 		<c:forEach var="vo" items="${list}" >
 			<li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li>
-			<li class="wordcut"><a href="boardView?no=${vo.no}">${vo.subject}</a></li>
-			<li>${vo.userid }</li>
+			<li class="wordcut" id="sub"><a href="boardView?no=${vo.no}" style="white-space: pre"><c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
+			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
 			<li>${vo.hit }</li>
 			<li>${vo.writedate}</li>
 			<c:set var="recordNum" value="${recordNum-1}"/>
@@ -143,14 +151,15 @@
 		</div>
 		
 	</div>
-		<!-------------- 페이징------------------>
+		<!-------------- pagination------------------>
 		<div class="page_wrap">
 			<div class="page_nation">
+			<!-- 1페이지 이상 레코드가 있어야지 화살표가 추가된다. -->
 			<c:if test="${sapvo.pageNum>1}"><!-- 이전페이지가 있을때 -->
 			  	<!--맨앞으로-->
   				<a class="arrow pprev" href="boardList?pageNum=1<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◀</a>
 				<!--앞으로-->
-				<c:if test="${sapvo.startPageNum > 1}">
+				<c:if test="${sapvo.startPageNum > 1}"> 
         		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum - 1}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◁</a>
  				</c:if>
  			</c:if>
@@ -171,7 +180,7 @@
         		<!-- 다음 페이지가 있을 때 ,총페이지수가 한 페이지세트 끝번호보다 크면 -->
         	<c:if test="${sapvo.pageNum < sapvo.totalPage}">
 				<!--뒤로-->            
-	         	<a class="arrow next" href="boardList?pageNum=${sapvo.pageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▷</a>
+	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				<!--맨뒤로-->
 	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▶</a>
 			 </c:if>

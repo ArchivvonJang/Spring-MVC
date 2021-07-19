@@ -14,4 +14,5 @@ public interface BoardService {
 	public int boardDelete(int no); 
 	public int totalRecord(SearchAndPageVO sapvo);
 	public int hitCnt(int no);
+	public String getUserpwd(int no);
 }

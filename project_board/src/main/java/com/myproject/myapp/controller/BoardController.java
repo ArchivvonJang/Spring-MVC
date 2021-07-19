@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -71,6 +72,17 @@ public class BoardController {
 		mav.addObject("vo", boardService.boardSelect(no));
 		mav.setViewName("board/boardView");
 		return mav;
+	}
+	//비밀번호 체킹
+	@RequestMapping("/getUserpwd")
+	@ResponseBody
+	public int getUserpwd(int no, String userpwd) {
+		int result = 0;
+		String oriUserpwd = boardService.getUserpwd(no);
+		if(oriUserpwd.equals(userpwd)) {
+			result=1;
+		}
+		return result;
 	}
 	//글쓰기 수정 폼으로 이동
 	@RequestMapping("/boardEdit")

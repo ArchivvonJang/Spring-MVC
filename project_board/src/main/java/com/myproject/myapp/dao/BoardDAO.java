@@ -13,6 +13,7 @@ public interface BoardDAO {
 	public int boardEdit(BoardVO vo);
 	public int boardUpdate(BoardVO vo); 
 	public int boardDelete(int no); //vo 대신에 매개변수로 하기 
+	public String getUserpwd(int no);
 	//총 레코드 수 구하기
 	public int totalRecord(SearchAndPageVO sapvo);
 	public int hitCnt(int no);

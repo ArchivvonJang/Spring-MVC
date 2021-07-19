@@ -55,6 +55,12 @@ public class BoardServiceImpl implements BoardService{
 	public int hitCnt(int no) {
 		return boardDAO.hitCnt(no);
 	}
+
+	@Override
+	public String getUserpwd(int no) {
+		// TODO Auto-generated method stub
+		return boardDAO.getUserpwd(no);
+	}
 	
 
 }
