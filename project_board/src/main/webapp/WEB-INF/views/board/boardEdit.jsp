@@ -24,12 +24,12 @@ $(function(){
 		var subjectLength = "${vo.subject}";
 		var useridLength = "${vo.userid}";
 		var userpwdLength = "${vo.userpwd}";
-
+		var conentLength = "${vo.contentLength}";
 		//길이표시
 		$("#count").text(subjectLength.length);
 		$("#useridLength").text(useridLength.length);
 		$("#userpwdLength").text(userpwdLength.length);
-		
+		$("#contentLength").text(contentLength.length);	
 		
 		//========================= 서머노트 =================================
 		 $('#summernote').summernote({
