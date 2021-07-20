@@ -142,9 +142,10 @@ $(function(){ */
 					if(count>=500){
 						$(this).val(content.substring(0,500));
 						alert('내용은 500자리까지 작성가능합니다.');
+						console.log("summernote lengthcheck if alert");
 						return false;
 					}
-					console.log("summernote lengthcheck");
+					console.log("summernote lengthcheck function");
 		      },
 		      onImageUpload : function(files, editor, welEditable) {
 		      // 파일 업로드(다중업로드를 위해 반복문 사용)
@@ -172,15 +173,16 @@ $(function(){ */
 		          $("#contentLength").html(t.length);
 		          if (t.length >= 500) {
 		        	  $(this).val(t.substring(0,500));
-		          
+		        	  console.log("keydown2 fucntion check");
 		        	//delete keys, arrow keys, copy, cut, select all
                       if (e.keyCode != 8 && !(e.keyCode >=37 && e.keyCode <=40) && e.keyCode != 46 && !(e.keyCode == 88 && e.ctrlKey) && !(e.keyCode == 67 && e.ctrlKey) && !(e.keyCode == 65 && e.ctrlKey))
                     	e.preventDefault(); 
-                  		console.log("keydown2 check");
+                  		console.log("keydown2  if  check");
+                  		return false;
 		         	 }
 		    },
 		    onKeyup: function(e) {
-		    	console.log("summernote keyup2");
+		    	console.log("summernote keyup2 function check");
 		         var t = e.currentTarget.innerText;
 		         var note = $($("#summernote").summernote("code")).text();		
 		         //글자수
@@ -188,7 +190,7 @@ $(function(){ */
 		         console.log("t.length :" , t.length);
 		         
 		         if (typeof callbackMax == 'function') {
-		        	 console.log("summernote keyup2-1");	
+		        	 console.log("summernote keyup2-1 if callbackMax check");	
 		        	 
 		            callbackMax(500 - t.length);
 		            $(this).text(note.substring(0,500));
@@ -198,14 +200,21 @@ $(function(){ */
 		            e.preventDefault(); 
 		            return false;
 		         }
-	    		if(t.length > 500){
-	    			console.log("summernote keyup2-2");		
+	    		if(t.length > 500){ //이 함수가 제일 잘 작동함
+	    			console.log("summernote keyup2-2 t.length check");		
 	    		
 	    			$("#summernote").text(note.substring(0,500));
 	    			$(this).text(note.substring(0,500));
-	    			$(this).text(t.substring(0,500));
+	    			//$(this).text(t.substring(0,500));
+	    			$(".note-editable").html(t.substring(0,500));
+	    			console.log('substring(0,500)', t.substring(0,500));
+	    			
 	    			 $("#contentLength").html(t.length);
 	    			 alert("내용은 500자까지 작성가능합니다.");
+	    			 $('#summernote').html(t.substring(0,500));
+	    	  			//================== summernote 여기서 컷팅됨 !!!!!!!!!!!!!!==========================================
+	    			 console.log('substring(0,500) 적용된 summernote -->',$(".note-editable").val());
+	    			 $("#contentLength").html(500);
 	    			 $('#summernote').focus(); 
 	    			e.preventDefault(); 
 	    			return false;
@@ -214,7 +223,7 @@ $(function(){ */
 	    		 
 		     },
 		     onPaste: function(e) {	    	 
-		    	 console.log("summernote keyup3");
+		    	 console.log("summernote onPaste function check");
 		          var t = e.currentTarget.innerText;
 		          $("#contentLength").html(t.length);
 		          var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
@@ -224,14 +233,17 @@ $(function(){ */
 		          document.execCommand('insertText', false, all.trim().substring(0, 500));
 		          if(t.length + bufferText.length > 500){
                       maxPaste = 500 - t.length;
+                      console.log("summernote onPaste bufferText.length check");
                   }
 		          if(maxPaste > 0){
                       document.execCommand('insertText', false, bufferText.substring(0, maxPaste));
+                      console.log("summernote onPaste maxPaste check");
                   }
                   $('#maxContentPost').text(500 - t.length);
 		          if (typeof callbackMax == 'function') {
 		            callbackMax(500 - t.length);
 		            $(this).text(t.substring(0,500));
+		            console.log("summernote onPaste callbackMax check");
 		            return false;
 		          }
 		        }
@@ -239,6 +251,8 @@ $(function(){ */
 		 }); //summernote end
 			//내용 글자수 
 		$(".note-editable").on("keypress", function(){
+				console.log("note-editable function keypress");
+				
 			    var limiteTxt= 500;
 			    var txt= $(this).text();
 			    var totalTxt= txt.length;
@@ -246,6 +260,7 @@ $(function(){ */
 			    $("#contentLength").html(totalTxt);
 			    //Check and Limit Charaters
 			    if(totalTxt >= limiteTxt){
+			    	console.log("note-editable function  if check ");
 			        return false;
 			    }
 		});
@@ -293,11 +308,12 @@ $(function(){ */
 			var content = note.val();//입력된 상품명의 value
 			var count = content.length;
 			$('#contentLegnth').html(count);
-			
+			console.log("summernote keyup note version check");
 			if(count>=500){
 				alert('내용은 500글자까지 입력 가능합니다.');
 				$(this).val(note.substring(0,500));
 				$('#contentLegnth').text(500);
+				console.log("summernote keyup note version if -->", note.substring(0,500));
 				return false;
 			}
 		});
@@ -305,8 +321,10 @@ $(function(){ */
 			var content = $(this).val();//입력된 상품명의 value
 			var count = content.length;
 			$('#contentLegnth').text(count);
-			
+			console.log("note-editable keyup ver. check");
 			if(count>=500){
+				
+				console.log("note-editable keyup ver.  note check");
 				alert('내용은 500글자까지 입력 가능합니다.');
 				$(this).val(note.substring(0,500));
 				$('#contentLegnth').html(500);
@@ -318,8 +336,10 @@ $(function(){ */
 			var count = content.length;
 			console.log("contentelength : ",count);
 			$('#contentLength').text(count);
-			
+			console.log("content keyup ver. check");
 			if(count>=500){
+				
+				console.log("content keyup ver. check");
 				alert('내용은 500글자까지 입력 가능합니다.');
 				$(this).val(note.substring(0,500));
 				$('#contentLegnth').html(500);
@@ -410,7 +430,7 @@ $(function(){ */
 			var conlength = content.length;
 			console.log("content.length : ",content.length);
 			if($('#contentLength').val() >500){
-				
+				 console.log("submit conlength check");
 				alert("!!!!!내용은 500자까지 입력해주세요.");	
 				$('#content').val().substring(0,500);
 				$('#summernote').summernote('focus');
@@ -425,18 +445,22 @@ $(function(){ */
 				alert("내용은 500자까지 입력해주세요.");	
 				//content.val(content.substring(0,500));
 				 $('#content').val($('#content').val().slice(0, 500));
+				 console.log("submit content value slice check");
 				$('#summernote').summernote('focus');
 				return false;
 			}
 			if(content.length >= 500){
 				alert(content.length+"자를 입력하셨습니다. 내용은 500자까지 입력해주세요.");	
 				$(this).val(content.substring(0,500));
+				 console.log("submit content length check");
 				$('#summernote').summernote('focus');
 				return false;
 			}
 	         var t = $('#summernote').currentTarget.innerText;
 	         console.log("submit check t.length :" , t.length);         
     		if(t.length > 500){
+    			
+    			 console.log("submit summernote currentTarget check");
     			alert("내용은 500자까지 작성가능합니다.");
     			$(this).text(t.substring(0,500));
     			return false;
