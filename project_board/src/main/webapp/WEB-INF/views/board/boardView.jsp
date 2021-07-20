@@ -20,11 +20,11 @@
 		height:40px ; line-height:40px; padding-left:10px; 
 		white-space:normal; word-break:break-all;  text-overflow:ellipsis;
 		width: 1110px; overflow: auto;
-		margin-bottom:10px;
+		margin-bottom:15px;
 	 }
 	#content{
-		 padding:10px; width: 1110px; height: 500px auto; border:1px solid lightgray; word-break:break-all; overflow: auto;
-		margin-bottom:10px;
+		 padding:10px; width: 1110px; height: 700px auto; border:1px solid lightgray; word-break:break-all; overflow: auto;
+		margin-bottom:15px; 
 	}
 </style>
 <script type="text/javascript">
@@ -93,9 +93,7 @@
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
 			<li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li>
 			<!-- 내용 -->
-			 <li id="content">${vo.content}</li>  
-		
-			</div>
+			 <li id="content">${vo.content}</li> 
 			
 		</ul>
 		<div id="btnLine">

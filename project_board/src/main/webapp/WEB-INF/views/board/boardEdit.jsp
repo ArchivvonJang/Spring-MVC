@@ -24,18 +24,20 @@ $(function(){
 		var subjectLength = "${vo.subject}";
 		var useridLength = "${vo.userid}";
 		var userpwdLength = "${vo.userpwd}";
-		var contentLength = "${vo.content}";
+
 		//길이표시
 		$("#count").text(subjectLength.length);
 		$("#useridLength").text(useridLength.length);
 		$("#userpwdLength").text(userpwdLength.length);
-		$("#contentLength").text(contentLength.length);
+		
 		//========================= 서머노트 =================================
 		 $('#summernote').summernote({
 			height: 500,    
 			lang: "ko-KR",	
 			maxHeight: null,   
+			placeholder: '내용을 입력해주세요. 최대 500자까지 쓸 수 있습니다',	
 			maxlength:500,
+			focus : true,
 			//콜백 함수
 		    callbacks : { 
 		    	lengthCheck : function(){
@@ -44,8 +46,8 @@ $(function(){
 					//$('#').html(count);
 					
 					if(count>=500){
-						alert('내용은 500자리까지 작성가능합니다.');
 						$(this).val(content.substring(0,500));
+						alert('내용은 500자리까지 작성가능합니다.');
 						return false;
 					}
 					console.log("summernote lengthcheck");
@@ -57,7 +59,7 @@ $(function(){
 			      this);
 			      }
 		      },
-		  	onKeydown: function(e) {
+		  	/* onKeydown: function(e) {
 		  		console.log("summernote keydown1");
 		  		 var t = e.currentTarget.innerText;
 		  	   $("#contentLength").html(t.length);
@@ -68,17 +70,18 @@ $(function(){
 	                return false;
 	            };
 	            
-		    },
+		    }, */
 		    onKeydown: function(e) {    	
 		    	console.log("summernote keydown2");
 		          var t = e.currentTarget.innerText;
+		          var note = $($("#summernote").summernote("code")).text();		
 		          $("#contentLength").html(t.length);
 		          if (t.length >= 500) {
 		        	  $(this).val(t.substring(0,500));
 		          
 		        	//delete keys, arrow keys, copy, cut, select all
                      if (e.keyCode != 8 && !(e.keyCode >=37 && e.keyCode <=40) && e.keyCode != 46 && !(e.keyCode == 88 && e.ctrlKey) && !(e.keyCode == 67 && e.ctrlKey) && !(e.keyCode == 65 && e.ctrlKey))
-                   	  e.preventDefault(); 
+                   	e.preventDefault(); 
                  		console.log("keydown2 check");
 		         	 }
 		    },
@@ -86,31 +89,35 @@ $(function(){
 		    	console.log("summernote keyup2");
 		         var t = e.currentTarget.innerText;
 		         var note = $($("#summernote").summernote("code")).text();		
+		         //글자수
 		         $("#contentLength").html(t.length);
 		         console.log("t.length :" , t.length);
 		         
-		         //글자수
 		         if (typeof callbackMax == 'function') {
+		        	 console.log("summernote keyup2-1");	
 		        	 
-		        	console.log("summernote keyup2-1");	
 		            callbackMax(500 - t.length);
-		            alert("내용은 500자까지 작성가능합니다.");
-		            $(this).text(t.substring(0,500));
+		            $(this).text(note.substring(0,500));
 		            $("#contentLength").html(t.length);
+		            alert("내용은 500자까지 작성가능합니다.");
+		            $('#summernote').focus(); 
+		            e.preventDefault(); 
+		            return false;
 		         }
 	    		if(t.length > 500){
-	    			
 	    			console.log("summernote keyup2-2");		
-	    			alert("내용은 500자까지 작성가능합니다.");
-	    			 $(this).val($(this).val().substring(0, 500));
-	    			 console.log("summernote cut1");	
-	    			 $(this).text(note.substring(0,500));
-	    			 console.log("summernote cut2");		
+	    		
+	    			$("#summernote").text(note.substring(0,500));
+	    			$(this).text(note.substring(0,500));
 	    			$(this).text(t.substring(0,500));
-	    			console.log("summernote cut3");		
 	    			 $("#contentLength").html(t.length);
+	    			 alert("내용은 500자까지 작성가능합니다.");
+	    			 $('#summernote').focus(); 
+	    			e.preventDefault(); 
 	    			return false;
 	    		}
+	        
+	    		 
 		     },
 		     onPaste: function(e) {	    	 
 		    	 console.log("summernote keyup3");
@@ -118,11 +125,20 @@ $(function(){
 		          $("#contentLength").html(t.length);
 		          var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
 		          e.preventDefault();
+		          var maxPaste = bufferText.length;
 		          var all = t + bufferText;
 		          document.execCommand('insertText', false, all.trim().substring(0, 500));
+		          if(t.length + bufferText.length > 500){
+                     maxPaste = 500 - t.length;
+                 }
+		          if(maxPaste > 0){
+                     document.execCommand('insertText', false, bufferText.substring(0, maxPaste));
+                 }
+                 $('#maxContentPost').text(500 - t.length);
 		          if (typeof callbackMax == 'function') {
 		            callbackMax(500 - t.length);
 		            $(this).text(t.substring(0,500));
+		            return false;
 		          }
 		        }
 		      } //callbacks end
@@ -272,12 +288,14 @@ $(function(){
 			return false;
 		} 
 		if(userpwd==' ' || userpwd==null){
-			alert("비밀번호를 입력해주세요.");
+			//alert("비밀번호를 입력해주세요.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
 			return false;
 		}
 		if($('#userpwd')==null){
-			alert("비밀번호를 입력해주세요.");
+			//alert("비밀번호를 입력해주세요.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
 			return false;
 		}
@@ -352,12 +370,15 @@ $(function(){
 		}
 		//비밀번호 4자리 숫자만 입력하도록 조건 걸어놓기
 		if($("#userpwd").val().length < 4){
-			alert("비밀번호는 4자리 숫자를 입력해주세요.");
+			
+			alert('비밀번호는 4자리를 입력해주세요.');
+			//alert("비밀번호는 4자리 숫자를 입력해주세요.");
 			$("#userpwd").focus();
 			return false;
 		}
 		if(userpwd.length<4){
-			alert("비밀번호는 4자리 숫자를 입력해주세요.");
+			alert('비밀번호는 4자리를 입력해주세요.');
+			//alert("비밀번호는 4자리 숫자를 입력해주세요.");
 			return false;
 			$('#userpwd').focus(); 	
 		}
@@ -407,11 +428,13 @@ $(function(){
 		
 		//비밀번호
 		if(!pwdreg.test(document.getElementById("userpwd").value)){
-			alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			return false;
 		}
 		if(!pwdreg.match(document.getElementById("userpwd").value)){
-			alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			alert('비밀번호는 4자리를 입력해주세요.');
 			return false;
 		}
 		if(none.test(document.getElementById("userpwd").value)){
@@ -553,7 +576,9 @@ function userpwdCheck(){
 					
 				</li>
 				<li>
-				<textarea id="summernote" name="content" id="content">${vo.content}" </textarea>
+			<!-- 내용 -->
+				<li>
+					<textarea id="summernote"  name="content" id="content"  rows="10" cols="" maxlength="500"  oninput="lengthCheck();"> ${vo.content}</textarea >
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
 				<li id="btnLine">

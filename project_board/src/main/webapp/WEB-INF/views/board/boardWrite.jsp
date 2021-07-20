@@ -108,18 +108,7 @@ $(function(){
 				return false;
 			}
 		});
-		//내용 글자수 
-		$(".note-editable").on("keypress", function(){
-		    var limiteTxt= 500;
-		    var txt= $(this).text();
-		    var totalTxt= txt.length;
-		    //Update value
-		    $("#contentLength").html(totalTxt);
-		    //Check and Limit Charaters
-		    if(totalTxt >= limiteTxt){
-		        return false;
-		    }
-		});
+	
 /* });
 
 $(function(){ */
@@ -142,6 +131,7 @@ $(function(){ */
 			maxHeight: null,   
 			placeholder: '내용을 입력해주세요. 최대 500자까지 쓸 수 있습니다',	
 			maxlength:500,
+			focus : true,
 			//콜백 함수
 		    callbacks : { 
 		    	lengthCheck : function(){
@@ -150,8 +140,8 @@ $(function(){ */
 					//$('#').html(count);
 					
 					if(count>=500){
-						alert('내용은 500자리까지 작성가능합니다.');
 						$(this).val(content.substring(0,500));
+						alert('내용은 500자리까지 작성가능합니다.');
 						return false;
 					}
 					console.log("summernote lengthcheck");
@@ -163,7 +153,7 @@ $(function(){ */
 			      this);
 			      }
 		      },
-		  	onKeydown: function(e) {
+		  	/* onKeydown: function(e) {
 		  		console.log("summernote keydown1");
 		  		 var t = e.currentTarget.innerText;
 		  	   $("#contentLength").html(t.length);
@@ -174,7 +164,7 @@ $(function(){ */
 	                return false;
 	            };
 	            
-		    },
+		    }, */
 		    onKeydown: function(e) {    	
 		    	console.log("summernote keydown2");
 		          var t = e.currentTarget.innerText;
@@ -185,7 +175,7 @@ $(function(){ */
 		          
 		        	//delete keys, arrow keys, copy, cut, select all
                       if (e.keyCode != 8 && !(e.keyCode >=37 && e.keyCode <=40) && e.keyCode != 46 && !(e.keyCode == 88 && e.ctrlKey) && !(e.keyCode == 67 && e.ctrlKey) && !(e.keyCode == 65 && e.ctrlKey))
-                    	  e.preventDefault(); 
+                    	e.preventDefault(); 
                   		console.log("keydown2 check");
 		         	 }
 		    },
@@ -198,22 +188,26 @@ $(function(){ */
 		         console.log("t.length :" , t.length);
 		         
 		         if (typeof callbackMax == 'function') {
-		        	 console.log("summernote keyup2-1");		        	 
+		        	 console.log("summernote keyup2-1");	
+		        	 
 		            callbackMax(500 - t.length);
-		            alert("내용은 500자까지 작성가능합니다.");
 		            $(this).text(note.substring(0,500));
 		            $("#contentLength").html(t.length);
+		            alert("내용은 500자까지 작성가능합니다.");
+		            $('#summernote').focus(); 
+		            e.preventDefault(); 
 		            return false;
 		         }
 	    		if(t.length > 500){
 	    			console.log("summernote keyup2-2");		
 	    		
-	    			alert("내용은 500자까지 작성가능합니다.");
 	    			$("#summernote").text(note.substring(0,500));
 	    			$(this).text(note.substring(0,500));
 	    			$(this).text(t.substring(0,500));
 	    			 $("#contentLength").html(t.length);
-	    		
+	    			 alert("내용은 500자까지 작성가능합니다.");
+	    			 $('#summernote').focus(); 
+	    			e.preventDefault(); 
 	    			return false;
 	    		}
 	        
@@ -238,10 +232,23 @@ $(function(){ */
 		          if (typeof callbackMax == 'function') {
 		            callbackMax(500 - t.length);
 		            $(this).text(t.substring(0,500));
+		            return false;
 		          }
 		        }
 		      } //callbacks end
 		 }); //summernote end
+			//내용 글자수 
+		$(".note-editable").on("keypress", function(){
+			    var limiteTxt= 500;
+			    var txt= $(this).text();
+			    var totalTxt= txt.length;
+			    //Update value
+			    $("#contentLength").html(totalTxt);
+			    //Check and Limit Charaters
+			    if(totalTxt >= limiteTxt){
+			        return false;
+			    }
+		});
 		//글자 수 입력 표시 및 제한
 		//제목
 		$("#subject").keyup(function(){
@@ -403,7 +410,9 @@ $(function(){ */
 			var conlength = content.length;
 			console.log("content.length : ",content.length);
 			if($('#contentLength').val() >500){
-				alert("내용은 500자까지 입력해주세요.");	
+				
+				alert("!!!!!내용은 500자까지 입력해주세요.");	
+				$('#content').val().substring(0,500);
 				$('#summernote').summernote('focus');
 				return false;
 			}
@@ -473,24 +482,24 @@ $(function(){ */
 			}
 			//비밀번호 4자리 숫자만 입력하도록 조건 걸어놓기
 			if($("#userpwd").val().length < 4){
-				alert("비밀번호는 4자리 숫자를 입력해주세요.");
+				alert("비밀번호 4자리를 입력해주세요.");
 				$("#userpwd").focus();
 				return false;
 			}
 			if(userpwd.length<4){
-				alert("비밀번호는 4자리 숫자를 입력해주세요.");
-				return false;
+				alert("비밀번호 4자리를 입력해주세요.");
 				$('#userpwd').focus(); 	
+				return false;
 			}
 			if(userpwd.length>4){
 				alert("비밀번호는 4자리만 입력해주세요.");
-				return false;
 				$('#userpwd').focus(); 	
+				return false;
 			}
 			if($('#userpwd').length>4){
 				alert("비밀번호는 4자리만 입력해주세요.");
-				return false;
 				$('#userpwd').focus(); 	
+				return false;
 			}
 			
 			/* if(userid.length>10 ){
@@ -528,11 +537,12 @@ $(function(){ */
 			
 			//비밀번호
 			if(!pwdreg.test(document.getElementById("userpwd").value)){
-				alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+				//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+				alert("비밀번호는 4자리만 입력 가능합니다.");
 				return false;
 			}
 			if(!pwdreg.match(document.getElementById("userpwd").value)){
-				alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+				alert("비밀번호는 4자리만 입력 가능합니다.");
 				return false;
 			}
 			if(none.test(document.getElementById("userpwd").value)){
