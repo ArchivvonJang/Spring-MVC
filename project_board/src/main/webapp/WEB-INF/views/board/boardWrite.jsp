@@ -208,11 +208,11 @@ $(function(){ */
 	    			//$(this).text(t.substring(0,500));
 	    			$(".note-editable").html(t.substring(0,500));
 	    			console.log('substring(0,500)', t.substring(0,500));
-	    			
+	    			//================== summernote 여기서 컷팅됨 !!!!!!!!!!!!!!==========================================
 	    			 $("#contentLength").html(t.length);
 	    			 alert("내용은 500자까지 작성가능합니다.");
 	    			 $('#summernote').html(t.substring(0,500));
-	    	  			//================== summernote 여기서 컷팅됨 !!!!!!!!!!!!!!==========================================
+	    	  			
 	    			 console.log('substring(0,500) 적용된 summernote -->',$(".note-editable").val());
 	    			 $("#contentLength").html(500);
 	    			 $('#summernote').focus(); 
@@ -334,7 +334,7 @@ $(function(){ */
 		$("#content").keyup(function(){
 			var content = note.val();//입력된 상품명의 value
 			var count = content.length;
-			console.log("contentelength : ",count);
+			console.log("content keyup function --> contentelength : ",count);
 			$('#contentLength').text(count);
 			console.log("content keyup ver. check");
 			if(count>=500){
