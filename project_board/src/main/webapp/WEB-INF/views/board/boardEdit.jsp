@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Edit Form</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -24,12 +24,12 @@ $(function(){
 		var subjectLength = "${vo.subject}";
 		var useridLength = "${vo.userid}";
 		var userpwdLength = "${vo.userpwd}";
-		
+		  var note = $($("#summernote").summernote("code")).text();		
 		//길이표시
 		$("#count").text(subjectLength.length);
 		$("#useridLength").text(useridLength.length);
 		$("#userpwdLength").text(userpwdLength.length);
-	
+		$("#contentLength").text(note.length);
 		//========================= 서머노트 =================================
 		 $('#summernote').summernote({
 			height: 500,    
@@ -116,7 +116,7 @@ $(function(){
 	    			$(this).text(t.substring(0,500));
 	    			$(".note-editable").html(t.substring(0,500));
 	    			console.log('substring(0,500)', t.substring(0,500));
-	    			//================== summernote 여기서 컷팅됨 !!!!!!!!!!!!!!==========================================
+	    		
 	    			 $("#contentLength").html(t.length);
 	    			 alert("내용은 500자까지 작성가능합니다.");
 	    			 $('#summernote').html(t.substring(0,500));
@@ -227,15 +227,37 @@ $(function(){
 					return false;
 				}
 			});
+//==========================!!!!! 수정 폼에서는 이 부분이 작동함 =========================================
 			$(".note-editable").keyup(function(){
-				var content = $(this).val();//입력된 상품명의 value
-				var count = content.length;
-				$('#contentLegnth').text(count);
+				var content = $(this).text();//입력된 상품명의 value
+				var count = $(this).text().length;
+				//$('#contentLegnth').text(count);
+				$('#contentLegnth').html(count);
 				console.log("note-editable keyup ver. check");
+			    console.log("note-editable keyup ver. content :" , content);
+			    console.log("note-editable keyup ver. length :" , $(this).text().length);
 				if(count>=500){
+					console.log("note-editable keyup ver. if!!!");
+				
 					alert('내용은 500글자까지 입력 가능합니다.');
-					$(this).val(note.substring(0,500));
-					$('#contentLegnth').html(500);
+					$(this).text(content.substring(0,500));
+					$('#contentLegnth').html(count);
+				}
+			}); //keyup end
+			$(".note-editable").on('paste', function(){
+				var content = $(this).text();//입력된 상품명의 value
+				var count = $(this).text().length;
+				$('#contentLegnth').text(count);
+				$('#contentLegnth').html(count);
+				console.log("note-editable paste ver. check");
+			    console.log("note-editable paste ver. content :" , content);
+			    console.log("note-editable paste ver. length :" ,count);dsfsaf
+				if(count>=500){
+					console.log("note-editable keyup ver. if!!!");
+								
+					$(this).text(content.substring(0,500));
+					$('#contentLegnth').html(count);
+					alert('내용은 500글자까지 입력 가능합니다.');
 				}
 			}); //keyup end
 			$("#content").keyup(function(){
@@ -245,7 +267,7 @@ $(function(){
 				$('#contentLength').text(count);
 				
 				if(count>=500){
-					console.log("content keyup ver. check");
+					console.log("content keyup check");
 				
 					alert('내용은 500글자까지 입력 가능합니다.');
 					$(this).val(note.substring(0,500));
