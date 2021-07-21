@@ -160,7 +160,7 @@
   				<a class="arrow pprev" href="boardList?pageNum=1<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◀</a>
 				<!--앞으로 1개 이상 존재하면,-->
 				<c:if test="${sapvo.startPageNum > 1}"> 
-        		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◁</a>
+        		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum-1}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◁</a>
  				</c:if>
  			</c:if>
  				<!--레코드 갯수에 따른 페이지 갯수 표시 :  jstl c tag를 사용하여 startPageNum(시작페이지)부터 끝(마지막페이지 -> 시작페이지+한 페이지당 페이지수-1)까지 반복하여 값을 꺼낸다.--> 
@@ -178,12 +178,16 @@
 	            	</c:if>
         		</c:forEach>
         		<!-- 다음 페이지가 있을 때 ,총페이지수가 한 페이지세트 끝번호보다 크면 -->
-        	<c:if test="${sapvo.pageNum < sapvo.totalPage}">
+
+        		<c:if test="${sapvo.pageNum < sapvo.totalPage}">
 				<!--뒤로-->            
 	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▷</a>
+				</c:if>
 				<!--맨뒤로-->
+				<c:if test="${sapvo.pageNum != sapvo.totalPage }">
 	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▶</a>
-			 </c:if>
+			 	</c:if>
+	
 			</div>
 		 </div> 
 		 <!-------------- 페이징 끝 --------------->

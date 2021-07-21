@@ -14,7 +14,7 @@
 		 			</when>
 		 		</choose>
 		 		order by no desc)
-	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no)
+	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no asc)
 				where <![CDATA[rownum<=]]>
 				<if test="pageNum==totalPage">${lastPageRecord}</if>
 	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
