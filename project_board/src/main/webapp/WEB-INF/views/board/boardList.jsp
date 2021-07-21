@@ -158,12 +158,12 @@
 			<c:if test="${sapvo.pageNum>1}"><!-- 이전페이지가 있을때 -->
 			  	<!--맨앞으로-->
   				<a class="arrow pprev" href="boardList?pageNum=1<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◀</a>
-				<!--앞으로-->
+				<!--앞으로 1개 이상 존재하면,-->
 				<c:if test="${sapvo.startPageNum > 1}"> 
-        		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum - 1}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◁</a>
+        		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◁</a>
  				</c:if>
  			</c:if>
- 				<!--레코드 갯수에 따른 페이지 갯수 표시--> 
+ 				<!--레코드 갯수에 따른 페이지 갯수 표시 :  jstl c tag를 사용하여 startPageNum(시작페이지)부터 끝(마지막페이지 -> 시작페이지+한 페이지당 페이지수-1)까지 반복하여 값을 꺼낸다.--> 
          		<c:forEach var="p" begin="${sapvo.startPageNum}" end="${(sapvo.startPageNum + sapvo.onePageNum)-1}">
 	         		<!--p가 총페이지수보다 작거나같을때  레코드가 있는 페이지까지만 표시 -->
 	            	<c:if test="${p<=sapvo.totalPage}">  
