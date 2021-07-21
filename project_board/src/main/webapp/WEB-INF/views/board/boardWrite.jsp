@@ -169,7 +169,7 @@ $(function(){ */
 		    onKeydown: function(e) {    	
 		    	console.log("summernote keydown2");
 		          var t = e.currentTarget.innerText;
-		          var note = $($("#summernote").summernote("code")).text();		
+		          //var note = $($("#summernote").summernote("code")).text();		
 		          $("#contentLength").html(t.length);
 		          if (t.length >= 500) {
 		        	  $(this).val(t.substring(0,500));
@@ -184,7 +184,7 @@ $(function(){ */
 		    onKeyup: function(e) {
 		    	console.log("summernote keyup2 function check");
 		         var t = e.currentTarget.innerText;
-		         var note = $($("#summernote").summernote("code")).text();		
+		         //var note = $($("#summernote").summernote("code")).text();		
 		         //글자수
 		         $("#contentLength").html(t.length);
 		         console.log("t.length :" , t.length);
@@ -193,7 +193,8 @@ $(function(){ */
 		        	 console.log("summernote keyup2-1 if callbackMax check");	
 		        	 
 		            callbackMax(500 - t.length);
-		            $(this).text(note.substring(0,500));
+		           // $(this).text(note.substring(0,500));
+		            $(this).text(t.substring(0,500));
 		            $("#contentLength").html(t.length);
 		            alert("내용은 500자까지 작성가능합니다.");
 		            $('#summernote').focus(); 
@@ -230,7 +231,8 @@ $(function(){ */
 		          e.preventDefault();
 		          var maxPaste = bufferText.length;
 		          var all = t + bufferText;
-		          document.execCommand('insertText', false, all.trim().substring(0, 500));
+		          //document.execCommand('insertText', false, all.trim().substring(0, 500));
+		          document.execCommand('insertText', false, all.substring(0, 500));
 		          if(t.length + bufferText.length > 500){
                       maxPaste = 500 - t.length;
                       console.log("summernote onPaste bufferText.length check");
@@ -271,7 +273,7 @@ $(function(){ */
 				var count = content.length;
 				$('#count').html(count);
 				
-				if(count>100){
+				if(count>=100){
 					alert('제목은 최대 100자까지 입력 가능합니다.').
 					$(this).val(content.substring(0,100));
 					$('#count').html(100);
@@ -291,10 +293,21 @@ $(function(){ */
 		$("#userpwd").keyup(function(){
 			var content = $(this).val();//입력된 상품명의 value
 			var count = content.length;
+			var pwdreg = /[0-9]$/; //유효성검사
 			$('#userpwdLength').html(count);
 			
+			//비밀번호가 숫자가 아니라면,
+			if(!pwdreg.test(document.getElementById("userpwd").value)){
+				//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+				$('#userpwd').val('');
+				$("#userpwd").focus();
+				alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+				return false; 
+			}
+			//비밀번호가 4자리 초과라면,
 			if(count>=4){
 				alert('비밀번호는 4자리까지 입력 가능합니다.');
+				$("#userpwd").focus();
 				$(this).val(content.substring(0,4));
 				$('#userpwdLength').html(4);
 			}
@@ -372,8 +385,7 @@ $(function(){ */
 			//var subcheck = subject.value.test(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
 			//var pwdcheck = userpwd.value.test(pwdreg);
 			//var idcheck = userid.value.test(idreg);		
-
-		
+	
 	$("#boardForm").on('submit',function(){
 		//유효성검사
 		var idreg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
@@ -385,7 +397,7 @@ $(function(){ */
 		var userpwd = $('#userpwd').val();
 		var content = $('#content').val();
 		console.log("subject : ", subject, " , userid : ", userid);
-			//공백 제거
+			//제목 공백 제거
 			$.trim($('#subject').val());
 			
 			// -----------------비어져있는지, 공백이나 null 먼저 확인 
@@ -562,6 +574,7 @@ $(function(){ */
 			//비밀번호
 			if(!pwdreg.test(document.getElementById("userpwd").value)){
 				//alert("비밀번호는 4자리 숫자만 입력 가능합니다.");
+			
 				alert("비밀번호는 4자리만 입력 가능합니다.");
 				return false;
 			}
@@ -601,7 +614,8 @@ $(function(){ */
 	}	
 	h2{margin-bottom:40px;}
 	li{margin-bottom:20px;}
-	
+
+}
 </style>
 <body>
 	<div class="container">
@@ -618,7 +632,8 @@ $(function(){ */
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
 				<li>
-					<label class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd" maxlength="4" class="wordcut" required/>
+					<label class="label">비밀번호</label> <input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4" class="wordcut" required/>
+					
 					<span id="userpwdLength"></span>/<span id="max_count">4</span><br/>
 					
 					</span> <span id="pwdMsg"></span>

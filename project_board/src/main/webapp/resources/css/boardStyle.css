@@ -14,9 +14,17 @@
 	.btn a{color:gray;}
 	#btnLine{text-align:center;}
 	label, .label{margin-right:10px; color:black; font-size:1em;}
-	input[type=text], input[type=password]{
+	input[type=text], input[type=password], input[type="number"]{
 		border:1px solid lightgray;
 		height:33px;
 		font-size:1em;
 	}
+	input[type="number"]::-webkit-outer-spin-button,
+	input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+	}
+	.input-number-password {
+    -webkit-text-security: disc;
+    }
 	
