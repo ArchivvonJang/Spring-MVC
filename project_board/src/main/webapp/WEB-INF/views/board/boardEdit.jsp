@@ -226,7 +226,7 @@ $(function(){
 			});
 
 				
-			$("#summernote").keyup(function(){
+/* 			$("#summernote").keyup(function(){
 				var note = $($("#summernote").summernote("code")).text();	
 				var content = note.val();//입력된 상품명의 value
 				var count = content.length;
@@ -239,7 +239,7 @@ $(function(){
 					console.log("summernote keyup note version if -->", note.substring(0,500));
 					return false;
 				}
-			});
+			}); */
 //==========================!!!!! 수정 폼에서는 이 부분이 작동함 =========================================
 			$(".note-editable").keyup(function(){
 				var content = $(this).text();//입력된 상품명의 value
@@ -288,8 +288,8 @@ $(function(){
 				}
 			}); //keyup end
 
-
-
+});
+$(function(){
 
 	 $("#boardEditFrm").on('submit',function(){
 	//====================== submit 넘기기 전에 유효성 검사 ========================================	
@@ -312,22 +312,31 @@ $(function(){
 	
 		//제목 공백 제거
 		$.trim($('#subject').val());
-		
+		console.log("submit check");
 		// -----------------비어져있는지, 공백이나 null 먼저 확인 
 		//제목
 		if(subject == '' ){
 			alert("제목을 입력해주세요.");
+			console.log("subject blank");
 			$('#subject').focus(); 
 			console.log('subject -->', $('#subject').val());
 			return false;
 		}  
 		if( subject == null){
+			console.log("submit subject blank");
+			alert("제목을 입력해주세요.");
+			$('#subject').focus(); 
+			return false;
+		}
+		if( subject.text()==' '){
+			console.log("submit subject text blank");
 			alert("제목을 입력해주세요.");
 			$('#subject').focus(); 
 			return false;
 		}
 		//작성자
 		if(userid=='' || userid==null){
+			console.log("submit userid null and blank");
 			alert("작성자를 입력해주세요.");
 			$('#userid').focus(); 	
 			return false;
@@ -335,17 +344,21 @@ $(function(){
 		//비밀번호
 
 		if($("#userpwd").val().length<4){
+			console.log("submit userpwd length");
+			console.log("password length : ", $("#userpwd").val().length);
 			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
 			return false;
 		} 
 		if(userpwd==' ' || userpwd==null){
+			console.log("submit userpwd null and blank");
 			//alert("비밀번호를 입력해주세요.");
 			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
 			return false;
 		}
-		if($('#userpwd')==null){
+		if($('#userpwd').val()==null ||$('#userpwd').val() =='' ){
+			console.log("submit userpwd null");
 			//alert("비밀번호를 입력해주세요.");
 			alert('비밀번호는 4자리를 입력해주세요.');
 			$('#userpwd').focus(); 	
@@ -357,6 +370,8 @@ $(function(){
 		var conlength = content.length;
 		console.log("content.length : ",content.length);
 		if ($('#summernote').summernote('isEmpty')) {
+			
+			console.log("submit - summernote text is empty");
 			alert("내용을 입력해주세요.");
 			$('#summernote').summernote('focus');
 			return false;
@@ -389,6 +404,8 @@ $(function(){
 		}
 		//---------------- 공백문자
 		if(subject.text()=='&nbsp' || subject.equals('&nbsp')){
+			
+			console.log("submit subject &nbsp");
 			alert("제목을 다시 입력해주세요.");
 			$('#subject').focus(); 
 			return false;	
@@ -396,18 +413,21 @@ $(function(){
 		//-------------------공백 trim 유효성검사
 		//제목
 		if($("#subject").val().trim()==""){
+			console.log("submit subject trim ");
 			alert("제목을 입력하세요.")
 			$("#subject").focus();
 			return false;
 		}
 		//작성자
-		if($("#userid").val().trim()==""){
+		if($("#userid").val().trim()==" "){
+			console.log("submit userid trim");
 			alert("작성자를 입력하세요.")
 			$("#userid").focus();
 			return false;
 		}
 		//비밀번호 
-		if($("#userpwd").val().trim()==""){
+		if($("#userpwd").val().trim()==" "){
+			console.log("submit userpwd trim");
 			alert("작성자를 입력하세요.")
 			$("#userpwd").focus();
 			return false;
@@ -415,6 +435,8 @@ $(function(){
 		//내용
 		
 		if(content.trim()==""){
+			
+			console.log("submit content trim");
 			alert("내용을 입력해주세요.")	
 			$('#content').summernote('focus');
 			return false;
@@ -422,31 +444,35 @@ $(function(){
 		// ----------------글자 수 
 		//제목
 		if(subject.val.length>100){
+			console.log("submit subject value length check");
 			alert("제목을 다시 입력해주세요.");
 			$('#subject').focus(); 
 			return false;	
 		}
 		//비밀번호 4자리 숫자만 입력하도록 조건 걸어놓기
 		if($("#userpwd").val().length < 4){
-			
+			console.log("submit userpwd value length check");
 			alert('비밀번호는 4자리를 입력해주세요.');
 			//alert("비밀번호는 4자리 숫자를 입력해주세요.");
 			$("#userpwd").focus();
 			return false;
 		}
 		if(userpwd.length<4){
+			console.log("submit userpwd length under 4 check 1");
 			alert('비밀번호는 4자리를 입력해주세요.');
 			//alert("비밀번호는 4자리 숫자를 입력해주세요.");
 			$('#userpwd').focus(); 
 			return false;	
 		}
 		if(userpwd.length>4){
+			console.log("submit userpwd value length excess 4 check");
 			alert("비밀번호는 4자리만 입력해주세요.");
 			$('#userpwd').focus(); 	
 			return false;
 		
 		}
-		if($('#userpwd').length>4){
+		if($('#userpwd').val().length>4){
+			console.log("submit userpwd length under 4 check 2");
 			alert("비밀번호는 4자리만 입력해주세요.");
 			$('#userpwd').focus(); 	
 			return false;
@@ -460,30 +486,35 @@ $(function(){
 		//----------정규식 유효성검사
 		//제목
 		if(none.test(document.getElementById("subject").value)){
+			console.log("regular expression none + subject");
 			alert("제목을 다시 입력해주세요.");
 			return false;
 		}
 		if(!idreg.test(document.getElementById("subject").value)){
+			console.log("regexp idreg + subject 1");
 			alert("제목은 한글 또는 영어, 숫자로 입력해주세요");
 			return false;
 		}
 		if(!idreg.test(subject)){
+			console.log("regexp idreg + subject 2");
 			alert("제목은 한글 또는 영어, 숫자로 입력해주세요");
 			return false;
 		}
 		
 		//작성자
 		if(!idreg.test(document.getElementById("userid").value)){
+			console.log("regexp idreg + userid");
 			alert("작성자를 다시 입력해주세요.");
 			$('#userid').focus(); 	
 			return false;
 		}
 		if(none.test(document.getElementById("userid").value)){
+			console.log("regexp none + userid");
 			alert("작성자를 다시 입력해주세요.");
 			$('#userid').focus(); 	
 			return false;
 		}
-		console.log("first check");
+		console.log("-------------여기까지 오긴하니?-----------------");
 		
 		//비밀번호
 		if(!pwdreg.test(document.getElementById("userpwd").value)){
@@ -512,7 +543,8 @@ $(function(){
 			return false;
 		}
 
-		return true; 
+		return false; 
+		console.log("----------submit end-------")
 	}); //submit end
 	//목록 돌아가기
 	/* 	$(function(){
@@ -528,6 +560,7 @@ $(function(){
 });
 // 작성자
 function useridInput(e){
+	console.log("useridInput function test");
 	var obj = $("#userid");
 	var wordcheck = $("#useridLength");
 	blankCheck(obj, '작성자')
@@ -535,6 +568,7 @@ function useridInput(e){
 }
 //비밀번호
 function userpwdInput(e){
+	console.log("userpwdInput function test");
 	var obj = $("#password");
 	var wordcheck = $("#userpwdLength");
 	var pwdMsg = $("#pwdApproval");
@@ -547,7 +581,7 @@ function userpwdInput(e){
 
 //textCount 글자수세기 함수
 function textCount(obj, txtcheck){
-	console.log("textCount function working?");
+	console.log("???textCount function working?");
 	wordcheck.text(obj.val().length + "/" + obj.attr("maxlength"));
 	if(obj.val().length >= obj.attr("maxlength")){
 		setTimeout(function(){
@@ -561,49 +595,55 @@ function textCount(obj, txtcheck){
 }
 //blackcheck 공백 알람 
 function blankCheck(obj, title){
-	console.log("blankCheck function working?");
+	console.log("???blankCheck function working?");
 	//if(obj.val().trim() == "" && obj.val().length > 0){
 	if(obj.val() == "" && obj.val().length > 0){
+		console.log("???blankCheck value check is working??");
 		alert(title+"의 시작으로 공백이 들어갈 수 없습니다.");
 		obj.val('');
 	};
 }
 //userpwdCheck 비밀번호 확인
 function userpwdCheck(){
-		console.log(clipboard)
+		console.log(clipboard);
+		console.log("userpwdCheck function 0");
 		var userpwd = $("#userpwd").val();
 		var pwdreg = password.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
 				
 		if(userpwd.length == 0 || clipboard == 0){
+			console.log("userpwdCheck function 1");
  				pwdAlert.text("");
 				$("#pwdApproval").css("display","none");
 				return false;
 			}else if(userpwd.search(/\s/) != -1){
+				console.log("userpwdCheck function 2");
  				checkblank(obj, '비밀번호');
  				$("#pwdApproval").css("display","none");
 				return false;
 			}else if(pw.length < 4 || clipboard < 4){
+				console.log("userpwdCheck function 3");
  				pwdAlert.text("4자리를 입력해주세요.");
  				alert("4자리를 입력해주세요.");
  				$("#pwdApproval").css("display","none");
 				return false;
 			}else if(!check){
-// 				비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력
 				pwdMsg.text("비밀번호는 숫자 4자리만 입력해주세요.");
+				console.log("userpwdCheck function 4");
 				alert("비밀번호를 확인해주세요.");
 				$("#pwdApproval").css("display","none");
- 				if(userpwd.length >= 9 || clipboard >= 9){
+ 				if(userpwd.length > 4 || clipboard >4){
  					setTimeout(function(){
  						alert("올바르지 않은 비밀번호입니다. 다시 확인해주세요");
  					}, 100);
  				}
 				return false;
 		    }else{
-		    	$("#pwdApproval").css("display",'inline-block')
+				console.log("userpwdCheck function else");
+		    	$("#pwdApproval").css("display",'inline-block');
 		    	pwdAlert.text("");
 		    }
 			
-		};
+};
 
 </script>
 <style>

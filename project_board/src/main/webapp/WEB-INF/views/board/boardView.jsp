@@ -9,6 +9,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 <style>
 	.menu{margin-right:10px; font-weight: bold;}
@@ -28,54 +34,71 @@
 	}
 </style>
 <script type="text/javascript">
-	// $(function(){	}); 아래랑 같은기능을 하는 다른표기법
-	$(()=>{
-		$("#boardDel").click(()=>{
-			if(confirm("삭제하시겠습니까?")){
+	// $(function(){	}); 아래랑 같은기능을 하는 다른표기법 $(()=>{});
+		//$("#boardDel").click(()=>{
+			/* if(confirm("삭제하시겠습니까?")){
 				location.href="boardDelete?no=${vo.no}";
-				//getUserpwd(window.location.href);
-			};
-		});
-		$("#boardEdit").click(()=>{
-			if(confirm("수정하시겠습니까?")){
+			}; */
+		function boardDelete(){
+				//var url ="/myapp/getUserpwd";
+				//getUserpwd(url, data, loc);
+			var loc = "/myapp/boardDelete?no=${vo.no}";//location url
+			var data = "no=${vo.no}&userpwd=";	
+			getUserpwd(data, loc);
+			console.log("delete data : ", data, " loc :", loc);
+		};
+		//$("#boardEdit").click(()=>{
+		/* 	if(confirm("수정하시겠습니까?")){	
 				location.href="boardEdit?no=${vo.no}";
-				//getUserpwd(window.location.href);
-			};
-		});
+			}; */
+		function boardEdit(){
+			var loc = "/myapp/boardEdit?no=${vo.no}";
+			var data = "no=${vo.no}&userpwd=";
+			getUserpwd(data, loc);
+			console.log("edit data : ", data, " loc :", loc);
+		};
 	
-		function getUserpwd(locationUrl){
+		function getUserpwd(data, loc){
+			console.log("getuserpwd in !!")
 			var pwd = prompt("비밀번호를 입력하세요");
-			
-			if(pwd != null){
-				checkUserpwd(pwd, window.location.href);
+			var param = data + pwd;
+			console.log("data : ", data, " / loc :", loc , " / param : ", param);
+			if(pwd != null || pwd != " "){
+				console.log("pwd check ! go to checkuserpwd")
+				checkUserpwd(param, loc);
 			}
-			if(pwd != ''){
+			/* if(pwd != ''){
 				checkUserpwd(pwd, window.location.href);
-			}
+			} */
 			if(pwd == '' || pwd==null){
 				alert("다시 입력해주세요");
 				return false;
 			}
 		}
-		function checkUserpwd(pwd, locationUrl){
+		//function checkUserpwd(url, param, loc){
+		function checkUserpwd(param, loc){
+			console.log("checkUserpwd ajax");
+			console.log("checkUserpwd param : " , param,"/ loc : ",loc);
 			$.ajax({
-				url : "/webapp/getUserpwd",
-				data : "no=${vo.no}&userpwd="+pwd,
+				url : "/myapp/getUserpwd",
+				data : param,
 				success : function(result){
 					if(result==0){
-						alert("비밀번호를 다시 확인해주세요.");		
-						getUserpwd(window.location.href);
-						console.log('url : ',window.location.href)
+						alert("비밀번호를 확인해주세요.");		
+						getUserpwd(data,loc);
+						console.log("ajax check loc : ", loc);
+						
 					}else if(result==1){
-						location.href = window.location.href;
+						location.href = loc;
 					}
 				}, error : function(){
-					
+			
+					console.log("!!checkUserpwd ajax function error!!")
 				}
 			});
 		}
 	
-	});
+
 </script>
 </head>
 <body>
@@ -98,8 +121,8 @@
 		</ul>
 		<div id="btnLine">
 			<%-- <button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button> --%>
-			<button class="btn"><a href="#" id="boardEdit" >수정하기</a></button>
-			<button class="btn"><a href="#" id="boardDel">삭제하기</a></button>
+			<button class="btn"><a href="javascript:boardEdit()" id="boardEdit" >수정하기</a></button>
+			<button class="btn"><a href="javascript:boardDelete()" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
 		</div>
 </div>

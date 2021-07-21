@@ -44,7 +44,7 @@
  	<update id="hitCnt" parameterType="com.myproject.myapp.vo.BoardVO">
  		update board set hit=hit+1 where no=#{param1}
  	</update>
- 		<select id="getUserpwd" resultType="String">
+ 	<select id="getUserpwd" resultType="String">
 		select userpwd from board where no=${param1}
 	</select>
   </mapper>

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -74,6 +75,7 @@ public class BoardController {
 		return mav;
 	}
 	//비밀번호 체킹
+	@GetMapping("/getUserpwd")
 	@RequestMapping("/getUserpwd")
 	@ResponseBody
 	public int getUserpwd(int no, String userpwd) {
@@ -86,9 +88,12 @@ public class BoardController {
 	}
 	//글쓰기 수정 폼으로 이동
 	@RequestMapping("/boardEdit")
-	public String boardEdit(int no, Model model) {
-		model.addAttribute("vo", boardService.boardSelect(no));
-		return "board/boardEdit";
+	public ModelAndView boardEdit(int no) {
+		ModelAndView mav = new ModelAndView();
+		// model 을 사용할 경우, model.addAttribute("vo", boardService.boardSelect(no));
+		mav.addObject("vo",  boardService.boardSelect(no));
+		mav.setViewName("board/boardEdit");
+		return mav;
 	}
 	//글쓰기 수정 완료 
 	@RequestMapping(value="/boardEditOk", method=RequestMethod.POST)  //수정할 글(레코드) 수정
