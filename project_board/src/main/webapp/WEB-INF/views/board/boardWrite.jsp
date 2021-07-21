@@ -69,7 +69,7 @@ $(function(){
 					pwdMsg.text("비밀번호는 숫자 4자리만 입력해주세요.");
 					alert("비밀번호를 확인해주세요.");
 					$("#pwdApproval").css("display","none");
-	 				if(userpwd.length >= 9 || clipboard >= 9){
+	 				if(userpwd.length > 4 || clipboard > 4){
 	 					setTimeout(function(){
 	 						alert("올바르지 않은 비밀번호입니다. 다시 확인해주세요");
 	 					}, 100);
@@ -171,7 +171,7 @@ $(function(){ */
 		          var t = e.currentTarget.innerText;
 		          //var note = $($("#summernote").summernote("code")).text();		
 		          $("#contentLength").html(t.length);
-		          if (t.length >= 500) {
+		          if (t.length > 500) {
 		        	  $(this).val(t.substring(0,500));
 		        	  console.log("keydown2 fucntion check");
 		        	//delete keys, arrow keys, copy, cut, select all
@@ -322,7 +322,7 @@ $(function(){ */
 			var count = content.length;
 			$('#contentLegnth').html(count);
 			console.log("summernote keyup note version check");
-			if(count>=500){
+			if(count>500){
 				alert('내용은 500글자까지 입력 가능합니다.');
 				$(this).val(note.substring(0,500));
 				$('#contentLegnth').text(500);
@@ -335,7 +335,7 @@ $(function(){ */
 			var count = content.length;
 			$('#contentLegnth').text(count);
 			console.log("note-editable keyup ver. check");
-			if(count>=500){
+			if(count>500){
 				
 				console.log("note-editable keyup ver.  note check");
 				alert('내용은 500글자까지 입력 가능합니다.');
@@ -350,7 +350,7 @@ $(function(){ */
 			console.log("content keyup function --> contentelength : ",count);
 			$('#contentLength').text(count);
 			console.log("content keyup ver. check");
-			if(count>=500){
+			if(count>500){
 				
 				console.log("content keyup ver. check");
 				alert('내용은 500글자까지 입력 가능합니다.');
@@ -453,7 +453,7 @@ $(function(){ */
 				$('#summernote').summernote('focus');
 				return false;
 			}
-			if(conlength >= maxlength){
+			if(conlength > maxlength){
 				alert("내용은 500자까지 입력해주세요.");	
 				//content.val(content.substring(0,500));
 				 $('#content').val($('#content').val().slice(0, 500));
@@ -461,7 +461,7 @@ $(function(){ */
 				$('#summernote').summernote('focus');
 				return false;
 			}
-			if(content.length >= 500){
+			if(content.length > 500){
 				alert(content.length+"자를 입력하셨습니다. 내용은 500자까지 입력해주세요.");	
 				$(this).val(content.substring(0,500));
 				 console.log("submit content length check");
@@ -485,14 +485,14 @@ $(function(){ */
 			}	
 			//-------------------공백 trim 유효성검사
 			//제목
-			if($("#subject").val().trim()==""){
-				alert("제목을 입력하세요.")
+			if($("#subject").val().trim()==" "){
+				alert("제목을 입력하세요.");
 				$("#subject").focus();
 				return false;
 			}
 			//작성자
 			if($("#userid").val().trim()==""){
-				alert("작성자를 입력하세요.")
+				alert("작성자를 입력하세요.");
 				$("#userid").focus();
 				return false;
 			}
@@ -586,7 +586,8 @@ $(function(){ */
 				alert("비밀번호를 다시 입력해주세요.");
 				return false;
 			}
-			if($("#userpwd").val().length >= 4 && !pwdreg){
+			if($("#userpwd").val().length >
+			4 && !pwdreg){
 				console.log(check)
 				alert("비밀번호는 4자리만 사용 가능합니다.");
 				$("#userpwd").focus();

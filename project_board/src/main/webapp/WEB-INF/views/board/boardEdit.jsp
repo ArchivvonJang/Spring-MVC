@@ -22,9 +22,11 @@
 $(function(){
 	//vo에서 가져온 글자 수 표시 count
 		var subjectLength = "${vo.subject}";
+		//var subjectLength = $("#subject").val();
+		//var subjectLength = "<c:out value='${vo.subject}'></c:out>";
 		var useridLength = "${vo.userid}";
 		var userpwdLength = "${vo.userpwd}";
-		  var note = $($("#summernote").summernote("code")).text();		
+		 var note = $($("#summernote").summernote("code")).text();		
 		//길이표시
 		$("#count").text(subjectLength.length);
 		$("#useridLength").text(useridLength.length);
@@ -76,7 +78,7 @@ $(function(){
 		    	console.log("summernote keydown2");
 		    
 		          $("#contentLength").html(t.length);
-		          if (t.length >= 500) {
+		          if (t.length > 500) {
 		        	  $(this).val(t.substring(0,500));
 		        	  console.log("keydown2 fucntion check");
 		        	//delete keys, arrow keys, copy, cut, select all
@@ -163,11 +165,11 @@ $(function(){
 				
 			    var limiteTxt= 500;
 			    var txt= $(this).text();
-			    var totalTxt= txt.length;
+			    var totalTxt = txt.length;
 			    //Update value
 			    $("#contentLength").html(totalTxt);
 			    //Check and Limit Charaters
-			    if(totalTxt >= limiteTxt){
+			    if(totalTxt > limiteTxt){
 			    	console.log("note-editable function  if check ");
 			        return false;
 			    }
@@ -178,7 +180,7 @@ $(function(){
 					var count = content.length;
 					$('#count').html(count);
 					
-					if(count>=100){
+					if(count>100){
 						alert('제목은 최대 100자까지 입력 가능합니다.').
 						$(this).val(content.substring(0,100));
 						$('#count').html(100);
@@ -189,7 +191,7 @@ $(function(){
 				var count = content.length;
 				$("#useridLength").html(count);
 				
-				if(count>=10){
+				if(count>10){
 					alert('작성자는 10글자까지 입력 가능합니다.');
 					$(this).val(content.substring(0,10));
 					$("#useridLength").html(10);
@@ -210,7 +212,7 @@ $(function(){
 					return false; 
 				}
 				//비밀번호가 4자리 초과라면,
-				if(count>=4){
+				if(count>4){
 					alert('비밀번호는 4자리까지 입력 가능합니다.');
 					$("#userpwd").focus();
 					$(this).val(content.substring(0,4));
@@ -247,7 +249,7 @@ $(function(){
 				console.log("note-editable keyup ver. check");
 			    console.log("note-editable keyup ver. content :" , content);
 			    console.log("note-editable keyup ver. length :" , $(this).text().length);
-				if(count>=500){
+				if(count>500){
 					console.log("note-editable keyup ver. if!!!");
 				
 					alert('내용은 500글자까지 입력 가능합니다.');
@@ -263,7 +265,7 @@ $(function(){
 				console.log("note-editable paste ver. check");
 			    console.log("note-editable paste ver. content :" , content);
 			    console.log("note-editable paste ver. length :" ,count);dsfsaf
-				if(count>=500){
+				if(count=500){
 					console.log("note-editable keyup ver. if!!!");
 								
 					$(this).text(content.substring(0,500));
@@ -277,7 +279,7 @@ $(function(){
 				console.log("content keyup function --> contentelength : ",count);
 				$('#contentLength').text(count);
 				
-				if(count>=500){
+				if(count>500){
 					console.log("content keyup check");
 				
 					alert('내용은 500글자까지 입력 가능합니다.');
@@ -359,7 +361,7 @@ $(function(){
 			$('#summernote').summernote('focus');
 			return false;
 		}
-		if(conlength >= maxlength){
+		if(conlength > maxlength){
 			
 			console.log("submit conlength and maxlength 확인");
 			alert("maxlength 내용은 500자까지 입력해주세요.");	
@@ -368,7 +370,7 @@ $(function(){
 			$('#summernote').summernote('focus');
 			return false;
 		}
-		if(content.length >= 500){
+		if(content.length > 500){
 			alert(content.length+"자를 입력하셨습니다. 내용은 500자까지 입력해주세요.");	
 			console.log("submit content substring 확인");
 			$(content).val(content.substring(0,500));
@@ -498,7 +500,7 @@ $(function(){
 			alert("비밀번호를 다시 입력해주세요.");
 			return false;
 		}
-		if($("#userpwd").val().length >= 4 && !pwdreg){
+		if($("#userpwd").val().length > 4 && !pwdreg){
 			console.log(check)
 			alert("비밀번호는 4자리만 사용 가능합니다.");
 			$("#userpwd").focus();
