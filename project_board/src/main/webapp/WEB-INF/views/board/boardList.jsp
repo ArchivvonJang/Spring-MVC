@@ -4,11 +4,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>board</title>
+<title>list</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<!-- summernote -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 <style>
 	#boardList{margin-top:10px;}
@@ -16,11 +22,12 @@
 		width:10%; height:50px; line-height:50px; border-bottom:1px solid lightgray; float: left;
 		text-align:center;
 	}
-	#boardList li:nth-child(5n+2){width:60%; text-align:left;}
-	#boardList li:nth-child(5n+2) a{color:black; }
 	.menu, h1{
 		color:#4289DB; font-weight:bold; text-align:center;
 	}
+	#boardList li:nth-child(5n+2){width:60%; text-align:left;}
+	#boardList li:nth-child(5n+2) a{color:black; }
+	
 	.search_container{
 		text-align:right; line-height:30px;
 	}
@@ -38,7 +45,7 @@
 	.btn{margin:10px 0 15px 0; height:33px;} 
 	#sub{
 		white-space:normal;  text-overflow:ellipsis;
-		 overflow: hidden;
+		 overflow: hidden;text-align:left;
 	 }
 	/* 페이징처리부분 */
 	.page_wrap {
@@ -119,7 +126,7 @@
 		<!-- 검색하기 -->
 		<div id="search_container" style="height:30px;">		
 		<form method="get" action="boardList" id="searchForm">
-			<input type="text" id="searchWord" name="searchWord" placeholder="검색하기"><input type="submit" id="searchBtn" value="검색"/>			
+			<input type="text" id="searchWord" name="searchWord" placeholder="검색하기" <c:if test="${sapvo.searchWord != null || sapvo.searchWord != ''}">value="${sapvo.searchWord}"</c:if>><input type="submit" id="searchBtn" value="검색"/>			
 		</form>	
 		</div>
 		<div id="totalList">
@@ -129,7 +136,7 @@
 		<!-- search_container end -->
 		<ul id="boardList">
 			<li class="menu">번호</li>
-			<li class="menu">제목</li>
+			<li class="menu" style="text-align:center">제목</li>
 			<li class="menu">글쓴이</li>
 			<li class="menu">조회수</li>
 			<li class="menu">등록일</li>

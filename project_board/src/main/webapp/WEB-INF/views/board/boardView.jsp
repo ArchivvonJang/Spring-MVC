@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>view</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -25,12 +25,15 @@
 		font-size:1em; border: 1px solid lightgray; 
 		padding:10px; 
 		white-space:normal; word-break:break-all;  text-overflow:ellipsis;
-		width: 1110px; overflow: auto;
+		width: 100%; overflow: auto;
 		margin-bottom:15px;
 	 }
 	#content{
 		 padding:10px; width: 1110px; height:500px; border:1px solid lightgray; word-break:break-all; overflow:auto;
 		margin-bottom:15px; 
+	}
+	.note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false], .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false] {
+    background-color: white; height: 500px;
 	}
 </style>
 <script type="text/javascript">
@@ -84,7 +87,7 @@
 				data : param,
 				success : function(result){
 					if(result==0){
-						alert("비밀번호를 확인해주세요.");		
+						//alert("비밀번호를 확인해주세요.");		
 						getUserpwd(data,loc);
 						console.log("ajax check loc : ", loc);
 						
@@ -98,7 +101,15 @@
 			});
 		}
 	
-
+$(function(){
+	$("#summernote").summernote({
+		disable: true,
+		toolbar : false,
+		disableDragAndDrop: true,
+		tabDisable: false
+	});
+	$('#summernote').summernote('disable');
+});
 </script>
 </head>
 <body>
@@ -111,19 +122,15 @@
 				<span class="menu">작성자</span>  <span><c:out value="${vo.userid}"  escapeXml="true"></c:out></span>
 			<li>
 			<li class="menuLine"><span class="menu">등록일</span> ${vo.writedate}</li>
-			<li class="menuLine"><span class="menu">조회수</span> ${vo.hit}</li>
+			<%-- <li class="menuLine"><span class="menu">조회수</span> ${vo.hit}</li> --%>
 			<!-- 제목 -->
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
 			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
 			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
 			<!-- 내용 -->
-			<%--  <li id="content">${vo.content}</li>  --%>
-			<%-- <li><textarea id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> --%>
-			<li>
-				<textarea id="content" readonly>
-					<pre>${vo.content}</pre>
-				</textarea>	
-			</li>
+			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
+			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
+			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
 		</ul>
 		<div id="btnLine">
 			<%-- <button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button> --%>

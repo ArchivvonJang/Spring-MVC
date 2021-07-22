@@ -22,13 +22,22 @@
 //<![CDATA[
 	//①CDATA로 감싼 javascript 부분이 의도치않게 XML Parser에 의해 잘못 인식되는 것을 막기 위해
 	//②XHTML이 아닌 HTML로 인식되는 경우에도 javascript가 문제 없이 동작하도록 하기 위해
+	
+	//제목
+	function subInput(e){
+		console.log("subInput function test");
+		var obj = $("#subject");
+		var txtcheck = $("#count");
+		blankCheck(obj, '제목');
+		textCount(obj, txtcheck, '제목');
+	}
 	//작성자
 	function useridInput(e){
 		console.log("useridInput function test");
 		var obj = $("#userid");
 		var txtcheck = $("#useridLength");
-		blankCheck(obj, '작성자')
-		textCount(obj, txtcheck);
+		blankCheck(obj, '작성자');
+		textCount(obj, txtcheck, '작성자');
 	}
 	//비밀번호
 	function userpwdInput(e){
@@ -36,20 +45,18 @@
 		var obj = $("#password");
 		var txtcheck = $("#userpwdLength");
 		var pwdMsg = $("#pwdApproval");
-		
-		blankCheck(obj, '비밀번호')
-		textCount(obj, txtcheck);
-	
+		blankCheck(obj, '비밀번호');
+		textCount(obj, txtcheck, '비밀번호');
 	}
 
 	//textCount 글자수세기 함수
-	function textCount(obj, txtcheck){
+	function textCount(obj, txtcheck, title){
 		console.log("???textCount function working?");
 		//txtcheck.text(obj.val().length + "/" + obj.attr("maxlength"));
 		txtcheck.text(obj.val().length);
 		if(obj.val().length >= obj.attr("maxlength")){
 			setTimeout(function(){
-				alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.");
+				alert(title +"은 " + obj.attr("maxlength") + "글자까지 입력 가능합니다.");
 				console.log("textCount setTimeout working?");
 			}, 100);
 			obj.val(obj.val().substr(0, obj.attr("maxlength")));
@@ -244,8 +251,8 @@ $(function(){
 	    			 $('#summernote').html(t.substring(0,500));
 	    	  			
 	    			 console.log('substring(0,500) 적용된 summernote -->',$(".note-editable").val());
-	    			 $("#contentLength").html(500);
 	    			 //$("#contentLength").html(t.length);
+	    			 $("#contentLength").html(500);
 	    			 $('#summernote').focus(); 
 	    			e.preventDefault(); 
 	    			return false;
@@ -265,15 +272,18 @@ $(function(){
 		          document.execCommand('insertText', false, all.substring(0, 500));
 		          if(t.length + bufferText.length > 500){
                       maxPaste = 500 - t.length;
+                      $("#contentLength").html(t.length);
                       console.log("summernote onPaste bufferText.length check");
                   }
 		          if(maxPaste > 0){
                       document.execCommand('insertText', false, bufferText.substring(0, maxPaste));
                       console.log("summernote onPaste maxPaste check");
+                      $("#contentLength").html(document.execCommand('insertText').length);
                   }
                   $('#maxContentPost').text(500 - t.length);
 		          if (typeof callbackMax == 'function') {
 		            callbackMax(500 - t.length);
+		            $("#contentLength").html(t.length);
 		            $(this).text(t.substring(0,500));
 		            console.log("summernote onPaste callbackMax check");
 		            return false;
@@ -305,9 +315,11 @@ $(function(){
 				console.log("subject keyup ");
 				if(count>100){
 					console.log("subject keyup count 100");
-					alert('제목은 최대 100자까지 입력 가능합니다.').
+					alert('제목은 최대 100자까지 입력 가능합니다.');
 					$(this).val(content.substring(0,100));
 					$('#count').html(100);
+					$("#subject").focus();
+					return false;	
 				}
 				if(content.replace(/\s| /gi, '').length== 0){
 					console.log("subject keyup regexp length spacebar ");
@@ -325,6 +337,7 @@ $(function(){
 					return false;	
 				}
 			});
+
 		$("#userid").keyup(function(){
 			console.log("userid keyup");
 			var content = $(this).val();//입력된 상품명의 value
@@ -393,26 +406,27 @@ $(function(){
 			if(count>500){
 				alert('내용은 500글자까지 입력 가능합니다.');
 				$(this).val(note.substring(0,500));
-				$('#contentLegnth').text(500);
+				$('#contentLegnth').html(count);
 				console.log("summernote keyup note version if -->", note.substring(0,500));
 				return false;
 			}
 		});
 		$(".note-editable").keyup(function(){
 			var content = $(this).text();//입력된 상품명의 value
-			var count = $(this).text().length;
+			var count = $(".note-editable").text().length;
 			$('#contentLegnth').html(count);
 			console.log("note-editable keyup ver. check");
 			if(count>500){
 				console.log("note-editable keyup ver.  note check");
-				alert('내용은 500글자까지 입력 가능합니다.');
+				alert('내용은 500글자까지 입력 가능합니다');
 				$(this).val(note.substring(0,500));
-				$('#contentLegnth').html(500);
+				$('#contentLegnth').html(count);
 				return false;
 			}
 			//delete keys, arrow keys, copy, cut, select all
             if (e.keyCode != 8 && !(e.keyCode >=37 && e.keyCode <=40) && e.keyCode != 46 && !(e.keyCode == 88 && e.ctrlKey) && !(e.keyCode == 67 && e.ctrlKey) && !(e.keyCode == 65 && e.ctrlKey)){
-          	e.preventDefault(); 
+            	$('#contentLegnth').html(count);
+            	e.preventDefault(); 
         		console.log("note-editable keyup  if  check");
         		return false;
          	 }
@@ -424,18 +438,18 @@ $(function(){
 		}));
 		$(".note-editable").on('paste', function(){
 			var content = $(this).text();//입력된 상품명의 value
-			var count = $(this).text().length;
+			var count = $(".note-editable").text().length;
 			$('#contentLegnth').text(count);
-			$('#contentLegnth').html(count);
+			$(".note-editable").text().html(count);
 			console.log("note-editable paste ver. check");
 		    console.log("note-editable paste ver. content :" , content);
-		    console.log("note-editable paste ver. length :" ,count);dsfsaf
-			if(count=500){
-				console.log("note-editable keyup ver. if!!!");
-							
+		    console.log("note-editable paste ver. length :" ,count);
+			if(count>500){
+				console.log("note-editable keyup ver. if!!!");			
 				$(this).text(content.substring(0,500));
-				$('#contentLegnth').html(count);
+				
 				alert('내용은 500글자까지 입력 가능합니다.');
+				$('#contentLegnth').html(count);
 			}
 		}); //keyup end
 		$("#content").keyup(function(){
@@ -445,11 +459,10 @@ $(function(){
 			$('#contentLength').text(count);
 			console.log("content keyup ver. check");
 			if(count>500){
-				
 				console.log("content keyup ver. check");
 				alert('내용은 500글자까지 입력 가능합니다.');
 				$(this).val(note.substring(0,500));
-				$('#contentLegnth').html(500);
+				$('#contentLegnth').html(count);
 				return false;
 			}
 		}); //keyup end
@@ -776,7 +789,7 @@ $(function(){
 		
 			<ul>
 			
-				<li class="menu"><label class="label">제목</label><input type="text" name="subject" id="subject" class="wordcut" maxlength="100" size="100" required oninput="useridInput(this.val)"/>
+				<li class="menu"><label class="label">제목</label><input type="text" name="subject" id="subject" class="wordcut" maxlength="100" size="100" required oninput="subInput(this.val)"/>
 								&nbsp;<span id="count"></span>/<span id="max_count">100</span><br/>
 				</li>
 				<li>

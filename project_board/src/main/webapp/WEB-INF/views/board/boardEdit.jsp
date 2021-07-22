@@ -219,9 +219,9 @@ $(function(){
 	    			console.log("summernote keyup2-2 t.length check");	
 	    			//수정 전 현재텍스트 길이 표시
 	    			 $("#contentLength").html(t.length);
-	    			
-	    			$("#summernote").text(note.substring(0,500));
-	    			$(this).text(note.substring(0,500));
+	    			 //var note = $($("#summernote").summernote("code")).val().length;	
+	    		//	t.text(note.substring(0,500));
+	    		//	$(this).text(note.substring(0,500));
 	    			$(this).text(t.substring(0,500));
 	    			$(".note-editable").html(t.substring(0,500));
 	    			console.log('substring(0,500)', t.substring(0,500));
@@ -393,7 +393,7 @@ $(function(){
 			    console.log("note-editable keyup ver. content :" , content);
 			    console.log("note-editable keyup ver. length :" , $(this).text().length);
 			    $("#contentLength").html(count);
-				if(count>=500){
+				if(count>500){
 					console.log("note-editable keyup ver. if!!!");
 					alert('내용은 500글자까지 입력 가능합니다.');
 					$(this).text(content.substring(0,500));
@@ -716,7 +716,7 @@ $(function(){
 			return false;
 		}
 		if($("#userpwd").val().length > 4 && !pwdreg){
-			console.log(check)
+			console.log("userpwd value + pwdreg");
 			alert("비밀번호는 4자리만 사용 가능합니다.");
 			$("#userpwd").focus();
 			return false;
