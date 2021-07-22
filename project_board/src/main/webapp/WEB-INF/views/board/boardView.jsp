@@ -23,13 +23,13 @@
 	.menuLine{margin: 10px 0 15px 0;}
 	#sub{
 		font-size:1em; border: 1px solid lightgray; 
-		height:40px ; line-height:40px; padding-left:10px; 
+		padding:10px; 
 		white-space:normal; word-break:break-all;  text-overflow:ellipsis;
 		width: 1110px; overflow: auto;
 		margin-bottom:15px;
 	 }
 	#content{
-		 padding:10px; width: 1110px; height: 700px auto; border:1px solid lightgray; word-break:break-all; overflow: auto;
+		 padding:10px; width: 1110px; height:500px; border:1px solid lightgray; word-break:break-all; overflow:auto;
 		margin-bottom:15px; 
 	}
 </style>
@@ -71,7 +71,7 @@
 				checkUserpwd(pwd, window.location.href);
 			} */
 			if(pwd == '' || pwd==null){
-				alert("다시 입력해주세요");
+				//alert("다시 입력해주세요");
 				return false;
 			}
 		}
@@ -108,21 +108,27 @@
 		<ul>
 			<!-- 작성자 -->
 			<li class="menuLine">
-				<span class="menu">작성자</span>  <span><c:out value="${vo.userid}"></c:out></span>
+				<span class="menu">작성자</span>  <span><c:out value="${vo.userid}"  escapeXml="true"></c:out></span>
 			<li>
 			<li class="menuLine"><span class="menu">등록일</span> ${vo.writedate}</li>
 			<li class="menuLine"><span class="menu">조회수</span> ${vo.hit}</li>
 			<!-- 제목 -->
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
-			<li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li>
+			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
+			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
 			<!-- 내용 -->
-			 <li id="content">${vo.content}</li> 
-			
+			<%--  <li id="content">${vo.content}</li>  --%>
+			<%-- <li><textarea id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> --%>
+			<li>
+				<textarea id="content" readonly>
+					<pre>${vo.content}</pre>
+				</textarea>	
+			</li>
 		</ul>
 		<div id="btnLine">
 			<%-- <button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button> --%>
-			<button class="btn"><a href="javascript:boardEdit()" id="boardEdit" >수정하기</a></button>
-			<button class="btn"><a href="javascript:boardDelete()" id="boardDel">삭제하기</a></button>	
+			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
+			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
 		</div>
 </div>

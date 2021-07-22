@@ -6,7 +6,7 @@
 	}
 	.btn{background-color:white; border:1px solid gray; color:gray; height:33px;  border-radius:0px;}
 	#subject{
-		width:90%; overflow-auto;
+		width:90%; overflow:auto;
 	}
 	#subject a{
 		color:black;
@@ -20,11 +20,14 @@
 		font-size:1em;
 	}
 	input[type="number"]::-webkit-outer-spin-button,
-	input[type="number"]::-webkit-inner-spin-button {
+	input[type="number"]::-webkit-inner-spin-button,
+	#content
+	 {
     -webkit-appearance: none;
     margin: 0;
 	}
 	.input-number-password {
     -webkit-text-security: disc;
     }
+    #content{width:100%;}
 	
