@@ -166,6 +166,7 @@ $(function(){
 			placeholder: '내용을 입력해주세요. 최대 500자까지 쓸 수 있습니다',	
 			maxlength:500,
 			focus : true,
+			airMode: false,
 			//콜백 함수
 		    callbacks : { 
 		    	lengthCheck : function(){
@@ -222,7 +223,7 @@ $(function(){
 		         var t = e.currentTarget.innerText;
 		         //var note = $($("#summernote").summernote("code")).text();		
 		         //글자수
-		         $("#contentLength").html(t.length);
+		        // $("#contentLength").html(t.length);
 		         console.log("t.length :" , t.length);
 		         
 		         if (typeof callbackMax == 'function') {
@@ -290,6 +291,7 @@ $(function(){
 		          }
 		        }
 		      } //callbacks end
+		      
 		 }); //summernote end
 			//내용 글자수 
 		$(".note-editable").on("keypress", function(){

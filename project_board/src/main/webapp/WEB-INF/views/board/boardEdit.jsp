@@ -155,7 +155,7 @@ $(function(){
 					var count = content.length;
 					//$('#').html(count);
 					
-					if(count>=500){
+					if(count>500){ //if(count>=500){
 						$(this).val(content.substring(0,500));
 						alert('내용은 500자리까지 작성가능합니다.');
 						console.log("summernote lengthcheck if alert");
@@ -227,7 +227,7 @@ $(function(){
 	    			console.log('substring(0,500)', t.substring(0,500));
 	    		
 	    			 $("#contentLength").html(t.length);
-	    			 alert("내용은 500자까지 작성가능합니다.");
+	    			// alert("내용은 500자까지 작성가능합니다.");
 	    			 $('#summernote').html(t.substring(0,500));
 	    			 
 	    			 console.log('substring(0,500) 적용된 summernote -->',t.length);

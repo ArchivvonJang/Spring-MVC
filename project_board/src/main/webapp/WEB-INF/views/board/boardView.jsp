@@ -17,23 +17,23 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 <style>
-	.menu{margin-right:10px; font-weight: bold;}
+	.menu{margin-right:10px; font-weight: bold; }
 	#btnLine{margin:0 auto;width:1000px; text-algin:center;}
-	ul{}
-	.menuLine{margin: 10px 0 15px 0;}
+	.menuLine:first-child{margin-top:50px;}
+	.menuLine{margin: 20px 0 20px 0;}
 	#sub{
-		font-size:1em; border: 1px solid lightgray; 
-		padding:10px; 
+		font-size:1em; border: 1px solid lightgray; overflow: auto;
+		padding:10px; height:30px auto;
 		white-space:normal; word-break:break-all;  text-overflow:ellipsis;
-		width: 100%; overflow: auto;
-		margin-bottom:15px;
+		width: 100%; 
+		margin-bottom:15px; 
 	 }
 	#content{
-		 padding:10px; width: 1110px; height:500px; border:1px solid lightgray; word-break:break-all; overflow:auto;
+		 padding:10px; width: 1110px; height:500px auto; border:1px solid lightgray; word-break:break-all; overflow:auto;
 		margin-bottom:15px; 
 	}
 	.note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false], .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false] {
-    background-color: white; height: 500px;
+    background-color: white; height: 500px auto;
 	}
 </style>
 <script type="text/javascript">
@@ -88,7 +88,7 @@
 				success : function(result){
 					if(result==0){
 						//alert("비밀번호를 확인해주세요.");		
-						getUserpwd(data,loc);
+						//getUserpwd(data,loc);
 						console.log("ajax check loc : ", loc);
 						
 					}else if(result==1){

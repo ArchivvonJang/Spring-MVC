@@ -10,14 +10,17 @@ public class SearchAndPageVO {
 	private String searchnum;
 	//페이지
 	// 총레코드수가 발생하면, 총페이지수를 구하기 가능 -> 총페이지수가 나오면 마지막페이지에 레코드가 몇개 남았는지 확인 -> 그럼 시작페이지알수있음
-	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개
+	// 초기값 설정 , 값 변동 x
 	private int onePageNum=5;//한페이지당 페이지 갯수 1 2 3 4 5
 	private int onePageRecord=5;//한페이지당 레코드수
 	
-	private int totalRecord;//총 레코드 수 	(검색어에 해당하는)	
-	private int totalPage;//마지막페이지, 총 페이지 수 	
-	
+	//초기값o,변동o
+	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개
 	private int startPageNum=1;//시작페이지 =3 이면 3페이지부터 시작
+	private int lastPage=5; //한 페이지의 페이지 개수의 마지막 번호  
+	//초기값x, 변동d
+	private int totalRecord;//총 레코드 수 	(검색어에 해당하는)	
+	private int totalPage;//마지막페이지, 총 페이지 수 
 	private int lastPageRecord;//마지막 페이지의 남은 레코드수
 	// 현재페이지의 시작 게시글 번호 = (현재 페이지 번호 - 1)*페이지 당 출력할 게시글 갯수
 	//이전글 다음글
@@ -155,5 +158,11 @@ public class SearchAndPageVO {
 	public void setSearchnum(String searchnum) {
 		this.searchnum = searchnum;
 	}
-
+	public int getLastPage() {
+		return lastPage;
+	}
+	public void setLastPage(int lastPage) {
+		this.lastPage = lastPage;
+	}
+	
 }
