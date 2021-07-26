@@ -18,6 +18,7 @@ public class SearchAndPageVO {
 	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개
 	private int startPageNum=1;//시작페이지 =3 이면 3페이지부터 시작
 	private int lastPage=5; //한 페이지의 페이지 개수의 마지막 번호  
+	//끝 페이지 : 시작 페이지 + 출력할 페이지 목록 수 - 1 (마지막 범위는 따로 처리)
 	//초기값x, 변동d
 	private int totalRecord;//총 레코드 수 	(검색어에 해당하는)	
 	private int totalPage;//마지막페이지, 총 페이지 수 

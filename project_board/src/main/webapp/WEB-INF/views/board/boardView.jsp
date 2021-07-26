@@ -138,6 +138,22 @@ $(function(){
 			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
 		</div>
+		
+		<!-- 댓글 -->
+		<div>
+		<form method="post" action=" " id="reviewForm">
+			<input type="hidden" name="no" value="">
+				<textarea name="content" id="content"></textarea>
+				<label>작성자</label><input type="text" name="userid" id="userid" maxlength="10">
+				<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" maxlength="4">
+			<br/>
+			<input type ="button" value="댓글등록" id="reviewBtn">
+		</form>
+		</div>
+		<!-- 댓글 목록 -->
+		<span>[전체 댓글 수 : ] </span>
+		<div id="reviewList"> <!-- webSpring01 -->
+		</div>
 </div>
 </body>
 </html>
