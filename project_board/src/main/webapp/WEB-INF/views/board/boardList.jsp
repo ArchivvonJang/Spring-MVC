@@ -186,7 +186,7 @@
         		</c:forEach>
         
         		<!-- 다음 페이지가 있을 때 ,총페이지수가 한 페이지세트 끝번호보다 크면 -->
-        		<c:if test="${sapvo.pageNum < sapvo.totalPage}">
+        		<c:if test="${sapvo.pageNum <= sapvo.totalPage}">
 				<!--뒤로-->            
 	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				</c:if>

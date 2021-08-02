@@ -35,6 +35,7 @@
 	.note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false], .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false] {
     background-color: white; height: 500px auto;
 	}
+	#reviewContainer{margin-top:20px;}
 </style>
 <script type="text/javascript">
 	// $(function(){	}); 아래랑 같은기능을 하는 다른표기법 $(()=>{});
@@ -140,7 +141,7 @@ $(function(){
 		</div>
 		
 		<!-- 댓글 -->
-		<div>
+		<div id="reviewContainer">
 		<form method="post" action=" " id="reviewForm">
 			<input type="hidden" name="no" value="">
 				<textarea name="content" id="content"></textarea>

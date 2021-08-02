@@ -33,6 +33,8 @@ public class SearchAndPageVO {
 	// 정렬 
 	private String sortRecord;
 	
+	//댓글
+	private int reviewTotalRecord;
 	
 	//getter setter
 	//검색
@@ -164,6 +166,12 @@ public class SearchAndPageVO {
 	}
 	public void setLastPage(int lastPage) {
 		this.lastPage = lastPage;
+	}
+	public int getReviewTotalRecord() {
+		return reviewTotalRecord;
+	}
+	public void setReviewTotalRecord(int reviewTotalRecord) {
+		this.reviewTotalRecord = reviewTotalRecord;
 	}
 	
 }
