@@ -111,6 +111,65 @@ $(function(){
 	});
 	$('#summernote').summernote('disable');
 });
+
+//------------------------ ajax를 이용한 댓글처리 -------------------------
+$(function(){
+	//댓글목록
+	function reviewList(){
+		var url = "/reviewList";
+		var params = "no=${vo.no}";
+		console.log(url);
+		console.log(params);
+		$.ajax({
+			url:url,
+			data:params,
+			success:function(result){
+				//변수이름이 $result
+				var $result=$(result);
+				var tag="<ul>"
+				//반복
+					$result.each(function(i, o){
+						tag+="<li><div>"+o.userid+"("+o.replydate+") ";
+					
+						tag+="<br/>"+o.content+"</div>";
+					
+						tag+="</li>";
+					});//each end
+					tag+="</ul>";
+					$("#reviewList").html(tag);				
+				
+				
+			}, error:function(){
+				console.log("댓글 데이터 가져오기 에러 발생")
+			}// success, error function end
+		}); //ajax end
+		
+	} //reviewList end
+	//댓글쓰기
+	$('#reviewBtn').on('click',function(){
+		if($("#content").val()!=''){
+			var url ="/reviewWriteOk"; 
+			var params=$("#reviewForm").serialize(); 
+	
+			$.ajax({
+				url:url,
+				data:params,
+				success:function(result){ //돌려받은 값을 아래에 적기
+					console.log("댓글 달기 성공 ");
+					reviewList();
+					$("#content").val("");
+				},error:function(){
+					console.log("댓글 등록 에러 발생");
+				} 
+			});//ajax end
+		}else{
+			alert("댓글을 입력하세요.");
+		}//if else end
+	});
+	
+
+}); //function end
+
 </script>
 </head>
 <body>
@@ -140,19 +199,18 @@ $(function(){
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
 		</div>
 		
-		<!-- 댓글 -->
+		<!------------------- 댓글 ----------------------->
 		<div id="reviewContainer">
 		<form method="post" action=" " id="reviewForm">
 			<input type="hidden" name="no" value="">
-				<textarea name="content" id="content"></textarea>
+				<textarea name="content" id="content" id="sub"></textarea>
 				<label>작성자</label><input type="text" name="userid" id="userid" maxlength="10">
 				<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" maxlength="4">
-			<br/>
-			<input type ="button" value="댓글등록" id="reviewBtn">
+				<input type ="button" value="댓글등록" id="reviewBtn" class="btn">
 		</form>
 		</div>
 		<!-- 댓글 목록 -->
-		<span>[전체 댓글 수 : ] </span>
+		<span>[전체 댓글 수 : ${reviewList.totalReviewRecord} ] </span>
 		<div id="reviewList"> <!-- webSpring01 -->
 		</div>
 </div>
