@@ -60,17 +60,26 @@
 		<!-- 									총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
 		<c:forEach var="vo" items="${list}" >
+			<!-- 번호 -->
 			<li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li>
-				<li class="wordCut">
-				<c:forEach var="i" begin="1" end="${vo.step}">
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				</c:forEach>
-				<c:if test="${vo.step>0}">
+			<!-- 답글 -->
+			<c:if test="${vo.step>0}">
+			<li class="wordCut">
+			<c:forEach var="i" begin="1" end="${vo.step}">
+			<!-- 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+			</c:forEach>
+			<c:if test="${vo.step>0}">
 					⤷
-				</c:if>
+			</c:if>
+			</li>
+			</c:if>
+			<!-- 제목 -->
 			<li class="wordcut" id="sub"><a href="boardView?no=${vo.no}" style="white-space: pre"><c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
+			<!-- 글쓴이 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
+			<!-- 조회수 -->
 			<li>${vo.hit }</li>
+			<!-- 작성일 -->
 			<li>${vo.writedate}</li>
 			<c:set var="recordNum" value="${recordNum-1}"/>
 		</c:forEach>
