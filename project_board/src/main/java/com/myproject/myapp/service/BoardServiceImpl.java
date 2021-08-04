@@ -58,8 +58,42 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public String getUserpwd(int no) {
-		// TODO Auto-generated method stub
 		return boardDAO.getUserpwd(no);
+	}
+
+	@Override
+	public BoardVO oriInfo(int no) {
+		return boardDAO.oriInfo(no);
+	}
+
+	@Override
+	public int lvlCount(BoardVO vo) {
+		return boardDAO.lvlCount(vo);
+	}
+
+	@Override
+	public int claseDataInsert(BoardVO vo) {
+		return boardDAO.claseDataInsert(vo);
+	}
+
+	@Override
+	public int claseUpdate(BoardVO vo) {
+		return boardDAO.claseUpdate(vo);
+	}
+
+	@Override
+	public BoardVO getStep(int no) {
+		return boardDAO.getStep(no);
+	}
+
+	@Override
+	public int claseDelete(int no) {
+		return boardDAO.claseDelete(no);
+	}
+
+	@Override
+	public int claseDeleteUpdate(int no,String userpwd) {
+		return boardDAO.claseDeleteUpdate(no, userpwd);
 	}
 	
 

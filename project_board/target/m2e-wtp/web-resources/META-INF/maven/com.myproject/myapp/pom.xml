@@ -137,6 +137,13 @@
 		    <artifactId>mybatis</artifactId>
 		    <version>3.5.6</version>
 		</dependency>
+		<!-- ajax -->
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.6</version>
+		</dependency>
 		<!-- jackson :map으로 넘겨도 jackson이 자동으로 JSON 타입으로 변환해서 넘겨줌.jackson은 gson처럼 객체화필요없음 그냥 @ResponseBody와 같이 사용-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -148,7 +155,34 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.9.2</version>
-		</dependency>     
+		</dependency>  
+			<!-- 섬머노트 이미지업로드추가를위해 추가 -->
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.6</version>
+		</dependency>  
+		
+		<!-- commons-fileupload -->
+        <!-- multipart등을 사용할수 있음 -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.1</version>
+        </dependency>  
+         <!-- apache.poi 엑셀 -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>5.0.0</version>
+		</dependency>
+        <!-- apache.poi xlsx 엑셀 -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>5.0.0</version>
+		</dependency> 
 	</dependencies>
     <build>
         <plugins>

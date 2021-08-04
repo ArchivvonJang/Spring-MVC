@@ -10,6 +10,9 @@ public class BoardVO {
 	private int hit;
 	private String writedate;
 	
+	private int ref;
+	private int step;
+	private int lvl; //답글순서
 	
 	public int getNo() {
 		return no;
@@ -60,7 +63,26 @@ public class BoardVO {
 	public void setRownum(int rownum) {
 		this.rownum = rownum;
 	}
-
+	public int getRef() {
+		return ref;
+	}
+	public void setRef(int ref) {
+		this.ref = ref;
+	}
+	public int getStep() {
+		return step;
+	}
+	public void setStep(int step) {
+		this.step = step;
+	}
+	public int getLvl() {
+		return lvl;
+	}
+	public void setLvl(int lvl) {
+		this.lvl = lvl;
+	}
+	
+	
 
 	
 }

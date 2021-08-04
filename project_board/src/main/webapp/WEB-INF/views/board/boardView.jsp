@@ -38,10 +38,17 @@
 	#reviewContainer{margin-top:20px;}
 </style>
 <script type="text/javascript">
+
+//------------------------ 게시판 글보기 -------------------------
+
 	// $(function(){	}); 아래랑 같은기능을 하는 다른표기법 $(()=>{});
 		//$("#boardDel").click(()=>{
 			/* if(confirm("삭제하시겠습니까?")){
 				location.href="boardDelete?no=${vo.no}";
+			}; */
+		//$("#boardEdit").click(()=>{
+		/* 	if(confirm("수정하시겠습니까?")){	
+				location.href="boardEdit?no=${vo.no}";
 			}; */
 		function boardDelete(){
 				//var url ="/myapp/getUserpwd";
@@ -51,10 +58,7 @@
 			getUserpwd(data, loc);
 			console.log("delete data : ", data, " loc :", loc);
 		};
-		//$("#boardEdit").click(()=>{
-		/* 	if(confirm("수정하시겠습니까?")){	
-				location.href="boardEdit?no=${vo.no}";
-			}; */
+
 		function boardEdit(){
 			var loc = "/myapp/boardEdit?no=${vo.no}";
 			var data = "no=${vo.no}&userpwd=";
@@ -125,7 +129,7 @@ $(function(){
 			data:params,
 			success:function(result){
 				//변수이름이 $result
-				var $result=$(result);
+				var $result=$(reviewList);
 				var tag="<ul>"
 				//반복
 					$result.each(function(i, o){
@@ -159,6 +163,8 @@ $(function(){
 					reviewList();
 					$("#content").val("");
 				},error:function(){
+					console.log("url->",url);
+					console.log("params->",params);
 					console.log("댓글 등록 에러 발생");
 				} 
 			});//ajax end
@@ -197,6 +203,7 @@ $(function(){
 			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
 			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
+			<button class="btn"><a href="claseWrite?no=${vo.no}">답글달기</a></button>	
 		</div>
 		
 		<!------------------- 댓글 ----------------------->
@@ -210,7 +217,7 @@ $(function(){
 		</form>
 		</div>
 		<!-- 댓글 목록 -->
-		<span>[전체 댓글 수 : ${reviewList.totalReviewRecord} ] </span>
+		<span>[전체 댓글 수 : ${reviewRecord} ] </span>
 		<div id="reviewList"> <!-- webSpring01 -->
 		</div>
 </div>

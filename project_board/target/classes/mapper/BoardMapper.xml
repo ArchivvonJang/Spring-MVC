@@ -6,19 +6,19 @@
  	<select id="boardAllRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="com.myproject.myapp.vo.BoardVO">
  		select*from
 	 		(select*from
-		 		(select no, subject, userid, userpwd,hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate
+		 		(select no, subject, userid, userpwd,hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step
 		 		from board 
 		 		<choose>
 		 			<when test='searchWord!=null'>
 		 				where subject like '%${searchWord}%'
 		 			</when>
 		 		</choose>
-		 		order by no desc)
-	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no asc)
+		 		order by order by ref desc, lvl asc)
+	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by ref asc)
 				where <![CDATA[rownum<=]]>
 				<if test="pageNum==totalPage">${lastPageRecord}</if>
 	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
-	     order by no desc 
+	     order by ref desc 
  	</select>
  	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">
 		select count(no) totalRecord from board 
@@ -29,17 +29,17 @@
 			 		</choose>		 	      
 	</select>
 	 	<insert id="boardInsert" parameterType="com.myproject.myapp.vo.BoardVO">
- 		insert into board(no, subject, content, userid, userpwd)
- 		values(boardsq.nextval, #{subject}, #{content}, #{userid},#{userpwd})
+ 		insert into board(no, subject, content, userid, userpwd, ref)
+ 		values(boardsq.nextval, ${subject}, ${content}, ${userid}, ${userpwd}, boardsq.currval)
  	</insert>
  	<select id="boardSelect" resultType="com.myproject.myapp.vo.BoardVO">
  		select no, userid, subject, content, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate from board where no=#{param1}
  	</select>
  	<update id="boardUpdate" parameterType="com.myproject.myapp.vo.BoardVO">
- 		update board set subject=#{subject}, content=#{content},userid=#{userid},userpwd=#{userpwd} where no=#{no} 
+ 		update board set subject=${subject}, content=${content},userid=${userid},userpwd=${userpwd} where no=#{no} 
  	</update>
  	<delete id="boardDelete">
- 		delete from board where no=#{param1}
+ 		delete from board where ref=#{param1}
  	</delete>
  	<update id="hitCnt" parameterType="com.myproject.myapp.vo.BoardVO">
  		update board set hit=hit+1 where no=#{param1}
@@ -47,4 +47,20 @@
  	<select id="getUserpwd" resultType="String">
 		select userpwd from board where no=${param1}
 	</select>
+	<select id="oriInfo" resultType="com.myproject.myapp.vo.BoardVO">
+		select no, ref, step, lvl from board where no=#{param1}
+	</select>
+		<update id="lvlCount" parameterType="com.myproject.myapp.vo.BoardVO" >	
+		<![CDATA[update claseboard set lvl=lvl+1 where ref = #{ref} and lvl>#{lvl}]]>
+	</update>
+	<insert id="claseDataInsert" parameterType="com.myproject.myapp.vo.BoardVO">
+		insert into claseBoard(no, subject, content, userid, userpwd, ref, step, lvl) 
+		values(boardsq.nextval, ${subject}, ${content}, ${userid}, ${userpwd}, #{ref}, #{step}, #{lvl})
+	</insert>
+	<select id="getStep" resultType="com.myproject.myapp.vo.BoardVO">
+		select step, userid from board where no=#{param1}
+	</select>
+	<update id="claseDeleteUpdate">
+		update board set subject='삭제된 글입니다.',content='삭제된 내용입니다.' where no=#{param1} and userpwd=#{param2}
+	</update>
   </mapper>
