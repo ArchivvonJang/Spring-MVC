@@ -13,12 +13,12 @@
 		 				where subject like '%${searchWord}%'
 		 			</when>
 		 		</choose>
-		 		order by order by ref desc, lvl asc)
-	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by ref asc)
+		 		order by no desc, lvl asc)
+	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no asc)
 				where <![CDATA[rownum<=]]>
 				<if test="pageNum==totalPage">${lastPageRecord}</if>
 	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
-	     order by ref desc 
+	     order by no desc 
  	</select>
  	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">
 		select count(no) totalRecord from board 
