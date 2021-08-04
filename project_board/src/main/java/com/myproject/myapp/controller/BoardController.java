@@ -172,7 +172,7 @@ public class BoardController {
 	public ModelAndView claseWriteForm(int no) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("no", no);
-		mav.setViewName("/claseWrite");
+		mav.setViewName("board/claseWrite");
 		return mav;
 	}
 	

@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 <style>
 	.menu{margin-right:10px; font-weight: bold; }
-	#btnLine{margin:0 auto;width:1000px; text-algin:center;}
+	#btnLine{margin:0 auto; text-algin:center; width: 100%; }
 	.menuLine:first-child{margin-top:50px;}
 	.menuLine{margin: 20px 0 20px 0;}
 	#sub{
@@ -29,7 +29,7 @@
 		margin-bottom:15px; 
 	 }
 	#content{
-		 padding:10px; width: 1110px; height:500px auto; border:1px solid lightgray; word-break:break-all; overflow:auto;
+		 padding:10px; width: 100%;height:500px auto; border:1px solid lightgray; word-break:break-all; overflow:auto;
 		margin-bottom:15px; 
 	}
 	.note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false], .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false] {
@@ -203,7 +203,7 @@ $(function(){
 			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
 			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
-			<button class="btn"><a href="claseWrite?no=${vo.no}">답글달기</a></button>	
+			<button class="btn"><a href="<%=request.getContextPath()%>/claseWrite?no=${vo.no}">답글달기</a></button>	
 		</div>
 		
 		<!------------------- 댓글 ----------------------->
