@@ -1,0 +1,84 @@
+@charset "EUC-KR";
+	#boardList{margin-top:10px;}
+	#boardList li{
+		width:10%; height:50px; line-height:50px; border-bottom:1px solid lightgray; float: left;
+		text-align:center;
+	}
+	.menu, h1{
+		color:#4289DB; font-weight:bold; text-align:center;
+	}
+	#boardList li:nth-child(5n+2){width:60%; text-align:left;}
+	#boardList li:nth-child(5n+2) a{color:black; }
+	
+	.search_container{
+		text-align:right; line-height:30px;
+	}
+	button, input, optgroup, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: normal;
+}
+	#searchBtn{color:gray; background-color:white; height:33px;}
+	a{color:gray;}
+	#totalList{text-align:right; margin: 30px 0 5px 0;}
+	form{text-align:right; height:33px; }
+	#btnLine{text-align:right; }
+	.btn{margin:10px 0 15px 0; height:33px;} 
+	#sub{
+		white-space:normal;  text-overflow:ellipsis;
+		 overflow: hidden;text-align:left;
+	 }
+	/* 其捞隆贸府何盒 */
+	.page_wrap {
+		text-align:center;
+		font-size:0;
+		padding-bottom: 30px;
+		padding-top: 50px;
+	}
+	.page_nation {
+		display:inline-block;
+	}
+	.page_nation .none {
+		display:none;
+	}
+	.page_nation a {
+		display:block;
+		margin:0 3px;
+		float:left;
+		border:1px solid #e6e6e6;
+		width:35px;
+		height:35px;
+		line-height:35px;
+		text-align:center;
+		background-color:#fff;
+		font-size:13px;
+		color:#999999;
+		text-decoration:none;
+	}
+	.page_nation .arrow {
+		border:1px solid #ccc;
+	}
+	.page_nation .pprev {			
+		margin-left: 0;
+	
+	}
+	
+	.page_nation .prev {
+		margin-right: 7px;
+	}
+	
+	.page_nation .next {
+		margin-left: 7px;
+	}
+	
+	.page_nation .nnext {
+		margin-right: 0;
+	}
+
+.page_nation a.on {
+	background-color: #42454c;
+	color: #fff;
+	border: 1px solid #42454c;
+}
+/* 其捞隆贸府场 */
