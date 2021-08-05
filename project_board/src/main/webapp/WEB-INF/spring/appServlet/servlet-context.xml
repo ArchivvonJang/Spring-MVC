@@ -23,6 +23,10 @@
 	
 	<context:component-scan base-package="com.myproject.myapp" />
 	
+	<!-- 트랜잭션 -->
+	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<beans:constructor-arg name="dataSource" ref="dataSource"></beans:constructor-arg>		
+	</beans:bean>
 	
 	
 </beans:beans>

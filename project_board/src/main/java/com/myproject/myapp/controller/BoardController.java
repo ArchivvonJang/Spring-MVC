@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.myproject.myapp.service.BoardService;
 import com.myproject.myapp.vo.BoardVO;
+import com.myproject.myapp.vo.CommentVO;
 import com.myproject.myapp.vo.SearchAndPageVO;
 
 @Controller
@@ -28,7 +28,6 @@ public class BoardController {
 	private DataSourceTransactionManager transactionManager; //트랜잭션
 	@Inject
 	BoardService boardService;
-	
 
 	
 	
@@ -226,5 +225,55 @@ public class BoardController {
 	
 	//답글 삭제 
 	
-	//댓글
+//------------------------------------!!!!  댓글  !!!!------------------------------------------------------
+	@RequestMapping("/CommentList")
+	public ModelAndView CommentList(SearchAndPageVO sapvo, HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		
+		//댓글 페이징 처리
+		String reqPageNum = req.getParameter("pageNum");// pageNum = 1로 sapvo에 이미 기본값 세팅이 되어 있음
+		if (reqPageNum != null) { // 리퀘스트했을 때, 페이지번호가 있으면 세팅/ 없으면 기본 값=1
+			sapvo.setPageNum(Integer.parseInt(reqPageNum));
+		}
+		
+		mav.addObject("CommentRecord", sapvo.getTotalCommentRecord());
+		mav.addObject("CommentList", boardService.commentAllList(sapvo));
+		mav.addObject("sapvo",sapvo);	
+		mav.setViewName("board/boardView");
+		return mav;
+	}
+	//댓글 작성
+	@RequestMapping(value="/CommentWriteOk", method=RequestMethod.POST)
+	@ResponseBody
+	public ModelAndView CommentWriteOk(CommentVO cvo) {
+		ModelAndView mav = new ModelAndView();
+		if(boardService.commentInsert(cvo)>0) {
+			 mav.setViewName("redirect:boardView");
+				System.out.println("controller :  댓글 작성 성공");
+		}else {
+			 mav.setViewName("redirect:boardView");
+			 System.out.println("controller :  댓글 작성 실패");
+		}
+		return mav;
+	}
+	//댓글 수정
+	@RequestMapping("/CommentEditOk")
+	@ResponseBody
+	public ModelAndView CommentEditOk(CommentVO cvo) {
+		
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject("Cno", cvo.getCno());
+		
+		if(boardService.commentUpdate(cvo)>0) {
+			 mav.setViewName("redirect:boardView");
+			 System.out.println("controller : 댓글 수정성공");
+		}else {
+			 mav.setViewName("redirect:boardView");
+				System.out.println("controller : 댓글 수정실패");
+		}
+		
+		return mav;
+	}
+	
 }

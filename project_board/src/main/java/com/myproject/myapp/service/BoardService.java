@@ -3,6 +3,7 @@ package com.myproject.myapp.service;
 import java.util.List;
 
 import com.myproject.myapp.vo.BoardVO;
+import com.myproject.myapp.vo.CommentVO;
 import com.myproject.myapp.vo.SearchAndPageVO;
 
 public interface BoardService {
@@ -43,4 +44,17 @@ public interface BoardService {
 	public int replyDelete(int no);
 	//답글들 삭제된글로 표시
 	public int replyDeleteUpdate(int no, String userpwd);
+	
+	//댓글
+	
+	//댓글등록
+	 public int commentInsert(CommentVO cvo);
+	 //댓수정
+	 public int commentUpdate(CommentVO cvo);
+	 //댓삭제
+	 public int commentDelete(int num, String userpwd);
+	 //댓목록
+	 public List<CommentVO> commentAllList(SearchAndPageVO sapvo);
+	 //댓 총 레코드
+	 public int totalCommentRecord(SearchAndPageVO sapvo);
 }
