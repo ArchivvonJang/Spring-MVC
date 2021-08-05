@@ -44,19 +44,25 @@ public interface BoardDAO {
 	//원글(레코드) 삭제
 	public int replyDelete(int no);
 	//답글들 삭제된글로 표시
-	public int replyDeleteUpdate(int no, String userpwd);
+	public int replyDeleteUpdate(int no);
+	// 답글 갯수 세기
+	public int replyCnt(int no);
 	
 	//댓글
 	
+	//원글 번호의 댓글 가져오기
+	public int getCno(int no);
 	//댓글등록
 	 public int commentInsert(CommentVO cvo);
 	 //댓수정
 	 public int commentUpdate(CommentVO cvo);
+	 //댓 상태변경을 위한 확인
+	 public int commentCheck(int cno, String userpwd);
 	 //댓삭제
-	 public int commentDelete(int num, String userpwd);
+	 public int commentDelete(int cno);
 	 //댓목록
 	 public List<CommentVO> commentAllList(SearchAndPageVO sapvo);
 	 //댓 총 레코드
-	 public int totalCommentRecord(SearchAndPageVO sapvo);
+	 public int totalCommentRecord(int no);
 }
 

@@ -16,7 +16,87 @@
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/list.css">
+<style>
+	#boardList{margin-top:10px;}
+	#boardList li{
+		width:8%; height:50px; line-height:50px; border-bottom:1px solid lightgray; float: left;
+		text-align:center;
+	}
+	.menu, h1{
+		color:#4289DB; font-weight:bold; text-align:center;
+	}
+	#boardList li:nth-child(6n+2){width:58%; text-align:left;}
+	#boardList li:nth-child(6n+2) a{color:black; }
+	#boardList li:nth-child(6n+6){width:10%;}
+	.search_container{
+		text-align:right; line-height:30px;
+	}
+	button, input, optgroup, select, textarea {
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: normal;
+}
+	#searchBtn{color:gray; background-color:white; height:33px;}
+	a{color:gray;}
+	#totalList{text-align:right; margin: 30px 0 5px 0;}
+	form{text-align:right; height:33px; }
+	#btnLine{text-align:right; }
+	.btn{margin:10px 0 15px 0; height:33px;} 
+	#sub{
+		white-space:normal;  text-overflow:ellipsis;
+		 overflow: hidden;text-align:left;
+	 }
+	 /* 페이징처리부분 */
+	.page_wrap {
+		text-align:center;
+		font-size:0;
+		padding-bottom: 30px;
+		padding-top: 50px;
+	}
+	.page_nation {
+		display:inline-block;
+	}
+	.page_nation .none {
+		display:none;
+	}
+	.page_nation a {
+		display:block;
+		margin:0 3px;
+		float:left;
+		border:1px solid #e6e6e6;
+		width:35px;
+		height:35px;
+		line-height:35px;
+		text-align:center;
+		background-color:#fff;
+		font-size:13px;
+		color:#999999;
+		text-decoration:none;
+	}
+	.page_nation .arrow {
+		border:1px solid #ccc;
+	}
+	.page_nation .pprev {			
+		margin-left: 0;
+	
+	}
+	.page_nation .prev {
+		margin-right: 7px;
+	}
+	.page_nation .next {
+		margin-left: 7px;
+	}
+	.page_nation .nnext {
+		margin-right: 0;
+	}
+	.page_nation a.on {
+		background-color: #42454c;
+		color: #fff;
+		border: 1px solid #42454c;
+	}
+/* 페이징처리끝 */
+</style>
 <script>
 	//검색어 확인
 	$(function(){
@@ -53,28 +133,35 @@
 		<ul id="boardList">
 			<li class="menu">번호</li>
 			<li class="menu" style="text-align:center">제목</li>
+			<li class="menu">  </li>
 			<li class="menu">글쓴이</li>
 			<li class="menu">조회수</li>
 			<li class="menu">등록일</li>
 		<!-- 변수 선언 -->
-		<!-- 									총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
+		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
-		<c:forEach var="vo" items="${list}" >
+		<c:forEach var="vo" items="${list}" varStatus="idx">
+		
 			<!-- 번호 -->
 			<li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li>
-			<!-- 답글 -->
-			<c:if test="${vo.step>0}">
-			<li class="wordCut">
-			<c:forEach var="i" begin="1" end="${vo.step}">
-			<!-- 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
-			</c:forEach>
-			<c:if test="${vo.step>0}">
-					⤷
-			</c:if>
-			</li>
-			</c:if>
+			
+			<!-- 답글있으면 표시, 없으면 제목만 -->
+			<li class="wordcut" id="sub">
+				<c:forEach var="i" begin="1" end="${vo.step}">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				</c:forEach>
+				<c:if test="${vo.step>0}">
+						⤷
+				</c:if>
+		
 			<!-- 제목 -->
-			<li class="wordcut" id="sub"><a href="boardView?no=${vo.no}" style="white-space: pre"><c:out value="${vo.subject}" escapeXml="true"></c:out></a></li>
+				<a href="boardView?no=${vo.no}" style="white-space: pre"><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+			</li>
+			<!-- 댓글 -->
+		
+			<li><span id="cno">[ ${cno[idx.index]} ]</span></li>
+		
+			
 			<!-- 글쓴이 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
 			<!-- 조회수 -->

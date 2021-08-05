@@ -136,12 +136,11 @@ $(function(){
 					$result.each(function(i, o){
 						
 						tag += "<li>"
-						tag += cno
 						tag += "<div> [ "+ o.cno +" ]"+ o.userid + "(" + o.replydate + ")";
 					
 						tag += "<br/>" + o.content + "</div>";
-						tag+="</li>";
-						tag += "<li> + [ "o.cdate" ]+<input type='text' value='"+o.userid+"'readonly></li>";
+						tag += "</li>";
+						tag += "<li>[ " + o.cdate + " ]<input type='text' value='" + o.userid  + "'readonly></li>";
 						tag += "<li  escapeXml='true'>"+obj.content+"</li>";
 						tag += "<li><input type='hidden' value='"+obj.password+"'/></li>";
 						tag += "<li><button class='edit'>수정</button><button class='del'>삭제</button></li>";

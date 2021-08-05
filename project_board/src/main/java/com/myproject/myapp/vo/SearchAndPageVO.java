@@ -12,7 +12,7 @@ public class SearchAndPageVO {
 	// 총레코드수가 발생하면, 총페이지수를 구하기 가능 -> 총페이지수가 나오면 마지막페이지에 레코드가 몇개 남았는지 확인 -> 그럼 시작페이지알수있음
 	// 초기값 설정 , 값 변동 x
 	private int onePageNum=5;//한페이지당 페이지 갯수 1 2 3 4 5
-	private int onePageRecord=5;//한페이지당 레코드수
+	private int onePageRecord=10;//한페이지당 레코드수
 	
 	//초기값o,변동o
 	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개	private int pageNum=1;//현재페이지 					초기 세팅해줘야하는 값 3개

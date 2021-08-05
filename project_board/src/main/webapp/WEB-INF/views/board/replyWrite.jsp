@@ -735,7 +735,7 @@ $(function(){
 		font-weight:bold;
 		margin:10px 0 10px;
 	}	
-	h2{margin-bottom:40px;}
+	h2{font-color:navy; margin-bottom:40px;}
 	li{margin-bottom:20px;}
 
 }

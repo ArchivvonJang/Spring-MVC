@@ -94,11 +94,19 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int replyDeleteUpdate(int no,String userpwd) {
-		return boardDAO.replyDeleteUpdate(no, userpwd);
+	public int replyDeleteUpdate(int no) {
+		return boardDAO.replyDeleteUpdate(no);
 	}
-	
 
+	@Override
+	public int replyCnt(int no) {
+		return boardDAO.replyCnt(no);
+	}
+
+	@Override
+	public int getCno(int no) {
+		return boardDAO.getCno(no);
+	}
 
 	@Override
 	public int commentInsert(CommentVO cvo) {
@@ -107,22 +115,31 @@ public class BoardServiceImpl implements BoardService{
 
 	@Override
 	public int commentUpdate(CommentVO cvo) {
-		return boardDAO.commentUpdate(cvo);
+		return boardDAO.commentInsert(cvo);
 	}
 
 	@Override
-	public int commentDelete(int num, String userpwd) {
-		return boardDAO.commentDelete(num, userpwd);
+	public int commentCheck(int cno, String userpwd) {
+		return boardDAO.commentCheck(cno, userpwd);
+	}
+
+	@Override
+	public int commentDelete(int cno) {
+		return boardDAO.commentDelete(cno);
 	}
 
 	@Override
 	public List<CommentVO> commentAllList(SearchAndPageVO sapvo) {
 		return boardDAO.commentAllList(sapvo);
 	}
-;
+
 	@Override
-	public int totalCommentRecord(SearchAndPageVO sapvo) {
-		return boardDAO.totalCommentRecord(sapvo);
+	public int totalCommentRecord(int no) {
+		return boardDAO.totalCommentRecord(no);
 	}
+	
+
+
+	
 
 }
