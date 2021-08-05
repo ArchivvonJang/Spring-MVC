@@ -35,7 +35,7 @@
 	.note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false], .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false] {
     background-color: white; height: 500px auto;
 	}
-	#reviewContainer{margin-top:20px;}
+	#commentContainer{margin-top:20px;}
 </style>
 <script type="text/javascript">
 
@@ -119,9 +119,10 @@ $(function(){
 //------------------------ ajax를 이용한 댓글처리 -------------------------
 $(function(){
 	//댓글목록
-	function reviewList(){
-		var url = "/reviewList";
+	function commentList(){
+		var url = "/commentList";
 		var params = "no=${vo.no}";
+		var tag =""
 		console.log(url);
 		console.log(params);
 		$.ajax({
@@ -129,18 +130,26 @@ $(function(){
 			data:params,
 			success:function(result){
 				//변수이름이 $result
-				var $result=$(reviewList);
-				var tag="<ul>"
+				var $result=$(result);
+				tag="<ul>"
 				//반복
 					$result.each(function(i, o){
-						tag+="<li><div>"+o.userid+"("+o.replydate+") ";
+						
+						tag += "<li>"
+						tag += cno
+						tag += "<div> [ "+ o.cno +" ]"+ o.userid + "(" + o.replydate + ")";
 					
-						tag+="<br/>"+o.content+"</div>";
-					
+						tag += "<br/>" + o.content + "</div>";
 						tag+="</li>";
+						tag += "<li> + [ "o.cdate" ]+<input type='text' value='"+o.userid+"'readonly></li>";
+						tag += "<li  escapeXml='true'>"+obj.content+"</li>";
+						tag += "<li><input type='hidden' value='"+obj.password+"'/></li>";
+						tag += "<li><button class='edit'>수정</button><button class='del'>삭제</button></li>";
+						tag += "</div>"
+						
 					});//each end
 					tag+="</ul>";
-					$("#reviewList").html(tag);				
+					$("#commentList").html(tag);				
 				
 				
 			}, error:function(){
@@ -148,20 +157,24 @@ $(function(){
 			}// success, error function end
 		}); //ajax end
 		
-	} //reviewList end
+	} //commentList end
+	
 	//댓글쓰기
-	$('#reviewBtn').on('click',function(){
+	$('#commentBtn').on('click',function(){
 		if($("#content").val()!=''){
-			var url ="/reviewWriteOk"; 
-			var params=$("#reviewForm").serialize(); 
+			var url ="/commentWriteOk"; 
+			var params=$("#commentForm").serialize(); 
 	
 			$.ajax({
 				url:url,
 				data:params,
-				success:function(result){ //돌려받은 값을 아래에 적기
+				success:function(){ //돌려받은 값을 아래에 적기
 					console.log("댓글 달기 성공 ");
-					reviewList();
+					commentList();
 					$("#content").val("");
+					$("#userid").val("");
+					$("#userpwd").val("");
+					
 				},error:function(){
 					console.log("url->",url);
 					console.log("params->",params);
@@ -172,6 +185,14 @@ $(function(){
 			alert("댓글을 입력하세요.");
 		}//if else end
 	});
+	
+	//댓글 삭제
+	
+	//댓글 수정
+	
+	//수정 확인
+	
+	
 	
 
 }); //function end
@@ -203,22 +224,23 @@ $(function(){
 			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
 			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
-			<button class="btn"><a href="<%=request.getContextPath()%>/replyWrite?no=${vo.no}">답글달기</a></button>	
+			<button class="btn"><a href="<%=request.getContextPath()%>/replyWrite?no=${vo.no}">답글쓰기</a></button>	
 		</div>
 		
 		<!------------------- 댓글 ----------------------->
-		<div id="reviewContainer">
-		<form method="post" action=" " id="reviewForm">
-			<input type="hidden" name="no" value="">
-				<textarea name="content" id="content" id="sub"></textarea>
+		<div id="commentContainer">
+		<form method="post" action=" " id="commentForm" >
+			<input type="hidden" name="no" value="${vo.no}">
+				<textarea name="content" id="content" id="sub" maxlength="150"></textarea>	<span id="commentLength"></span>/<span id="max_count">150</span><br/>
 				<label>작성자</label><input type="text" name="userid" id="userid" maxlength="10">
 				<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" maxlength="4">
-				<input type ="button" value="댓글등록" id="reviewBtn" class="btn">
+				<input type ="button" value="댓글등록" id="commentBtn" class="btn">
 		</form>
 		</div>
 		<!-- 댓글 목록 -->
-		<span>[전체 댓글 수 : ${reviewRecord} ] </span>
-		<div id="reviewList"> <!-- webSpring01 -->
+		<h5>comments</h5>
+		<span>[전체 댓글 수 : ${commentRecord} ] </span>
+		<div id="commentList"> <!-- webSpring01 -->
 		</div>
 </div>
 </body>

@@ -7,7 +7,6 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.myproject.myapp.dao.BoardDAO;
-import com.myproject.myapp.dao.CommentDAO;
 import com.myproject.myapp.vo.BoardVO;
 import com.myproject.myapp.vo.CommentVO;
 import com.myproject.myapp.vo.SearchAndPageVO;
