@@ -14,6 +14,8 @@ public class BoardVO {
 	private int step;
 	private int lvl; //답글순서
 	
+	private int replyRecord;
+	
 	public int getNo() {
 		return no;
 	}
@@ -80,6 +82,12 @@ public class BoardVO {
 	}
 	public void setLvl(int lvl) {
 		this.lvl = lvl;
+	}
+	public int getReplyRecord() {
+		return replyRecord;
+	}
+	public void setReplyRecord(int replyRecord) {
+		this.replyRecord = replyRecord;
 	}
 	
 	

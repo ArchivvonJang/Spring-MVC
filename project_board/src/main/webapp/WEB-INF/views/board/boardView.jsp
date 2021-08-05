@@ -186,6 +186,21 @@ $(function(){
 	});
 	
 	//댓글 삭제
+	function commentDelete(location){
+		$.ajax({
+			url : "/commentDelete",
+			data : location,
+			success : function(result){
+				if(result>0){//성공
+					replyList();
+				}else{ //실패
+					alert("댓글 삭제가 실패했습니다.");
+				}
+			}, error : function(result){
+				console.log("[ 댓삭 실패 ]");
+			}
+		});
+	};
 	
 	//댓글 수정
 	
@@ -225,19 +240,22 @@ $(function(){
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
 			<button class="btn"><a href="<%=request.getContextPath()%>/replyWrite?no=${vo.no}">답글쓰기</a></button>	
 		</div>
-		
+		<br/>
+		<hr/>
+		<br/>
 		<!------------------- 댓글 ----------------------->
+			<h4>comment</h4>
 		<div id="commentContainer">
-		<form method="post" action=" " id="commentForm" >
+		<form method="post" id="commentForm" >
 			<input type="hidden" name="no" value="${vo.no}">
-				<textarea name="content" id="content" id="sub" maxlength="150"></textarea>	<span id="commentLength"></span>/<span id="max_count">150</span><br/>
-				<label>작성자</label><input type="text" name="userid" id="userid" maxlength="10">
-				<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" maxlength="4">
-				<input type ="button" value="댓글등록" id="commentBtn" class="btn">
+			&nbsp; 	&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<label>작성자</label>&nbsp;&nbsp;&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span>/<span id="max_count">10</span>
+			 &nbsp; &nbsp;<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" maxlength="4"> <span id="userpwdLength"></span>/<span id="max_count">4</span>
+			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
+			<textarea name="content" id="content" id="sub" maxlength="150" style="width:95%; margin-bottom:0px;"></textarea>	<span id="commentLength"></span>/<span id="max_count">150</span>
+				
 		</form>
 		</div>
 		<!-- 댓글 목록 -->
-		<h5>comments</h5>
 		<span>[전체 댓글 수 : ${commentRecord} ] </span>
 		<div id="commentList"> <!-- webSpring01 -->
 		</div>

@@ -38,7 +38,7 @@ public class BoardController {
 	
 	//게시판 목록
 	@RequestMapping("/boardList")
-	public ModelAndView boardList(SearchAndPageVO sapvo, HttpServletRequest req) {
+	public ModelAndView boardList(BoardVO vo, SearchAndPageVO sapvo, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		
 		//페이징 처리
@@ -58,6 +58,11 @@ public class BoardController {
 		//총 레코드 수 구하기 
 		sapvo.setTotalRecord(boardService.totalRecord(sapvo));
 		
+		//원글의 답글의 레코드 갯수 구하기
+		//vo.setReplyRecord(boardService.replyCnt(vo.getRef()));
+		//System.out.println("reply original record no ---> " + vo.getRef());
+		//System.out.println("reply Count --->" + vo.getReplyRecord());
+		
 		List<BoardVO> list = boardService.boardAllRecord(sapvo);
 		
 		//댓글 갯수
@@ -72,8 +77,19 @@ public class BoardController {
 			System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
 		}
 		
+		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
+		
+		// 게시글 정렬
+		int listSort = list.size()-1;
+		List<Integer> lvl = new ArrayList<Integer>();
+		for(int i = 0; i<list.size(); i++) {
+			lvl.add(list.get(listSort).getLvl());
+			listSort--;
+		}
+		
 		
 		// return ModelAndView
+		mav.addObject("replyRecord", vo.getReplyRecord());
 		mav.addObject("totalRecord", sapvo.getTotalRecord()); //전체 글 갯수
 		mav.addObject("cno", cno); //댓글 갯수
 		mav.addObject("ref", ref); //답글 
@@ -158,12 +174,15 @@ public class BoardController {
 		
 		ModelAndView mav = new  ModelAndView();
 		try {
+			System.out.println("board delete transaction!!!try catch in!!!");
 			//답글 확인
 			int rCount = boardService.replyCnt(no);
 			//삭제 하면 1 아니면 0
-			int bResult = boardService.boardDelete(no);
+			int result = boardService.boardDelete(no);
 			//상태 변경
 			int rDeleteUpdate = boardService.replyDeleteUpdate(no);
+			
+			//나중에 글 삭제할 때 해당 글의 댓글도 지워지도록 하기 
 			
 			System.out.println("boardDelete rCount check ---> "+ rCount);
 			System.out.println("board Delete rdeleteupdate check ---> "+ rDeleteUpdate);
@@ -173,24 +192,26 @@ public class BoardController {
 			String userpwd = boardService.getUserpwd(no);
 			
 			//지워진 글 갯수를 담을 변수 result
-			int result = 0; 
+	//		int result = 0; 
 			
 			//원글 - 원글은 step=0 userid가 userpwd가 같을때 삭제해야함
-			if(orivo.getStep()==0 ) { //원글 - 원글은 step=0 userid가 session의userid와 같을때 삭제해야함
-				result = boardService.boardDelete(no);// 몇개 지웠는지 결과를 구할 수 있다.
-				
-			}else if(orivo.getStep()>0){ //답글
-				result = boardService.replyDeleteUpdate(no);
-			}
+	//		if(orivo.getStep()==0 ) { //원글 - 원글은 step=0 userid가 session의userid와 같을때 삭제해야함
+	//			result = boardService.boardDelete(no);// 몇개 지웠는지 결과를 구할 수 있다.
+	//			
+	//		}else if(orivo.getStep()>0){ //답글
+	//			result = boardService.replyDeleteUpdate(no);
+	//		}
 			
 			//삭제가 되었으면 리스트로 이동, 삭제 안되었으면 글내용보기로 이동 
 			if(result>0) {
 				mav.setViewName("redirect:boardList");
+				transactionManager.commit(status);
 				 System.out.println("[ 글 삭제 성공 ]");
 			}else {
 				mav.addObject("no", no);//레코드번호를 보내줌
 				mav.setViewName("redirect:boardView");
-				 System.out.println("[ delete - 글 삭제 실패 ]");
+				System.out.println("[ delete - 글 삭제 실패 ]");
+				transactionManager.rollback(status);
 			}
 		}catch(Exception e) {
 			mav.addObject("no", no);
@@ -210,7 +231,7 @@ public class BoardController {
 		return mav;
 	}
 	
-	//트랜젝션 처리
+	//답글 작성 - 트랜잭션
 	@RequestMapping(value="/replyWriteOk", method=RequestMethod.POST)
 	@Transactional(rollbackFor= {Exception.class, RuntimeException.class}) //예외가발생하면 롤백처리를해줘라
 	public ModelAndView replyWriteOk(BoardVO vo, HttpServletRequest req) {
@@ -236,9 +257,9 @@ public class BoardController {
 			//3. 답글(레코드)추가 : 아래의 데이터를 위 orivo에 추가,db에서 읽어온 원래 ref를 불러옴, db의 step + 1, lvl + 1 업데이트가 이루어짐 insert
 			//원글번호 가져오기
 			vo.setRef(orivo.getRef());      System.out.println("orivo ref -->" + orivo.getRef());
-			//순서
-			vo.setStep(orivo.getStep()+1);  System.out.println("orivo step + 1 ---> "+orivo.getStep() + " +++1");
 			//들여쓰기
+			vo.setStep(orivo.getStep()+1);  System.out.println("orivo step + 1 ---> "+orivo.getStep() + " +++1");
+			//순서
 			vo.setLvl(orivo.getLvl()+1);    System.out.println("orivo lvl + 1 ---> " + orivo.getLvl()+ " +++1");
 			
 			//4. 답글 등록 메소드 호출
@@ -273,54 +294,64 @@ public class BoardController {
 	//답글 삭제 ---> boardDelete 로 돌아가세요
 
 //------------------------------------!!!!  댓글  !!!!------------------------------------------------------
-	@RequestMapping("/CommentList")
-	public ModelAndView CommentList(SearchAndPageVO sapvo, HttpServletRequest req) {
-		ModelAndView mav = new ModelAndView();
+	//댓글 목록
+	
+	@RequestMapping("/commentList")
+	public List<CommentVO> commentList(int no, SearchAndPageVO sapvo, HttpServletRequest req) {
+		List<CommentVO> list = boardService.commentAllList(no ,sapvo);
 		
+		System.out.println("댓글이 씌여지는 board no ---> " + no );
 		//댓글 페이징 처리
 		String reqPageNum = req.getParameter("pageNum");// pageNum = 1로 sapvo에 이미 기본값 세팅이 되어 있음
 		if (reqPageNum != null) { // 리퀘스트했을 때, 페이지번호가 있으면 세팅/ 없으면 기본 값=1
 			sapvo.setPageNum(Integer.parseInt(reqPageNum));
 		}
 		
-		mav.addObject("CommentRecord", sapvo.getTotalCommentRecord());
-		mav.addObject("CommentList", boardService.commentAllList(sapvo));
-		mav.addObject("sapvo",sapvo);	
-		mav.setViewName("board/boardView");
-		return mav;
+		for(int i=0; i<list.size(); i++) {
+			System.out.println("cno" +i+ "-> " + list.get(i).getCno());
+		}
+		
+		return list;
+		
 	}
 	//댓글 작성
-	@RequestMapping(value="/CommentWriteOk", method=RequestMethod.POST)
+	/*
+	 * @RequestMapping(value="/CommentWriteOk", method=RequestMethod.POST)
+	 * 
+	 * @ResponseBody public ModelAndView CommentWriteOk(CommentVO cvo) {
+	 * ModelAndView mav = new ModelAndView(); if(boardService.commentInsert(cvo)>0)
+	 * { mav.setViewName("redirect:boardView");
+	 * System.out.println("controller :  댓글 작성 성공"); }else {
+	 * mav.setViewName("redirect:boardView");
+	 * System.out.println("controller :  댓글 작성 실패"); } return mav; }
+	 */
+	
+	@RequestMapping(value="/commentWriteOk", method=RequestMethod.GET)
 	@ResponseBody
-	public ModelAndView CommentWriteOk(CommentVO cvo) {
-		ModelAndView mav = new ModelAndView();
-		if(boardService.commentInsert(cvo)>0) {
-			 mav.setViewName("redirect:boardView");
-				System.out.println("controller :  댓글 작성 성공");
-		}else {
-			 mav.setViewName("redirect:boardView");
-			 System.out.println("controller :  댓글 작성 실패");
-		}
-		return mav;
+	public int commentWriteOk(CommentVO cvo) {
+		int result = boardService.commentInsert(cvo);
+		return result;
 	}
-	//댓글 수정
-	@RequestMapping("/CommentEditOk")
+	//댓글 상태변경시 확인
+	@RequestMapping("/commentCheck")
 	@ResponseBody
-	public ModelAndView CommentEditOk(CommentVO cvo) {
-		
-		ModelAndView mav = new ModelAndView();
-		
-		mav.addObject("Cno", cvo.getCno());
-		
-		if(boardService.commentUpdate(cvo)>0) {
-			 mav.setViewName("redirect:boardView");
-			 System.out.println("controller : 댓글 수정성공");
-		}else {
-			 mav.setViewName("redirect:boardView");
-				System.out.println("controller : 댓글 수정실패");
-		}
-		
-		return mav;
+	public Integer commentDel(int cno, String userpwd) {
+		System.out.println("comment no ->" + cno);
+		System.out.println("comment userpwd -> " + userpwd);
+		return boardService.commentCheck(cno, userpwd);
+	}
+
+	//댓글 수정
+	@RequestMapping("/commentEditOk")
+	@ResponseBody
+	public int commentEditOk(CommentVO cvo) {
+		return boardService.commentUpdate(cvo);
 	}
 	
+	//댓글 삭제
+	@RequestMapping("/commentDelete")
+	@ResponseBody
+	public int commentDelete(int no, int cno) {
+		return boardService.commentDelete(no);
+	}
 }

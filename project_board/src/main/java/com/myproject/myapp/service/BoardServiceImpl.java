@@ -129,8 +129,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<CommentVO> commentAllList(SearchAndPageVO sapvo) {
-		return boardDAO.commentAllList(sapvo);
+	public List<CommentVO> commentAllList(int no, SearchAndPageVO sapvo) {
+		return boardDAO.commentAllList(no, sapvo);
 	}
 
 	@Override

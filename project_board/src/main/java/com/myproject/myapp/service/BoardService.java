@@ -60,7 +60,7 @@ public interface BoardService {
 	 //댓삭제
 	 public int commentDelete(int cno);
 	 //댓목록
-	 public List<CommentVO> commentAllList(SearchAndPageVO sapvo);
+	 public List<CommentVO> commentAllList(int no, SearchAndPageVO sapvo);
 	 //댓 총 레코드
 	 public int totalCommentRecord(int no);
 }

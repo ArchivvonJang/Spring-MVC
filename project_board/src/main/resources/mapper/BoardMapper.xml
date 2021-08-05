@@ -6,19 +6,19 @@
  	<select id="boardAllRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="com.myproject.myapp.vo.BoardVO">
  		select*from
 	 		(select*from
-		 		(select no, subject, userid, userpwd, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step
+		 		(select no, subject, userid, userpwd, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
 		 		from board 
 		 		<choose>
 		 			<when test='searchWord!=null'>
 		 				where subject like '%${searchWord}%'
 		 			</when>
 		 		</choose>
-		 		order by no desc, lvl desc)
-	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no asc)
+		 		order by no desc, ref desc, lvl asc)
+	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by no asc, rownum asc)
 				where <![CDATA[rownum<=]]>
 				<if test="pageNum==totalPage">${lastPageRecord}</if>
 	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
-	     order by no desc
+	     order by no desc, ref desc, lvl asc
  	</select>
  	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">
 		select count(no) totalRecord from board 
@@ -65,7 +65,7 @@
 		update board set subject='삭제된 글입니다.',content='해당 글은 삭제되었습니다.' where no=${param1} 
 	</update>
 	<select id="replyCnt" resultType="int">
-		select count(ref) from board where no = ${param1}
+		select count(ref) from board where ref = ${param1}
 	</select>
 	<select id="getCno" resultType="int">
 		select count(no) from comments where no=${param1}

@@ -140,10 +140,12 @@
 		<!-- 변수 선언 -->
 		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
+		<c:set var="replyRecordNum" value="${replyRecord}"/> 
 		<c:forEach var="vo" items="${list}" varStatus="idx">
 		
 			<!-- 번호 -->
-			<li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li>
+			<c:if test="${vo.step>0}">${replyRecordNum}<input type="hidden" name="no" value="${vo.no}"/></li></c:if>
+			<c:if test="${vo.step==0}"><li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li></c:if>
 			
 			<!-- 답글있으면 표시, 없으면 제목만 -->
 			<li class="wordcut" id="sub">
@@ -151,7 +153,7 @@
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
 				<c:if test="${vo.step>0}">
-						⤷
+						⤷ &nbsp;
 				</c:if>
 		
 			<!-- 제목 -->
@@ -169,6 +171,7 @@
 			<!-- 작성일 -->
 			<li>${vo.writedate}</li>
 			<c:set var="recordNum" value="${recordNum-1}"/>
+			<c:set var="replyRecordNum" value="${replyRecord-1}"/>
 		</c:forEach>
 			
 		</ul>
