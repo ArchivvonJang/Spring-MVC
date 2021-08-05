@@ -34,13 +34,13 @@ public interface BoardService {
 	// lvl증가
 	public int lvlCount(BoardVO vo);
 	// insert ref, step, lvl
-	public int claseDataInsert(BoardVO vo);
+	public int replyDataInsert(BoardVO vo);
 	//답변형 글 (레코드)수정
-	public int claseUpdate(BoardVO vo);
+	public int replyUpdate(BoardVO vo);
 	//원글번호 확인 - step과 userid 가져오기
 	public BoardVO getStep(int no);
 	//원글(레코드) 삭제
-	public int claseDelete(int no);
+	public int replyDelete(int no);
 	//답글들 삭제된글로 표시
-	public int claseDeleteUpdate(int no, String userpwd);
+	public int replyDeleteUpdate(int no, String userpwd);
 }

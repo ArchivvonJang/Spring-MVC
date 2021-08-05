@@ -72,13 +72,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int claseDataInsert(BoardVO vo) {
-		return boardDAO.claseDataInsert(vo);
+	public int replyDataInsert(BoardVO vo) {
+		return boardDAO.replyDataInsert(vo);
 	}
 
 	@Override
-	public int claseUpdate(BoardVO vo) {
-		return boardDAO.claseUpdate(vo);
+	public int replyUpdate(BoardVO vo) {
+		return boardDAO.replyUpdate(vo);
 	}
 
 	@Override
@@ -87,13 +87,13 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int claseDelete(int no) {
-		return boardDAO.claseDelete(no);
+	public int replyDelete(int no) {
+		return boardDAO.replyDelete(no);
 	}
 
 	@Override
-	public int claseDeleteUpdate(int no,String userpwd) {
-		return boardDAO.claseDeleteUpdate(no, userpwd);
+	public int replyDeleteUpdate(int no,String userpwd) {
+		return boardDAO.replyDeleteUpdate(no, userpwd);
 	}
 	
 

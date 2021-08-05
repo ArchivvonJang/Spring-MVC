@@ -51,16 +51,16 @@
 		select no, ref, step, lvl from board where no=#{param1}
 	</select>
 		<update id="lvlCount" parameterType="com.myproject.myapp.vo.BoardVO" >	
-		<![CDATA[update claseboard set lvl=lvl+1 where ref = #{ref} and lvl>#{lvl}]]>
+		<![CDATA[update board set lvl=lvl+1 where ref = #{ref} and lvl>#{lvl}]]>
 	</update>
-	<insert id="claseDataInsert" parameterType="com.myproject.myapp.vo.BoardVO">
-		insert into claseBoard(no, subject, content, userid, userpwd, ref, step, lvl) 
+	<insert id="replyDataInsert" parameterType="com.myproject.myapp.vo.BoardVO">
+		insert into board(no, subject, content, userid, userpwd, ref, step, lvl) 
 		values(boardsq.nextval, ${subject}, ${content}, ${userid}, ${userpwd}, #{ref}, #{step}, #{lvl})
 	</insert>
 	<select id="getStep" resultType="com.myproject.myapp.vo.BoardVO">
 		select step, userid from board where no=#{param1}
 	</select>
-	<update id="claseDeleteUpdate">
+	<update id="replyDeleteUpdate">
 		update board set subject='삭제된 글입니다.',content='삭제된 내용입니다.' where no=#{param1} and userpwd=#{param2}
 	</update>
   </mapper>

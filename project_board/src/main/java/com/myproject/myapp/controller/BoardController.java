@@ -146,7 +146,7 @@ public class BoardController {
 			result = boardService.boardDelete(no);// 몇개 지웠는지 결과를 구할 수 있다.
 			
 		}else if(orivo.getStep()>0 && orivo.getUserpwd().equals(userpwd)){ //답글
-			result = boardService.claseDeleteUpdate(no, userpwd);
+			result = boardService.replyDeleteUpdate(no, userpwd);
 		}
 		
 		//삭제가 되었으면 리스트로 이동, 삭제 안되었으면 글내용보기로 이동 
@@ -168,18 +168,18 @@ public class BoardController {
 	}
 	
 	//답글 쓰기 폼 이동
-	@RequestMapping("/claseWrite")
-	public ModelAndView claseWriteForm(int no) {
+	@RequestMapping("/replyWrite")
+	public ModelAndView replyWriteForm(int no) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("no", no);
-		mav.setViewName("board/claseWrite");
+		mav.setViewName("board/replyWrite");
 		return mav;
 	}
 	
 	//트랜젝션 처리
-	@RequestMapping(value="/claseWriteOk", method=RequestMethod.POST)
+	@RequestMapping(value="/replyWriteOk", method=RequestMethod.POST)
 	@Transactional(rollbackFor= {Exception.class, RuntimeException.class}) //예외가발생하면 롤백처리를해줘라
-	public ModelAndView claseWriteOk(BoardVO vo, HttpSession session,HttpServletRequest req) {
+	public ModelAndView replyWriteOk(BoardVO vo, HttpSession session,HttpServletRequest req) {
 		//트렌잭션 
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();  //객체 생성을 위해 호출해옴
 		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
@@ -197,7 +197,7 @@ public class BoardController {
 			vo.setStep(orivo.getStep()+1);
 			vo.setLvl(orivo.getLvl()+1);
 			//4. 메소드 호출
-			int cnt = boardService.claseDataInsert(vo); // orivo 넣기 금지
+			int cnt = boardService.replyDataInsert(vo); // orivo 넣기 금지
 			//5. cnt rollback 처리
 			// cnt = 0 이면, insert 불가능 -> rollback
 			// 예외 발생시, exception으로 가서 알아서 rollback 처리 
@@ -210,14 +210,14 @@ public class BoardController {
 				transactionManager.commit(status);
 			}else {
 				//insert가 안되었지만 cnt = 0 또는 에러 발생하지 않았을 때, 원글 글 번호와 함께 답글쓰기 폼으로 이동 
-				mav.setViewName("redirect:claseWrite");
+				mav.setViewName("redirect:replyWrite");
 				transactionManager.rollback(status);
 			}
 			
 			
 		}catch(Exception e){
 			mav.addObject("no", vo.getNo());
-			mav.setViewName("redirect:claseWrite");
+			mav.setViewName("redirect:replyWrite");
 		}
 		
 	
@@ -225,4 +225,6 @@ public class BoardController {
 	}	
 	
 	//답글 삭제 
+	
+	//댓글
 }

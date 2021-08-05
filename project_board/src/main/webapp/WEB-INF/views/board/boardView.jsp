@@ -203,7 +203,7 @@ $(function(){
 			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
 			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
-			<button class="btn"><a href="<%=request.getContextPath()%>/claseWrite?no=${vo.no}">답글달기</a></button>	
+			<button class="btn"><a href="<%=request.getContextPath()%>/replyWrite?no=${vo.no}">답글달기</a></button>	
 		</div>
 		
 		<!------------------- 댓글 ----------------------->
