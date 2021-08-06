@@ -100,6 +100,8 @@
 <script>
 	//검색어 확인
 	$(function(){
+		$(".disableLink").css({ 'pointer-events': 'none' });
+		
 		$("#searchForm").submit(function(){
 			//searchWord있는지 없는지 찾기 , 있을때만 데이터 넘기기
 			if($('#searchWord').val()=="" || $('#searchWord').val()==null){
@@ -113,13 +115,14 @@
 			history.back();
 		}
 	});
+	
 </script>
 </head>
 <body>
 	<div class="container">
 		<h2>게시판</h2>
 	
-		<!-- 검색하기 -->
+		<!-- [ 검색하기 ] -->
 		<div id="search_container" style="height:30px;">		
 		<form method="get" action="boardList" id="searchForm">
 			<input type="text" id="searchWord" name="searchWord" placeholder="검색하기" <c:if test="${sapvo.searchWord != null || sapvo.searchWord != ''}">value="${sapvo.searchWord}"</c:if>><input type="submit" id="searchBtn" value="검색"/>			
@@ -130,6 +133,8 @@
 			<a href="<%=request.getContextPath()%>/boardList">전체보기</a>
 		</div>
 		<!-- search_container end -->
+		
+		<!-- [ 게시판 ] -->
 		<ul id="boardList">
 			<li class="menu">번호</li>
 			<li class="menu" style="text-align:center">제목</li>
@@ -144,34 +149,40 @@
 		<c:forEach var="vo" items="${list}" varStatus="idx">
 		
 			<!-- 번호 -->
-			<c:if test="${vo.step>0}">${replyRecordNum}<input type="hidden" name="no" value="${vo.no}"/></li></c:if>
-			<c:if test="${vo.step==0}"><li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li></c:if>
 			
+			<%-- 
+			<c:if test="${vo.step == 0}"><li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li></c:if> 
+			--%>
+			
+	         
+	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> 
+			 
 			<!-- 답글있으면 표시, 없으면 제목만 -->
 			<li class="wordcut" id="sub">
 				<c:forEach var="i" begin="1" end="${vo.step}">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
 				<c:if test="${vo.step>0}">
-						⤷ &nbsp;
+						⤷ &nbsp; 
+						<c:if test="${vo.step == 1}">${vo.lvl}.</c:if>
+						<c:if test="${vo.step > 1}">${vo.lvl-vo.step+1}-${vo.step-1}<input type="hidden" name="no" value="${vo.no}"/>.</c:if>
 				</c:if>
 		
 			<!-- 제목 -->
-				<a href="boardView?no=${vo.no}" style="white-space: pre"><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+				<a href="boardView?no=${vo.no}" style="white-space: pre" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 			</li>
+			
 			<!-- 댓글 -->
-		
 			<li><span id="cno">[ ${cno[idx.index]} ]</span></li>
 		
-			
-			<!-- 글쓴이 -->
+			<!-- 작성자 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
 			<!-- 조회수 -->
 			<li>${vo.hit }</li>
 			<!-- 작성일 -->
 			<li>${vo.writedate}</li>
 			<c:set var="recordNum" value="${recordNum-1}"/>
-			<c:set var="replyRecordNum" value="${replyRecord-1}"/>
+			
 		</c:forEach>
 			
 		</ul>

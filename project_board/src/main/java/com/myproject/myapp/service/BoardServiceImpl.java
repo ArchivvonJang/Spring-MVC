@@ -129,13 +129,18 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public List<CommentVO> commentAllList(int no, SearchAndPageVO sapvo) {
-		return boardDAO.commentAllList(no, sapvo);
+	public List<CommentVO> commentAllList(int no) {
+		return boardDAO.commentAllList(no);
 	}
 
 	@Override
 	public int totalCommentRecord(int no) {
 		return boardDAO.totalCommentRecord(no);
+	}
+
+	@Override
+	public int boardCommentDelete(int no) {
+		return boardDAO.boardCommentDelete(no);
 	}
 	
 

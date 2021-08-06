@@ -31,6 +31,7 @@ import com.myproject.myapp.vo.SearchAndPageVO;
 public class BoardController {
 	@Autowired
 	private DataSourceTransactionManager transactionManager; //트랜잭션
+	
 	@Inject
 	BoardService boardService;
 
@@ -38,7 +39,7 @@ public class BoardController {
 	
 	//게시판 목록
 	@RequestMapping("/boardList")
-	public ModelAndView boardList(BoardVO vo, SearchAndPageVO sapvo, HttpServletRequest req) {
+	public ModelAndView boardList(CommentVO cvo, SearchAndPageVO sapvo, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		
 		//페이징 처리
@@ -57,19 +58,21 @@ public class BoardController {
 		
 		//총 레코드 수 구하기 
 		sapvo.setTotalRecord(boardService.totalRecord(sapvo));
-		
-		//원글의 답글의 레코드 갯수 구하기
-		//vo.setReplyRecord(boardService.replyCnt(vo.getRef()));
-		//System.out.println("reply original record no ---> " + vo.getRef());
-		//System.out.println("reply Count --->" + vo.getReplyRecord());
+
 		
 		List<BoardVO> list = boardService.boardAllRecord(sapvo);
+		
+		//댓글
+		//int no = Integer.parseInt(req.getParameter("no"));
+		List<CommentVO> clist = boardService.commentAllList(cvo.getNo());
 		
 		//댓글 갯수
 		List<Integer> cno = new ArrayList<Integer>(); 
 		for(int i=0; i<list.size(); i++) {
 			cno.add(boardService.getCno(list.get(i).getNo()));
 		}
+		
+		
 		//원글번호의 답글덩어리들 쪼개기
 		int ref[] = new int[list.size()];
 		for(int i=0; i<list.size(); i++) {
@@ -87,13 +90,19 @@ public class BoardController {
 			listSort--;
 		}
 		
+		//System.out.println("댓글이 씌여지는 board no ---> " + cvo.getNo());
+		
+		/*
+		 * for(int i=0; i<list.size(); i++) { System.out.println("cno" +i+ "-> " +
+		 * list.get(i).getNo()); }
+		 */
 		
 		// return ModelAndView
-		mav.addObject("replyRecord", vo.getReplyRecord());
 		mav.addObject("totalRecord", sapvo.getTotalRecord()); //전체 글 갯수
 		mav.addObject("cno", cno); //댓글 갯수
 		mav.addObject("ref", ref); //답글 
 		mav.addObject("list", list); //게시판 글 목록
+		mav.addObject("clist", clist); //댓글 글 목록
 		mav.addObject("sapvo",sapvo); //페이징	
 		mav.setViewName("board/boardList"); //보내줄 view name 
 		return mav;
@@ -168,7 +177,7 @@ public class BoardController {
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = transactionManager.getTransaction(def);	
-		
+		System.out.println("delete no-->"+no);
 		// 원글 삭제가 가능하고 답글이 있는경우답글까지 지운다. delete
 		// 답글은 제목, 글내용을 삭제된 글입니다.로 바꾼다. update
 		
@@ -176,20 +185,21 @@ public class BoardController {
 		try {
 			System.out.println("board delete transaction!!!try catch in!!!");
 			//답글 확인
-			int rCount = boardService.replyCnt(no);
+			int replyCnt = boardService.replyCnt(no);
 			//삭제 하면 1 아니면 0
-			int result = boardService.boardDelete(no);
+			//int result = boardService.boardDelete(no);
 			//상태 변경
-			int rDeleteUpdate = boardService.replyDeleteUpdate(no);
+			int result = boardService.replyDeleteUpdate(no);
 			
 			//나중에 글 삭제할 때 해당 글의 댓글도 지워지도록 하기 
 			
-			System.out.println("boardDelete rCount check ---> "+ rCount);
-			System.out.println("board Delete rdeleteupdate check ---> "+ rDeleteUpdate);
+			System.out.println("boardDelete rCount check ---> "+ replyCnt);
+			System.out.println("board Delete rdeleteupdate (result) check ---> "+ result);
 	
 			//원글정보 - 원글인지 확인 step=0 or no = ref 인지 확인
-			BoardVO orivo = boardService.getStep(no);
-			String userpwd = boardService.getUserpwd(no);
+			System.out.println("board delete no :" + no);
+			//BoardVO orivo = boardService.getStep(no);
+			//String userpwd = boardService.getUserpwd(no);
 			
 			//지워진 글 갯수를 담을 변수 result
 	//		int result = 0; 
@@ -297,15 +307,16 @@ public class BoardController {
 	//댓글 목록
 	
 	@RequestMapping("/commentList")
-	public List<CommentVO> commentList(int no, SearchAndPageVO sapvo, HttpServletRequest req) {
-		List<CommentVO> list = boardService.commentAllList(no ,sapvo);
+	@ResponseBody
+	public List<CommentVO> commentList(int no) {
+		List<CommentVO> list = boardService.commentAllList(no);
 		
 		System.out.println("댓글이 씌여지는 board no ---> " + no );
-		//댓글 페이징 처리
-		String reqPageNum = req.getParameter("pageNum");// pageNum = 1로 sapvo에 이미 기본값 세팅이 되어 있음
-		if (reqPageNum != null) { // 리퀘스트했을 때, 페이지번호가 있으면 세팅/ 없으면 기본 값=1
-			sapvo.setPageNum(Integer.parseInt(reqPageNum));
-		}
+		//댓글 페이징 처리s
+		//String reqPageNum = req.getParameter("pageNum");// pageNum = 1로 sapvo에 이미 기본값 세팅이 되어 있음
+		//if (reqPageNum != null) { // 리퀘스트했을 때, 페이지번호가 있으면 세팅/ 없으면 기본 값=1
+		//	sapvo.setPageNum(Integer.parseInt(reqPageNum));
+		//}
 		
 		for(int i=0; i<list.size(); i++) {
 			System.out.println("cno" +i+ "-> " + list.get(i).getCno());
@@ -329,13 +340,14 @@ public class BoardController {
 	@RequestMapping(value="/commentWriteOk", method=RequestMethod.GET)
 	@ResponseBody
 	public int commentWriteOk(CommentVO cvo) {
+		System.out.println("controller comment write ok in!!!");
 		int result = boardService.commentInsert(cvo);
 		return result;
 	}
 	//댓글 상태변경시 확인
 	@RequestMapping("/commentCheck")
 	@ResponseBody
-	public Integer commentDel(int cno, String userpwd) {
+	public Integer commentCheck(int cno, String userpwd) {
 		System.out.println("comment no ->" + cno);
 		System.out.println("comment userpwd -> " + userpwd);
 		return boardService.commentCheck(cno, userpwd);

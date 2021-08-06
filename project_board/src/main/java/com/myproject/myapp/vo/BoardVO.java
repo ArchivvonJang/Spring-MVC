@@ -10,9 +10,9 @@ public class BoardVO {
 	private int hit;
 	private String writedate;
 	
-	private int ref;
-	private int step;
-	private int lvl; //답글순서
+	private int ref; // 답글 그룹 (== 같은원글번호)
+	private int step; // 답글 들여쓰기
+	private int lvl; //답글 순서
 	
 	private int replyRecord;
 	

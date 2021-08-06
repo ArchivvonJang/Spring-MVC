@@ -60,7 +60,9 @@ public interface BoardService {
 	 //댓삭제
 	 public int commentDelete(int cno);
 	 //댓목록
-	 public List<CommentVO> commentAllList(int no, SearchAndPageVO sapvo);
+	 public List<CommentVO> commentAllList(int no);
 	 //댓 총 레코드
 	 public int totalCommentRecord(int no);
+	 //게시판 글 삭제시 해당 글의 댓글 삭제 
+	 public int boardCommentDelete(int no);
 }

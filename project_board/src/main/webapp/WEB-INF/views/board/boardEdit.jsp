@@ -770,9 +770,10 @@ $(function(){
 					<label class="label">작성자</label> <input type="text" name="userid" id="userid" maxlength="10"  class="wordcut"  value="<c:out value="${vo.userid}"  escapeXml="true"></c:out>" required oninput="useridInput(this.value);">
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
+				<%-- 
 				<li>
+				
 					<label class="label">비밀번호</label>
-					<%-- <input type="password" name="userpwd" id="userpwd" class="wordcut" maxlength="4" value="<c:out value="${vo.userpwd}"></c:out>" required oninput="userpwdInput(this.val);"> --%>
 					<input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4" class="wordcut" value="<c:out value="${vo.userpwd}"  escapeXml="true"></c:out>" required oninput="userpwdCheck()"/>
 					
 					<span id="userpwdLength"></span>/<span id="max_count">4</span><br/>
@@ -781,6 +782,7 @@ $(function(){
 					<span id="pwdApproval">사용가능</span>
 					
 				</li>
+				--%>
 				<li>
 			<!-- 내용 -->
 				<li>
