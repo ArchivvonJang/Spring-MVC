@@ -127,6 +127,7 @@ public class BoardController {
 	public ModelAndView boardView(int no) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject(boardService.hitCnt(no));
+	//	mav.addObject("cvo", boardService.commentAllList(no));
 		mav.addObject("vo", boardService.boardSelect(no));
 		mav.setViewName("board/boardView");
 		return mav;
@@ -192,10 +193,12 @@ public class BoardController {
 			int result = boardService.replyDeleteUpdate(no);
 			
 			//나중에 글 삭제할 때 해당 글의 댓글도 지워지도록 하기 
+			int commentDel = boardService.boardCommentDelete(no);
+			
 			
 			System.out.println("boardDelete rCount check ---> "+ replyCnt);
 			System.out.println("board Delete rdeleteupdate (result) check ---> "+ result);
-	
+			System.out.println("comment delete check ---> "+ commentDel);
 			//원글정보 - 원글인지 확인 step=0 or no = ref 인지 확인
 			System.out.println("board delete no :" + no);
 			//BoardVO orivo = boardService.getStep(no);
@@ -214,6 +217,7 @@ public class BoardController {
 			
 			//삭제가 되었으면 리스트로 이동, 삭제 안되었으면 글내용보기로 이동 
 			if(result>0) {
+				System.out.println("comment delete check ---> "+ commentDel);
 				mav.setViewName("redirect:boardList");
 				transactionManager.commit(status);
 				 System.out.println("[ 글 삭제 성공 ]");
@@ -284,6 +288,7 @@ public class BoardController {
 			if(cnt>0) { //등록 성공
 				//transaction commit해주고 원글으로 이동
 				mav.setViewName("redirect:boardList");
+		
 				transactionManager.commit(status);
 			}else { //실패
 				//insert가 안되었지만 cnt = 0 또는 에러 발생하지 않았을 때, 원글 글 번호와 함께 답글쓰기 폼으로 이동 
@@ -348,8 +353,8 @@ public class BoardController {
 	@RequestMapping("/commentCheck")
 	@ResponseBody
 	public Integer commentCheck(int cno, String userpwd) {
-		System.out.println("comment no ->" + cno);
-		System.out.println("comment userpwd -> " + userpwd);
+		System.out.println("controller check comment no ->" + cno);
+		System.out.println("controller check comment userpwd -> " + userpwd);
 		return boardService.commentCheck(cno, userpwd);
 	}
 
@@ -357,6 +362,7 @@ public class BoardController {
 	@RequestMapping("/commentEditOk")
 	@ResponseBody
 	public int commentEditOk(CommentVO cvo) {
+		System.out.println("controller comment Edit Edit   in!!!");
 		return boardService.commentUpdate(cvo);
 	}
 	
@@ -364,6 +370,7 @@ public class BoardController {
 	@RequestMapping("/commentDelete")
 	@ResponseBody
 	public int commentDelete(int no, int cno) {
-		return boardService.commentDelete(no);
+		System.out.println("controller comment delete in!!!");
+		return boardService.commentDelete(cno); // !! 문제 해결: param 값으로 cno를 입력받으면서 no를 넣고 있었음!!!!! 
 	}
 }

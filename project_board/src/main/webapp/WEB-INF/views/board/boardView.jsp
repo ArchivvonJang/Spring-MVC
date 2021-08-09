@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>선택한 글보기</title>
+<title>View</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -54,15 +54,15 @@
 		function boardDelete(){
 				//var url ="/myapp/getUserpwd";
 				//getUserpwd(url, data, loc);
-			var loc = "/myapp/boardDelete?no=${vo.no}";	
-			var data = "no=${vo.no}&userpwd=";	
+			var loc = "/myapp/boardDelete?no=${vo.no}";	 //이동할 주소
+			var data = "no=${vo.no}&userpwd=";	//필요한 데이터 값
 			getUserpwd(data, loc);
 			console.log(" delete data : ", data, " loc :", loc);
 		};
 
 		function boardEdit(){
 			var loc = "/myapp/boardEdit?no=${vo.no}";
-			var data = "no=${vo.no}&userpwd=";
+			var data = "no=${vo.no}&userpwd=";j
 			getUserpwd(data, loc);
 			//console.log("edit data : ", data, " loc :", loc);
 		};
@@ -131,33 +131,39 @@ $(function(){
 			url:url,
 			data:params,
 			success:function(result){
-				console.log("ajax comment list in!!!!!!");
+				//console.log("ajax comment list in!!!!!!");
 				//변수이름이 $result
 				var $result = $(result);
-				console.log("ajax result !!!!!!!!!");
+				//console.log("ajax result !!!!!!!!!");
 				var num = result.length; 
-				console.log("commentList num ->",num);
-				tag="<ul>"
+				//console.log("commentList num ->",num);
+				tag=""
 				//반복
 					$result.each(function(i, o){
-						console.log("result in!!!!!!!!!!!!");
-						tag += "<li> <span id='numColor'>("+ num +")</span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp; [ " + o.cdate + " ] </li>";
-						tag += "<li escapeXml='true' ><input type='text' value='" + o.content  + "'readonly cols='20' style='width:89%'>";
-						tag += "<span style='float:right;'><button class='edit btn' >수정</button>&nbsp;&nbsp;<button class='delete btn'>삭제</button></span>"
+						console.log("comment List result function in!!!!!!!!!!!!");
+					///////////////////////////////////////// 댓글 쓰기 폼 ////////////////////////<input type='hidden' value='"+o.cno+"'>/////////////////////////////////////////
+						tag += "<div><ul>"
+						tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp; [ " + o.cdate + " ] </li>";
+						tag += "<li escapeXml='true'>";
+						tag += "	<input type='text' value='" + o.content  + "'readonly cols='20' style='width:89%'>";
+						tag += "	<span style='float:right;' class='"+o.cno+"'><button class='edit btn' >수정</button>&nbsp;&nbsp;<button class='delete btn'>삭제</button></span>"
 						tag += "</li>";
 						tag += "<li><input type='hidden' value='"+o.userpwd+"'/></li>";
 						
 						tag+="</ul><br/>";
-						
-					
+						tag+="</div>";
+						//console.log("commentList function cno -> ", o.cno)
+					///////////////////////////////////////////// 댓글 수정 폼 ///////////////////////////////////////////////////////////////////
 						tag += "<div class='editDiv' style='display:none;'><form class='editForm' method='post' onsubmit='return false'>"
 							tag += "<input type='hidden' name='no' value='${vo.no}'/>"
 							tag += "<input type='hidden' name='cno' value='"+o.cno+"'/>"
-							tag += "<div class='cno'>"+num+"</div>";
-							tag += "<div class='cPwd cId'> 비밀번호 : <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='10'><span id='editPwdcheck'>0/10</span></div>";
-							tag += "<div class='cId' > 작성자 : <input class='cId' type='text' name='userid' value='"+o.userid+"' maxlength='5'><span id='editidcheck'>0/5</span></div>";
-							tag += "<div class='"+o.cno+"'><button class='finish'>완료</button><button class='cancel' type='button'>취소</button></div>";
-							tag += "<div><textarea class='cContent' name='content' maxlength='250' wrap='hard'>"+o.content+"</textarea><br><span class='editContentWord'>0/250</span></div>";
+							tag += "<div class='cno'>("+num+")</div>";
+							tag += "<div class='cPwd cId'> ";
+							tag += "비밀번호 : <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='4'><span id='editPwdcheck'>/4</span>";
+							tag += "작성자 : <input class='cId' type='text' name='userid' value='"+o.userid+"' maxlength='10'><span id='editidcheck'>/10</span>";
+							tag += "</div>";
+							tag += "<div><textarea id='sub' class='content' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px;'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span></div>";
+							tag += "<div class='"+o.cno+"'><button class='finish btn'>완료</button><button class='cancel btn' type='button'>취소</button></div>";
 							tag += "</form></div>"
 							num--;
 						
@@ -173,6 +179,8 @@ $(function(){
 		
 	} //commentList end
 $(function(){ 
+	
+	//댓글 목록 함수 부르기
 	commentList();	
 
 	//댓글쓰기
@@ -201,7 +209,7 @@ $(function(){
 					console.log("댓글 등록 에러 발생");
 				} 
 			});//ajax end
-		}//if  end
+		}//if  
 		return false;
 	}//submitCheck function end
 	return false;
@@ -211,36 +219,48 @@ $(function(){
 		$(document).on('click','.delete', function(){
 			if(confirm("선택한 댓글을 삭제하겠습니까?")){
 				var cno = $(this).parent().attr("class");
+				console.log("click del check !!  cno !!-->" + cno);
 				var url = "/myapp/commentCheck";
-				var data = "cno="+cno+"&userpwd=";
-				var delUrl = "no=${vo.no}&cno="+cno;
+				var data = "cno="+cno+"&userpwd="; 
+				var loc = "no=${vo.no}&cno="+cno; //delUrl
 				var obj = $(this);
-				
-				commentCheck(url, data, 'delete', delUrl, obj);
+			
+				console.log("delete clcik no --> ", ${vo.no});
+				commentCheck(url, data, 'delete', loc, obj);
 			}
 		});
 
 		//수정
 		$(document).on('click','.edit', function(){
 			var cno = $(this).parent().attr("class");
-			var url = "/webapp/commentCheck";
+			//수정 삭제가 안되는 이유 : 댓글번호를 못갖고옴
+			console.log("click edit check !!  cno 1 !!-->" + cno);
+			console.log("click edit check !!  cno 2 !! ${cvo.cno}");
+			var url = "/myapp/commentCheck";
 			var data = "cno="+cno+"&userpwd=";
-			var delUrl = "no=${vo.no}&cno="+cno;
+			var loc = "no=${vo.no}&cno="+cno;
 			var obj = $(this);
-			
-			commentCheck(url, data, 'edit', editUrl, obj);
+			console.log("edit click obj ?? " + obj);
+			commentCheck(url, data, 'edit', loc, obj);
 		});
 
 	//댓글 삭제
-	function commentDelete(location){
+	function commentDelete(loc){
+		var url ="/myapp/commentDelete"; 
+		var data = loc;
 		$.ajax({
-			url : "/myapp/commentDelete",
-			data : location,
+			url : url,
+			data : data,
 			success : function(result){
+				console.log("result : sucess 1  or  fail 0 ->", result);
 				if(result>0){//성공
-					replyList();
+					console.log("댓글 삭제 성공");
+					commentList();
 				}else{ //실패
-					alert("댓글 삭제가 실패했습니다.");
+					//alert("댓글 삭제가 실패했습니다.");
+					console.log("댓글 삭제 실패");
+					console.log("delete url -> ", url );
+					console.log("delete data -> ", data );
 				}
 			}, error : function(result){
 				console.log("[ 댓삭 실패 ]");
@@ -251,39 +271,54 @@ $(function(){
 	//댓글 수정
 	//댓글 수정창 보이기
 	function commentEdit(obj){
-		$(obj).parent().parent().css('display', 'none');
-		$(obj).parent().parent().next().css('display', 'block');
-		var pwdCount = $(obj).parent().parent().next().children().children().eq(3).children().val().length;
-		var idcount = $(obj).parent().parent().next().children().children().eq(4).children().val().length;
-		var contentcount = $(obj).parent().parent().next().children().children().eq(6).children().val().length;
-		console.log(contentcount);
-		$(obj).parent().parent().next().children().children().eq(3).children().next().text(pwdCount+"/10");
-		$(obj).parent().parent().next().children().children().eq(4).children().next().text(idcount+"/5");
-		$(obj).parent().parent().next().children().children().eq(6).children().next().text(contentcount+"/250");
+		
+		$(obj).parent().parent().parent().parent().css('display', 'none');
+		$(obj).parent().parent().parent().parent().next().css('display', 'block');
+		console.log("edit 1");
+		$(this).parent().parent().parent().next().css('display', 'block');
+		//var pwdCount = $(obj).parent().parent().parent().next().children().children().eq(3).children().val().length();
+		//var idcount = $(obj).parent().parent().next().children().children().eq(4).children().val().length;
+		//var contentcount = $(obj).parent().parent().next().children().children().eq(6).children().val().length;
+		
+	console.log("contentEdit count");
+		
+	//$(obj).parent().parent().parent().next().children().children().eq(3).children().next().text(pwdCount+"/10");
+//		$(obj).parent().parent().next().children().children().eq(4).children().next().text(idcount+"/5");
+//		$(obj).parent().parent().next().children().children().eq(6).children().next().text(contentcount+"/250");
 	}
 	//수정 확인
 	
+	
 	//댓글 비밀번호 확인
-	function commentCheck(url, data, state, location, obj){
-		var pwd = prompt("해당 댓글의 비밀번호를 입력하세요.")
+	function commentCheck(url, data, state, loc, obj){
+		var pwd = prompt("해당 댓글의 비밀번호를 입력하세요.");
+		console.log("commentcheck userpwd ---> ", pwd);
+		console.log("commentcheck url ---> ", url);
+		console.log("commentcheck data ---> ", data);
+		console.log("commentcheck state ---> ", state);
+		console.log("commentcheck loc ---> ", loc);
+		console.log("commentcheck obj ---> ", obj);
+		
 		
 		if(pwd != null){
+			console.log("pwd prompt not null !!");
 			$.ajax({
 				url : url,
 				data : data+pwd,
 				success : function(result){
 					if(result>0){
+						console.log("commentcheck result over 0 delete or edit go!");
 						if(state == 'delete'){
-							commentDel(location);
+							commentDelete(loc);
 						}else if(state == 'edit'){
 							commentEdit(obj);
 						}
 					}else{
-						alert("비밀번호를 다시 확인해주세요.")
-						commentCheck(url, data, state, location, obj);
+						alert("비밀번호를 다시 확인해주세요.");
+						commentCheck(url, data, state, loc, obj);
 					}
 				}, error : function(result){
-					
+					console.log("[comment check 실패]")	
 				}
 			})
 		}

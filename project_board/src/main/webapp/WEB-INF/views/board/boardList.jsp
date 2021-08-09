@@ -164,16 +164,23 @@
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
-						<c:if test="${vo.step == 1}">${vo.lvl}.</c:if>
-						<c:if test="${vo.step > 1}">${vo.lvl-vo.step+1}-${vo.step-1}<input type="hidden" name="no" value="${vo.no}"/>.</c:if>
+						<c:if test="${vo.step == 1}"> ${vo.lvl} . </c:if>
+						<c:if test="${vo.step > 1}">${vo.lvl-vo.step+1}-${vo.step-1} . <input type="hidden" name="no" value="${vo.no}"/></c:if>
 				</c:if>
 		
 			<!-- 제목 -->
-				<a href="boardView?no=${vo.no}" style="white-space: pre" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+				<a href="boardView?no=${vo.no}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 			</li>
 			
 			<!-- 댓글 -->
-			<li><span id="cno">[ ${cno[idx.index]} ]</span></li>
+			<li>
+				<c:if test="${vo.subject eq '삭제된 글입니다.'}">
+						<span id="cno">[ - ]</span>
+				</c:if>
+				<c:if test="${vo.subject ne '삭제된 글입니다.'}">
+				<span id="cno">[ ${cno[idx.index]} ]</span>
+				</c:if>
+			</li>
 		
 			<!-- 작성자 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>

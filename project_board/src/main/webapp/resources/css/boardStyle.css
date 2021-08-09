@@ -2,7 +2,10 @@
 	ul, li, #btnLine{ margin:0; padding:0; list-style:none;}
 	h2{text-align:center; margin: 20px 0 40px 0;}
 	.wordcut{
-		white-space:nowrap; overflow:hidden; text-overflow:ellipsys;white-space:pre;
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:pre;
+	}
+	.replyWordcut{
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys;
 	}
 	.btn{background-color:white; border:1px solid #9DA5AB; color:#9DA5AB; height:33px;  border-radius:0px;}
 	#subject{

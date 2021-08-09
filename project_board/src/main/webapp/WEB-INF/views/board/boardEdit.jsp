@@ -420,7 +420,7 @@ $(function(){
 				$('#contentLegnth').html(count);
 				console.log("note-editable paste ver. check");
 			    console.log("note-editable paste ver. content :" , content);
-			    console.log("note-editable paste ver. length :" ,count);dsfsaf
+			    console.log("note-editable paste ver. length :" ,count);
 				if(count=500){
 					console.log("note-editable keyup ver. if!!!");
 								
