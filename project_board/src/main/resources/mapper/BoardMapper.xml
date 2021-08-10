@@ -13,7 +13,7 @@
 		 				where subject like '%${searchWord}%'
 		 			</when>
 		 		</choose>
-		 		order by no desc )
+		 		order by ref desc )
 	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by rownum desc)
 				where <![CDATA[rownum<=]]>
 				<if test="pageNum==totalPage">${lastPageRecord}</if>

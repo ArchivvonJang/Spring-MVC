@@ -172,7 +172,7 @@ $(function(){
 					$result.each(function(i, o){
 						console.log("comment List result function in!!!!!!!!!!!!");
 					///////////////////////////////////////// 댓글 목록 ////////////////////////<input type='hidden' value='"+o.cno+"'>/////////////////////////////////////////
-						tag += "<div><ul>"
+					/*	tag += "<div><ul>"
 							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span>&nbsp;  <span style='color:#9DA5AB;'>[ " + o.cdate + " ]</span> </li>";
 							tag += "<li escapeXml='true' style='height:auto;margin-top:6px;'>";
 							tag += "	<input type='text' value='" + o.content  + "'readonly  style='width:100%; height:100px;' class='cWordcut'>";
@@ -183,8 +183,18 @@ $(function(){
 						
 						tag+="</ul><br/>";
 						tag+="</div>";
-						//console.log("commentList function cno -> ", o.cno)
+					*/
+						tag += "<div><ul>"
+							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp;&nbsp; [ " + o.cdate + " ] </li>";
+							tag += "<li escapeXml='true' style='height:auto;margin-top:6px;'>";
+							tag += "	<input type='text' value='" + o.content  + "'readonly cols='20' class='cWordcut' style='width:100%; height: 80px;'>";
+							tag += "	<span  class='"+o.cno+"'><button class='edit btn' >수정</button><button class='delete btn'>삭제</button></span>"
+							tag += "</li>";
+							tag += "<li><input type='hidden' value='"+o.userpwd+"'/></li>";
 						
+						tag+="</ul><br/>";
+						tag+="</div>";
+						//console.log("commentList function cno -> ", o.cno)
 						
 					///////////////////////////////////////////// 댓글 수정 폼 ///////////////////////////////////////////////////////////////////
 						tag += "<div class='editDiv' style='display:none; margin-bottom:15px;'>" ;
@@ -346,9 +356,10 @@ $(function(){
 		console.log("edit obj : " + obj);
 		//$(this).parent().parent().parent().next().css('display', 'block'); //댓글 수정창 꺼내기
 		
+		
 		var commentPwd =$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(3).val();
 		var commentId = $(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(1).val();
-		var commentContent = $(obj).parent().parent().parent().parent().next().children().children().eq(5).children().val();
+		var commentContent = $(obj).parent().parent().parent().parent().next().children().children().eq(4).children().val();
 
  	console.log("1 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(5).children().val());
 	console.log("2 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(5).children().val() );
@@ -618,11 +629,11 @@ $(function(){
 			 &nbsp; &nbsp;<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
-			<textarea name="content" id="content" id="sub" class="wordcut" maxlength="150" style="margin-bottom:0px; height: 150px auto;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+			<textarea name="content" id="content" id="sub" class="wordcut" maxlength="150" style="margin-bottom:0px; height: 100px;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
 				
 		</form>
 		</div>
-		<br/>
+		<hr/>
 		<!-- 댓글 목록 -->
 	<%-- 	<span>[전체 댓글 수 : ${list.size} ] </span> --%>
 		<div id="commentList" > <!-- webSpring01 -->
