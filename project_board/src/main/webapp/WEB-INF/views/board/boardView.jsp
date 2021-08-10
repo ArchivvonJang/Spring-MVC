@@ -81,13 +81,13 @@
 		};
 	
 		function getUserpwd(url, data, loc){
-			console.log("getuserpwd in !!")
+			console.log("getuserpwd in !!");
 			var pwd = prompt("비밀번호를 입력하세요.");
 			var param = data + pwd;
-			
+			console.log("param:"+param);
 			if(pwd != null || pwd != " "){
-				console.log("pwd check ! go to check userpwd")
-				checkUserpwd(param,url,loc, data);
+				console.log("pwd check ! go to check userpwd");
+				checkUserpwd(param, url,loc);
 			}else{
 				alert("비밀번호를 다시 확인해주세요.AA");
 				getUserpwd(url, data, loc);
@@ -103,15 +103,15 @@
 			} */
 		}
 		//function checkUserpwd(url, param, loc){
-		function checkUserpwd(param, url, loc, data){
+		function checkUserpwd(param, url, loc){
 			console.log("checkUserpwd ajax");
-			console.log("check userpwd and loc-> "+loc +" param -> " + param + "  url -> " + url + " data -> " + data);
+			console.log("check userpwd and loc-> "+loc +" param -> " + param + "  url -> " + url );
 			$.ajax({
 				url : "/myapp/getUserpwd",
 				data : param,
 				success : function(result){
 					
-					if(result==1){
+					if(result>=1){
 						location.href = url;
 						console.log("url-->",url);
 						console.log("result-->",result);
@@ -519,13 +519,11 @@ $(function(){
 	//댓글 수정 유효성 검사
 	function editSubmitCheck(obj){
 		var flag = true;
-		
+	 	
+		var idField = $('#cId').val();// $(obj).children().eq(4).children().eq(1); 
+		var pwdField =$('#cPwd').val(); //$(obj).children().eq(3).children().eq(3);
 		var contentField =  $(obj).children().eq(4).children();
-	/* 	
-		var pwdField = $(obj).children().eq(3).children(); 
-		var idField = $(obj).children().eq(4).children().eq(1); 
-		var pwdField = $(obj).children().eq(3).children().eq(3);
-		var pwdField = $(obj).children().eq(4).children().eq(4);
+	/*
 		console.log(" [수정] editSubmitCheck obj :"+ obj.val()+" / pwd:  " + pwdField.val()+ " / id: " + idField.val() + "  content " + contentField.val());
 		비밀번호 유효성 검사
 		

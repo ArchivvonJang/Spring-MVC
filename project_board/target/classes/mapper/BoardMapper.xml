@@ -79,7 +79,7 @@
  		insert into comments(cno, no, content, userid, userpwd) values(commentsq.nextval, ${no}, #{content}, #{userid}, #{userpwd})
  	</update>
  	<update id="commentUpdate" parameterType="com.myproject.myapp.vo.CommentVO">
- 		update comments set set userid=#{userid}, userpwd=#{userpwd}, content=#{content} where cno=${cno}
+ 		update comments set content=#{content} where cno=${cno}
  	</update>
  	<delete id="commentDelete">
  		delete from comments where cno=${param1}

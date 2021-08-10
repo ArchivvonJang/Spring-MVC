@@ -163,9 +163,9 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			--%>
 			
 	        <!-- 원글 --> 
-	     <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> 
-
-			<!-- 답글있으면 표시, 없으면 제목만 -->
+	    <c:if test="${vo.step==0}"> <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
+  		<c:if test="${vo.step>0}"> <li class="${vo.ref}">+<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
+			<!-- 답글있으면 표시, 없으면 제목만 ${vo.lvl-vo.step+1} - ${vo.step-1} -->
 			<li class="wordcut" id="sub" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" style="pointer-events: none; cursor : default;"</c:if>>
 				<c:forEach var="i" begin="1" end="${vo.step}">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -173,7 +173,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
 						<c:if test="${vo.step == 1}">${vo.lvl} . </c:if>
-						<c:if test="${vo.step > 1}">${vo.lvl-vo.step} - ${vo.step-1} . <input type="hidden" name="no" value="${vo.no}"/></c:if>
+						<c:if test="${vo.step > 1}">${vo.lvl-vo.step+1} . <input type="hidden" name="no" value="${vo.no}"/></c:if>
 				</c:if>
 		
 			<!-- 제목 -->
