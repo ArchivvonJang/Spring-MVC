@@ -5,7 +5,15 @@
 <head>
 	<title>Home</title>
 </head>
+<style>
+	a{color:gray; }
+	body{margin:0 auto; padding:0;}
+	h3{text-align:center; margin-top:200px;}
+</style>
 <body>
-	<h2><a href="boardList">게시판 이동</a></h2>
+<div id="mainDiv">
+	<h3><a href="boardList">BOARD</a></h3>
+</div>
+
 </body>
 </html>

@@ -2,10 +2,10 @@
 	ul, li, #btnLine{ margin:0; padding:0; list-style:none;}
 	h2{text-align:center; margin: 20px 0 40px 0;}
 	.wordcut{
-		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:pre;
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal;white-space: break-spaces;
 	}
 	.replyWordcut{
-		white-space:nowrap; overflow:hidden; text-overflow:ellipsys;
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  text-overflow: clip;  white-space: break-spaces;
 	}
 	.btn{background-color:white; border:1px solid #9DA5AB; color:#9DA5AB; height:33px;  border-radius:0px;}
 	#subject{
@@ -21,6 +21,8 @@
 		border:1px solid lightgray;
 		height:33px;
 		font-size:1em;
+		 -ms-overflow-style: none; /* IE and Edge */
+    	scrollbar-height: none; /* Firefox */
 	}
 	input[type="number"]::-webkit-outer-spin-button,
 	input[type="number"]::-webkit-inner-spin-button,

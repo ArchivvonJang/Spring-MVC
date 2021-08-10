@@ -95,12 +95,20 @@
 		color: #fff;
 		border: 1px solid #42454c;
 	}
+	
 /* 페이징처리끝 */
+a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
+  pointer-events: none;
+  cursor: default;
+}
+
 </style>
 <script>
 	//검색어 확인
 	$(function(){
 		$(".disableLink").css({ 'pointer-events': 'none' });
+		$(".disableLink").css({ 'cursor': 'default' });
+		
 		
 		$("#searchForm").submit(function(){
 			//searchWord있는지 없는지 찾기 , 있을때만 데이터 넘기기
@@ -154,22 +162,23 @@
 			<c:if test="${vo.step == 0}"><li>${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li></c:if> 
 			--%>
 			
-	         
-	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> 
-			 
+	        <!-- 원글 --> 
+	     <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> 
+
 			<!-- 답글있으면 표시, 없으면 제목만 -->
-			<li class="wordcut" id="sub">
+			<li class="wordcut" id="sub" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" style="pointer-events: none; cursor : default;"</c:if>>
 				<c:forEach var="i" begin="1" end="${vo.step}">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
-						<c:if test="${vo.step == 1}"> ${vo.lvl} . </c:if>
-						<c:if test="${vo.step > 1}">${vo.lvl-vo.step+1}-${vo.step-1} . <input type="hidden" name="no" value="${vo.no}"/></c:if>
+						<c:if test="${vo.step == 1}">${vo.lvl} . </c:if>
+						<c:if test="${vo.step > 1}">${vo.lvl-vo.step} - ${vo.step-1} . <input type="hidden" name="no" value="${vo.no}"/></c:if>
 				</c:if>
 		
 			<!-- 제목 -->
-				<a href="boardView?no=${vo.no}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+			
+				<a href="boardView?no=${vo.no}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 			</li>
 			
 			<!-- 댓글 -->
