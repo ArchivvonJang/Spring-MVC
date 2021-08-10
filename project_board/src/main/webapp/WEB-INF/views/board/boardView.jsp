@@ -49,6 +49,11 @@
     scrollbar-height: none; /* Firefox */
 	}
 	#commentForm{height: 130px auto;}
+	.cWordCut{
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  white-space: break-spaces; 
+		white-space:pre;
+	}
+	.edit, .delete{border:none;}
 </style>
 <script type="text/javascript">
 
@@ -64,33 +69,34 @@
 				location.href="boardEdit?no=${vo.no}";
 			}; */
 		function boardDelete(){
-			var url ="/myapp/getUserpwd";
+			//var url ="/myapp/getUserpwd";
 			var loc = "/myapp/boardDelete?no=${vo.no}";	 //이동할 주소
 			var data = "no=${vo.no}&userpwd=";	//필요한 데이터 값
-			getUserpwd(url, data, loc);
+			getUserpwd( data, loc);//1
 			console.log(" delete data : ", data, " loc :", loc);
 		};
 
 		function boardEdit(){
-			var url ="/myapp/getUserpwd";
+			//var url ="/myapp/getUserpwd";
 			var loc = "/myapp/boardEdit?no=${vo.no}";
 			var data = "no=${vo.no}&userpwd=";
 			//getUserpwd(data, loc);
-			getUserpwd(url, data, loc);
+			getUserpwd(data, loc);
 			//console.log("edit data : ", data, " loc :", loc);
 		};
 	
-		function getUserpwd(url, data, loc){
-			console.log("getuserpwd in !!");
+		function getUserpwd(data, loc){
+			console.log("function getuserpwd in !!");
 			var pwd = prompt("비밀번호를 입력하세요.");
 			var param = data + pwd;
-			console.log("param:"+param);
+			console.log("param: "+param);
 			if(pwd != null || pwd != " "){
 				console.log("pwd check ! go to check userpwd");
-				checkUserpwd(param, url,loc);
+				checkUserpwd(param, loc);
 			}else{
 				alert("비밀번호를 다시 확인해주세요.AA");
-				getUserpwd(url, data, loc);
+				getUserpwd(data, loc);
+				return false;
 			}
 			/* if(pwd != ''){
 				checkUserpwd(pwd, window.location.href);
@@ -103,9 +109,9 @@
 			} */
 		}
 		//function checkUserpwd(url, param, loc){
-		function checkUserpwd(param, url, loc){
+		function checkUserpwd(param, url){
 			console.log("checkUserpwd ajax");
-			console.log("check userpwd and loc-> "+loc +" param -> " + param + "  url -> " + url );
+			//console.log("check userpwd and loc-> "+loc +" param -> " + param  );
 			$.ajax({
 				url : "/myapp/getUserpwd",
 				data : param,
@@ -167,16 +173,19 @@ $(function(){
 						console.log("comment List result function in!!!!!!!!!!!!");
 					///////////////////////////////////////// 댓글 목록 ////////////////////////<input type='hidden' value='"+o.cno+"'>/////////////////////////////////////////
 						tag += "<div><ul>"
-							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp; [ " + o.cdate + " ] </li>";
+							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span>&nbsp;  <span style='color:#9DA5AB;'>[ " + o.cdate + " ]</span> </li>";
 							tag += "<li escapeXml='true' style='height:auto;margin-top:6px;'>";
-							tag += "	<input type='text' value='" + o.content  + "'readonly cols='20' style='width:89%; height: 100px auto;'>";
-							tag += "	<span style='float:right;' class='"+o.cno+"'><button class='edit btn' >수정</button>&nbsp;&nbsp;<button class='delete btn'>삭제</button></span>"
+							tag += "	<input type='text' value='" + o.content  + "'readonly  style='width:100%; height:100px;' class='cWordcut'>";
+							//tag += "	<span style='float:right;' class='"+o.cno+"'><button class='edit btn' >수정</button>&nbsp;&nbsp;<button class='delete btn'>삭제</button></span>"
 							tag += "</li>";
+							tag += "<li class='"+o.cno+"'><button class='edit btn' >수정</button>&nbsp;<button class='delete btn'>삭제</button</li>"
 							tag += "<li><input type='hidden' value='"+o.userpwd+"'/></li>";
 						
 						tag+="</ul><br/>";
 						tag+="</div>";
 						//console.log("commentList function cno -> ", o.cno)
+						
+						
 					///////////////////////////////////////////// 댓글 수정 폼 ///////////////////////////////////////////////////////////////////
 						tag += "<div class='editDiv' style='display:none; margin-bottom:15px;'>" ;
 						tag += "<form class='editForm' method='post' onsubmit='return false'>";
@@ -188,8 +197,8 @@ $(function(){
 						//	tag += "작성자 : <input class='cId' type='text' name='userid' value='"+o.userid+"' maxlength='10' readonly style='border:none; margin-bottom:6px;'> "; //<span id='editidcheck'>/10</span>&nbsp;&nbsp;";
 						//	tag += " <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='4' realonly > "; //<span id='editPwdcheck'>/4</span>";
 							tag += "</div>";
-							tag += "<div style='height:auto'><textarea class='replyWordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:150 auto; width:90%'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
-							tag += "&nbsp;&nbsp;&nbsp;&nbsp;<span class='"+o.cno+"' style='float:right'><button class='finish btn'>완료</button></span>";
+							tag += "<div style='height:auto'><textarea class='cWordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:100px; width:100%'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
+							tag += "&nbsp;&nbsp;&nbsp;&nbsp;<span class='"+o.cno+"' style='float:right'><input type='submit' class='finish btn' value='수정하기'></span>";
 							tag += "</div>";
 						//	tag += "<div class='"+o.cno+"'><button class='finish btn'>완료</button></div>";
 							//tag += "<div class='"+o.cno+"'><button class='finish btn'>완료</button><button class='cancel btn' type='button'>취소</button></div>";
@@ -279,7 +288,7 @@ $(function(){
 			if(confirm('댓글을 수정하시겠습니까?')){
 				if( editSubmitCheck(obj) ){
 					$.ajax({
-						url : "/myapp/commentEdit",
+						url : "/myapp/commentEditOk",
 						data : $(this).serialize(),
 						success : function(result){
 							console.log("edit result : sucess 1  or  fail 0 ->", result);
@@ -297,6 +306,7 @@ $(function(){
 							console.log("3.  댓글 수정 확인");
 						}, error : function(){
 							console.log("4. 댓글 수정 에러발생");
+							
 						}
 					});
 				}
@@ -338,21 +348,21 @@ $(function(){
 		
 		var commentPwd =$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(3).val();
 		var commentId = $(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(1).val();
-		var commentContent = $(obj).parent().parent().parent().parent().next().children().children().eq(4).children().val();
+		var commentContent = $(obj).parent().parent().parent().parent().next().children().children().eq(5).children().val();
 
-/* 	console.log("1 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(5).val());
-	console.log("2 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().children().val());
-	console.log("3 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().next().val());
-	console.log("4 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(2).val());
-	console.log("5 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(4).val());
-	console.log("6 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(6).val());
-	console.log("7 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().val());
-	 */
+ 	console.log("1 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().eq(5).children().val());
+	console.log("2 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(5).children().val() );
+	console.log("3 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().val() );
+	console.log("4 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(3).children().val() );
+	console.log("5 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(2).children().val() );
+	console.log("6 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(6).children().val() );
+	console.log("7 --> "+$(obj).parent().parent().parent().parent().next().children().children().eq(7).children().val() );
+	
 	console.log("contentEdit comment content : " + commentContent + "/ length: " + commentContent.length );
 	console.log("contentEdit comment id : " + commentId );
 	console.log("contentEdit comment pwd : " + commentPwd );
 	
-	
+	 	
 	//$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().next().next().next().text(commentContent.length+"/150");
 	$('.editContentWord').text(commentContent.length+"/150");
 //	$(obj).parent().parent().parent().parent().next().children().children().eq(3).children().next().text(commentPwd.length+"/4");

@@ -113,10 +113,6 @@ public class BoardServiceImpl implements BoardService{
 		return boardDAO.commentInsert(cvo);
 	}
 
-	@Override
-	public int commentUpdate(CommentVO cvo) {
-		return boardDAO.commentInsert(cvo);
-	}
 
 	@Override
 	public int commentCheck(int cno, String userpwd) {
@@ -142,7 +138,13 @@ public class BoardServiceImpl implements BoardService{
 	public int boardCommentDelete(int no) {
 		return boardDAO.boardCommentDelete(no);
 	}
-	
+
+	@Override
+	public int commentUpdate(int no, int cno, String content) {
+		// TODO Auto-generated method stub
+		return boardDAO.commentUpdate(no, cno, content);
+	}
+
 
 
 	

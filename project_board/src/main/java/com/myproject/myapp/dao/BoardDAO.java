@@ -55,7 +55,8 @@ public interface BoardDAO {
 	//댓글등록
 	 public int commentInsert(CommentVO cvo);
 	 //댓수정
-	 public int commentUpdate(CommentVO cvo);
+	// public int commentUpdate(CommentVO cvo);
+	 public int commentUpdate(int no, int cno, String content);
 	 //댓 상태변경을 위한 확인
 	 public int commentCheck(int cno, String userpwd);
 	 //댓삭제

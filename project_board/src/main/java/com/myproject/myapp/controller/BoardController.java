@@ -192,13 +192,13 @@ public class BoardController {
 			//상태 변경
 			int result = boardService.replyDeleteUpdate(no);
 			
-			//나중에 글 삭제할 때 해당 글의 댓글도 지워지도록 하기 
-			int commentDel = boardService.boardCommentDelete(no);
+			//나중에 글 삭제할 때 해당 글의 댓글도 지워지도록 하기 --> JSP에서 안보이게 하기로 바꿈
+			//int commentDel = boardService.boardCommentDelete(no);
 			
 			
 			System.out.println("boardDelete rCount check ---> "+ replyCnt);
 			System.out.println("board Delete rdeleteupdate (result) check ---> "+ result);
-			System.out.println("comment delete check ---> "+ commentDel);
+		//	System.out.println("comment delete check ---> "+ commentDel);
 			//원글정보 - 원글인지 확인 step=0 or no = ref 인지 확인
 			System.out.println("board delete no :" + no);
 			//BoardVO orivo = boardService.getStep(no);
@@ -217,7 +217,7 @@ public class BoardController {
 			
 			//삭제가 되었으면 리스트로 이동, 삭제 안되었으면 글내용보기로 이동 
 			if(result>0) {
-				System.out.println("comment delete check ---> "+ commentDel);
+				//System.out.println("comment delete check ---> "+ commentDel);
 				mav.setViewName("redirect:boardList");
 				transactionManager.commit(status);
 				 System.out.println("[ 글 삭제 성공 ]");
@@ -361,9 +361,11 @@ public class BoardController {
 	//댓글 수정
 	@RequestMapping("/commentEditOk")
 	@ResponseBody
-	public int commentEditOk(CommentVO cvo) {
-		System.out.println("controller comment Edit Edit   in!!!");
-		return boardService.commentUpdate(cvo);
+	//public int commentEditOk(CommentVO cvo) {
+	public int commentEditOk(int no, int cno, String content) {
+		System.out.println("controller comment Edit Edit  in!!!");
+		//return boardService.commentUpdate(cvo);
+		return boardService.commentUpdate(no, cno, content);
 	}
 	
 	//댓글 삭제
