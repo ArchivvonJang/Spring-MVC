@@ -8,6 +8,10 @@
 		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  text-overflow: clip;  white-space: break-spaces;
 	}
 	.btn{background-color:white; border:1px solid #9DA5AB; color:#9DA5AB; height:33px;  border-radius:0px;}
+	.cWordCut{
+		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  white-space: break-spaces; 
+		white-space:pre; width:1110px;
+	}
 	#subject{
 		width:90%; overflow:auto;
 	}
@@ -17,7 +21,7 @@
 	.btn a{color:gray;}
 	#btnLine{text-align:center; }
 	label, .label{margin-right:10px; color:black; font-size:1em;}
-	input[type=text], input[type=password], input[type="number"]{
+	select, #searchKey, input[type=text], input[type=password], input[type="number"]{
 		border:1px solid lightgray;
 		height:33px;
 		font-size:1em;

@@ -760,7 +760,7 @@ $(function(){
 <body>
 	<div class="container">
 	<h2>게시판</h2>
-		<form method="post" name="boardEditFrm" id="boardEditFrm" action="boardEditOk">
+		<form method="post" name="boardEditFrm" id="boardEditFrm" action="boardEditOk" enctype="multipart/form-data">
 			<input type="hidden" name="no" value="${vo.no}"/>
 			<ul>
 				<li class="menu"><label class="label">제목</label><input type="text" name="subject" id="subject" value="<c:out value="${vo.subject}" escapeXml="true"></c:out>" required  class="wordcut" size="100"  maxlength="100" oninput="useridInput(this.val)"/>
@@ -769,6 +769,13 @@ $(function(){
 				<li>
 					<label class="label">작성자</label> <input type="text" name="userid" id="userid" maxlength="10"  class="wordcut"  value="<c:out value="${vo.userid}"  escapeXml="true"></c:out>" required oninput="useridInput(this.value);">
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
+				</li>
+				<!-- 첫번째 첨부파일 :vo.filename1 = vo.filename[0] -->
+				<li>첨부파일 
+					<div>${vo.filename} <b class="f">⛝</b></span></div>
+					<input type="hidden" name="filename" id="filename"/>
+					<!-- 삭제파일명: 사용자는 안보이게 -->
+					<input type="hidden" name="" id="delfile" value="${vo.filename}"/>
 				</li>
 				<%-- 
 				<li>

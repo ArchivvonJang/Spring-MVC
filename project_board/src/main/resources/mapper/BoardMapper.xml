@@ -9,8 +9,17 @@
 		 		(select no, subject, userid, userpwd, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
 		 		from board 
 		 		<choose>
-		 			<when test='searchWord!=null'>
+		 			<when test ='searchWord!=null and searchKey=="subject" '>
 		 				where subject like '%${searchWord}%'
+		 			</when>
+		 			<when test ='searchWord!=null and searchKey=="content" '>
+		 				where content like '%${searchWord}%'
+		 			</when>
+		 			<when test ='searchWord!=null and searchKey=="reply" '>
+		 				where subject like '%${searchWord}%' and lvl > 1
+		 			</when>
+		 				<when test ='searchWord!=null and searchKey=="userid" '>
+		 				where userid like '%${searchWord}%' 
 		 			</when>
 		 		</choose>
 		 		 order by ref desc, lvl asc )

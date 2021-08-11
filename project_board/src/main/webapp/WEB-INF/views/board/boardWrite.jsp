@@ -497,6 +497,17 @@ $(function(){
 $(function(){
 	$("#boardForm").on('submit',function(){
 		console.log("~~~~~~~~~~~submit~~~~~~~~~~~~~~~");
+		// 첨부파일
+		var fileCnt = 0;
+		if($("#filename").val()!=""){
+			//해당 아이디에 첨부파일이 선택되어 있으면,
+			fileCnt++;
+		}
+		if(fileCnt<1){ //올려진 파일이 0개
+			alert("파일을 첨부하세요.");
+			return false;
+		}
+		
 		//유효성검사
 		var idreg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
 		var pwdreg = /[0-9]$/;
@@ -787,7 +798,7 @@ $(function(){
 <body>
 	<div class="container">
 	<h2>게시판</h2>
-		<form method="post" name="boardForm" id="boardForm" action="boardWriteOk" >
+		<form method="post" name="boardForm" id="boardForm" action="boardWriteOk" enctype="multipart/form-data">
 		
 			<ul>
 			
@@ -810,6 +821,10 @@ $(function(){
 				<li>
 					<textarea id="summernote"  name="content" id="content"  rows="10" cols="" maxlength="500"  oninput="lengthCheck()"></textarea >
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
+				</li>
+				<!-- 첨부파일 -->
+				<li>
+					<input type="file" name="filename" id="filename">
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="등록하기" class="btn"/>

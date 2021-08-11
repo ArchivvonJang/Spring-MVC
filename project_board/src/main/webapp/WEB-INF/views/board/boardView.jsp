@@ -47,12 +47,10 @@
     margin: 0;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-height: none; /* Firefox */
+    scrollbar-width: none; 
 	}
 	#commentForm{height: 130px auto;}
-	.cWordCut{
-		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  white-space: break-spaces; 
-		white-space:pre;
-	}
+	
 	.edit, .delete{border:none;}
 	#useridLength, #userpwdLength, #commentLengt{ width: 35px; margin:0; padding:0; }
 </style>
@@ -95,7 +93,7 @@
 			console.log("param: "+param);
 			if(pwd != null || pwd != " "){
 				console.log("pwd check ! go to check userpwd");
-				checkUserpwd(param, loc);
+				checkUserpwd(param, loc, data);
 			}else{
 				alert("비밀번호를 다시 확인해주세요.AA");
 				getUserpwd(data, loc);
@@ -112,11 +110,12 @@
 			} */
 		}
 		//function checkUserpwd(url, param, loc){
-		function checkUserpwd(param, url){
+		function checkUserpwd(param, loc, data){
 			console.log("checkUserpwd ajax");
+			var url = "/myapp/getUserpwd";
 			//console.log("check userpwd and loc-> "+loc +" param -> " + param  );
 			$.ajax({
-				url : "/myapp/getUserpwd",
+				url : url,
 				data : param,
 				success : function(result){
 					
@@ -131,6 +130,8 @@
 						//getUserpwd(url, data, loc);
 						console.log("checkuserpwd password is wrong or result is failed -> ajax check url : ", url, "result-->, result");
 						console.log("chechk reuslt = 0 and url->"+url);
+						getUserpwd(data, loc);
+						return false;
 					}
 					
 				}, error : function(){
@@ -178,7 +179,7 @@ $(function(){
 					/*	tag += "<div><ul>"
 							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span>&nbsp;  <span style='color:#9DA5AB;'>[ " + o.cdate + " ]</span> </li>";
 							tag += "<li escapeXml='true' style='height:auto;margin-top:6px;'>";
-							tag += "	<input type='text' value='" + o.content  + "'readonly  style='width:100%; height:100px;' class='cWordcut'>";
+							tag += "	<input type='text' value='" + o.content  + "'readonly  style='width:100%; height:100px;' class='wordcut'>";
 							//tag += "	<span style='float:right;' class='"+o.cno+"'><button class='edit btn' >수정</button>&nbsp;&nbsp;<button class='delete btn'>삭제</button></span>"
 							tag += "</li>";
 							tag += "<li class='"+o.cno+"'><button class='edit btn' >수정</button>&nbsp;<button class='delete btn'>삭제</button</li>"
@@ -189,8 +190,10 @@ $(function(){
 					*/
 						tag += "<div><ul>"
 							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp;&nbsp; [ " + o.cdate + " ] </li>";
-							tag += "<li escapeXml='true' style='height:auto;margin-top:6px;'>";
-							tag += "	<input type='text' value='" + o.content  + "'readonly cols='20' class='cWordcut' style='width:1110px; height: 80px;'>";
+							tag += "<li style='margin-top:6px;'   escapeXml='true'>";
+							//tag += "	<input type='text' value='" + o.content  + "'readonly class='wordcut' style='height:80px; width:100%;'>";
+							tag += "	<textarea name='content' id='content'  id='sub' class='wordCut'  maxlength='150' style='margin-bottom:0px; width:100%; readonly '>"+o.content+"</textarea>";
+							
 							tag += "	<span  class='"+o.cno+"'><button class='edit btn' >수정</button><button class='delete btn'>삭제</button></span>"
 							tag += "</li>";
 							tag += "<li><input type='hidden' value='"+o.userpwd+"'/></li>";
@@ -210,7 +213,7 @@ $(function(){
 						//	tag += "작성자 : <input class='cId' type='text' name='userid' value='"+o.userid+"' maxlength='10' readonly style='border:none; margin-bottom:6px;'> "; //<span id='editidcheck'>/10</span>&nbsp;&nbsp;";
 						//	tag += " <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='4' realonly > "; //<span id='editPwdcheck'>/4</span>";
 							tag += "</div>";
-							tag += "<div style='height:auto'><textarea class='cWordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:100px; width:1110px'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
+							tag += "<div style='height:auto'><textarea class='wordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:100px; width:100%'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
 							tag += "&nbsp;&nbsp;&nbsp;&nbsp;<span class='"+o.cno+"' style='float:right'><input type='submit' class='finish btn' value='수정하기'></span>";
 							tag += "</div>";
 						//	tag += "<div class='"+o.cno+"'><button class='finish btn'>완료</button></div>";
@@ -446,9 +449,14 @@ $(function(){
 			$("#userid").focus();
 			return false;
 		}
+		if($("#userid").val().length > 10){
+			alert("작성자는 10자리까지 입력가능합니다.");
+			$("#userpwd").focus();
+			return false;
+	    }
 		//비밀번호 
-		//var check = userpwd.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
-		var check = userpwd.value.match(/[0-9]/);
+		var check = userpwd.value.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
+		//var check = userpwd.value.match(/[0-9]/);
 		var pw = $("#userpwd").val();
 		
 		if($("#userpwd").val().trim()==""){
@@ -546,8 +554,9 @@ $(function(){
 		wordcheck.text(obj.val().length + "/" + obj.attr("maxlength"));
 		if(obj.val().length > obj.attr("maxlength")){
 			setTimeout(function(){
-				alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.")		
+				//alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.")	;	
 			}, 100);
+			alert(obj.attr("maxlength")+"글자까지 입력 가능합니다.")	;	
 			obj.val(obj.val().substr(0, obj.attr("maxlength")));
 			wordcheck.text(obj.attr("maxlength") + "/" + obj.attr("maxlength"));
 		}
@@ -609,6 +618,11 @@ $(function(){
 		return flag;
 	}
 }); //function end
+//----------------------------------------------- 파일 업로드 ----------------------------------------------------------
+
+
+
+
 
 </script>
 </head>
@@ -629,7 +643,7 @@ $(function(){
 			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
 			
 			<!-- 첨부파일 -->
-			
+			<li></li>
 			
 			<!-- 내용 -->
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
@@ -651,7 +665,7 @@ $(function(){
 		<br/>
 		<hr/>
 		
-		<!------------------- 댓글 ----------------------->
+		<!------------------- 댓글 작성 ----------------------->
 		<h4>comment</h4>
 		<div id="commentContainer">
 		<form method="post" id="commentForm" >
@@ -661,8 +675,8 @@ $(function(){
 			 <label style="margin-top:12px;">비밀번호</label><input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
-			<textarea name="content" id="content" id="sub" class="wordcut" maxlength="150" style="margin-bottom:0px; height: 100px;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
-				
+			<textarea name="content" id="content"  id="sub" class="wordCut" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+				 
 		</form>
 		</div>
 		<hr/>

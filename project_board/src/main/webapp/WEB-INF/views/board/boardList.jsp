@@ -27,7 +27,7 @@
 	}
 	#boardList li:nth-child(7n+2){width:55%; text-align:left;}
 	#boardList li:nth-child(7n+2) a{color:black; }
-	#boardList li:nth-child(7n+7){width:7%;}
+	#boardList li:nth-child(7n+7){width:9%;}
 	.search_container{
 		text-align:right; line-height:30px;
 	}
@@ -133,6 +133,12 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 		<!-- [ 검색하기 ] -->
 		<div id="search_container" style="height:30px;">		
 		<form method="get" action="boardList" id="searchForm">
+			<select  name="searchKey" id="searchKey">
+				<option value="subject">제목</option>
+				<option value="reply">답글</option>
+				<option value="content">내용</option>
+				<option value="userid">작성자</option>
+			</select>
 			<input type="text" id="searchWord" name="searchWord" placeholder="검색하기" <c:if test="${sapvo.searchWord != null || sapvo.searchWord != ''}">value="${sapvo.searchWord}"</c:if>><input type="submit" id="searchBtn" value="검색"/>			
 		</form>	
 		</div>
@@ -188,7 +194,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 				-->
 				
-				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut"  ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut"   <c:if test="${vo.subject eq '삭제된 글입니다.'}">style="color:gray;"</c:if>><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 			</li>
 			
 			<!-- 댓글 -->
@@ -208,7 +214,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<!-- 작성자 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
 			<!-- 데이터여부  -->
-			<li>✉wf</li>
+			<li>✉</li>
 			<!-- 조회수 -->
 			<li>${vo.hit }</li>
 			<!-- 작성일 -->
@@ -229,10 +235,10 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<!-- 1페이지 이상 레코드가 있어야지 화살표가 추가된다. -->
 			<c:if test="${sapvo.pageNum>1}"><!-- 이전페이지가 있을때 -->
 			  	<!--맨앞으로-->
-  				<a class="arrow pprev" href="boardList?pageNum=1<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◀</a>
+  				<a class="arrow pprev" href="boardList?pageNum=1<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">◀</a>
 				<!--앞으로 1개 이상 존재하면,-->
 				<c:if test="${sapvo.startPageNum > 1}"> 
-        		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum-1}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">◁</a>
+        		<a class="arrow prev" href="boardList?pageNum=${sapvo.startPageNum-1}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">◁</a>
  				</c:if>
  			</c:if>
  				<!--레코드 갯수에 따른 페이지 갯수 표시 :  jstl c tag를 사용하여 startPageNum(시작페이지)부터 끝(마지막페이지 -> 시작페이지+한 페이지당 페이지수-1)까지 반복하여 값을 꺼낸다.--> 
@@ -241,11 +247,11 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 	            	<c:if test="${p<=sapvo.totalPage}">  
 						<!--현재페이지 :  현재보고있는 페이지 표시 -->
 		               <c:if test="${p==sapvo.pageNum}">
-		                  <a class="on" href="boardList?pageNum=${p}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">${p}</a>
+		                  <a class="on" href="boardList?pageNum=${p}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">${p}</a>
 		               </c:if>
 		               <!-- 현재페이지가 아닐 때 -->
 		               <c:if test="${p!=sapvo.pageNum}">
-		                  <a href="boardList?pageNum=${p}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">${p}</a>
+		                  <a href="boardList?pageNum=${p}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">${p}</a>
 		               </c:if>
 	            	</c:if>
         		</c:forEach>
@@ -253,11 +259,11 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
         		<!-- 다음 페이지가 있을 때 ,총페이지수가 한 페이지세트 끝번호보다 크면 -->
         		<c:if test="${sapvo.pageNum <= sapvo.totalPage}">
 				<!--뒤로-->            
-	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▷</a>
+	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				</c:if>
 				<!--맨뒤로-->
 				<c:if test="${sapvo.pageNum != sapvo.totalPage }">
-	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchWord=${sapvo.searchWord}</c:if>">▶</a>
+	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▶</a>
 			 	</c:if>
 			
 			</div>
