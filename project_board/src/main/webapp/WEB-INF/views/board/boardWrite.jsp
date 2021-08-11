@@ -90,7 +90,6 @@
 	//userpwdCheck 비밀번호 확인
 	function userpwdCheck(){
 			console.log("userpwdCheck function 0");
-			var password = $("#userpwd");
 			var userpwd = $("#userpwd").val();
 			var pwdMsg =$("#pwdMsg");
 			var pwdreg = userpwd.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
@@ -115,8 +114,9 @@
 	 				}
 					return false; 
 				}else if(!pwdreg){
-					pwdMsg.text("2. 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+					//pwdMsg.text("2. 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
 					console.log("userpwdCheck function 10");
+					
 					//alert("3. 비밀번호를 확인해주세요.");
 					$("#pwdApproval").css("display","none");
 	 				if(userpwd.length > 10){
