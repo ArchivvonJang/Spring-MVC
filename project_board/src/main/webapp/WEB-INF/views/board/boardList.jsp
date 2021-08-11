@@ -178,8 +178,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
-						 <c:if test="${vo.step == 1}"> ${ vo.step} - ${(vo.lvl-vo.step)+1}  <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
-						<c:if test="${vo.step > 1}">${vo.step } - ${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if>
+						 <c:if test="${vo.step == 1}">${(vo.lvl-vo.step)+1}  <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
+						<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
 				</c:if>
 		
 			<!-- 제목 -->

@@ -54,6 +54,7 @@
 		white-space:pre;
 	}
 	.edit, .delete{border:none;}
+	#useridLength, #userpwdLength, #commentLengt{ width: 35px; margin:0; padding:0; }
 </style>
 <script type="text/javascript">
 
@@ -235,7 +236,13 @@ $(function(){
 
 	//댓글쓰기
 	$(document).on('click', '#commentBtn', function(){
-	console.log("comment write in!!!!!!")
+		console.log("comment write in!!!!!!");
+/* 		$('#useridLength').css('display','');
+		$('#userpwdLength').css('display','');
+		$('#commentLength').css('display','');
+		$('#useridLength').val('');
+		$('#userpwdLength').val('');
+		$('#commentLength').val(''); */
 	if(submitCheck()){
 		//댓 작성
 		if($("#content").val()!=''){
@@ -252,13 +259,22 @@ $(function(){
 					$("#content").val("");
 					$("#userid").val("");
 					$("#userpwd").val("");
+					$('#useridLength').val('');
+					$('#userpwdLength').val('');
+					$('#commentLength').val('');
+					$('#useridLength').css('display','none');
+					$('#userpwdLength').css('display','none');
+					$('#commentLength').css('display','none');
 					commentList();
 				},error:function(){
 					console.log("url->",url);
 					console.log("params->",params);
 					console.log("댓글 등록 에러 발생");
 				} 
+				
 			});//ajax end
+			$('#useridLength').css('display','block'); $('#userpwdLength').css('display','block');	$('#commentLength').css('display','block');
+			console.log("length block");
 		}//if  
 		return false;
 	}//submitCheck function end
@@ -492,10 +508,13 @@ $(function(){
 		checkblank(obj, '댓글의 본문')
 		subjectWordCount(obj, wordcheck);
 	});
-	
+
+
+
 	//키보드 입력	
 	//작성자 글자수
 	userid.oninput = function(){
+		$('#useridLength').css('display','block');
 		var obj = $("#userid");
 		var wordcheck = $("#useridLength");
 		checkblank(obj, '작성자')
@@ -503,6 +522,7 @@ $(function(){
 	}
 	//비밀번호 글자수 
 	userpwd.oninput = function(e){
+		$('#userpwdLength').css('display','block');
 		var obj = $("#userpwd");
 		var wordcheck = $("#userpwdLength");
 		var pwdAlert = $("#pwdMsg");
@@ -513,6 +533,7 @@ $(function(){
 	
 	//댓글 본문 글자수
 	content.oninput = function(){
+		$('#commentLength').css('display','block');
 		var obj = $("#content");
 		var wordcheck = $("#commentLength");
 		checkblank(obj, '댓글')
@@ -531,6 +552,7 @@ $(function(){
 			wordcheck.text(obj.attr("maxlength") + "/" + obj.attr("maxlength"));
 		}
 		return obj.val().length;;
+		
 	}
 	//공백 방지하는 함수------------
 	function checkblank(obj, title){
@@ -628,10 +650,10 @@ $(function(){
 		<h4>comment</h4>
 		<div id="commentContainer">
 		<form method="post" id="commentForm" >
-		<div style="margin-bottom:7px;">
+		<div style="margin-bottom:7px;" id="commentIdPwdDiv">
 			<input type="hidden" name="no" value="${vo.no}">
-			&nbsp; 	<label>작성자</label>&nbsp;&nbsp;&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span><!-- /<span id="max_count">10</span> -->
-			 &nbsp; &nbsp;<label>비밀번호</label><input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
+			<label style="margin-right:16px;">작성자&nbsp;</label>&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span><!-- /<span id="max_count">10</span> --><br/>
+			 <label style="margin-top:12px;">비밀번호</label><input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
 			<textarea name="content" id="content" id="sub" class="wordcut" maxlength="150" style="margin-bottom:0px; height: 100px;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
