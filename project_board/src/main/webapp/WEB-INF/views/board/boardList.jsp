@@ -153,6 +153,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 		<!-- 변수 선언 -->
 		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
+		<c:set var="recordNum1" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
 		<c:set var="replyRecordNum" value="${replyRecord}"/> 
 	
 		<c:forEach var="vo" items="${list}" varStatus="idx">
@@ -177,8 +178,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
-						 <c:if test="${vo.step == 1}"> ${(vo.lvl-vo.step)+1}  <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
-						<c:if test="${vo.step > 1}">${vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}"/>.</c:if>
+						 <c:if test="${vo.step == 1}"> ${ vo.step} - ${(vo.lvl-vo.step)+1}  <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
+						<c:if test="${vo.step > 1}">${vo.step } - ${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if>
 				</c:if>
 		
 			<!-- 제목 -->
