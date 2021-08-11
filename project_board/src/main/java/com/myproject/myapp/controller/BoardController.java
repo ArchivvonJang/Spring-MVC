@@ -114,9 +114,10 @@ public class BoardController {
 	}
 	//글쓰기 완료 후 리스트로 이동
 	@RequestMapping(value="/boardWriteOk", method=RequestMethod.POST)
-	public ModelAndView boardWriteOk(BoardVO vo) {
+	public ModelAndView boardWriteOk(BoardVO vo, SearchAndPageVO sapvo) {
 		ModelAndView mav = new ModelAndView();
 		  if(boardService.boardInsert(vo)>0) {
+			  mav.addObject("sapvo", sapvo);
 		        mav.setViewName("redirect:boardList");
 		    }else {
 		        mav.setViewName("redirect:boardWrite");
@@ -124,8 +125,9 @@ public class BoardController {
 		return mav;
 	}
 	@RequestMapping("/boardView")
-	public ModelAndView boardView(int no) {
+	public ModelAndView boardView(int no, SearchAndPageVO sapvo) {
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("sapvo", sapvo);
 		mav.addObject(boardService.hitCnt(no));
 	//	mav.addObject("cvo", boardService.commentAllList(no));
 		mav.addObject("vo", boardService.boardSelect(no));
@@ -146,7 +148,7 @@ public class BoardController {
 	}
 	//글쓰기 수정 폼으로 이동
 	@RequestMapping("/boardEdit")
-	public ModelAndView boardEdit(int no) {
+	public ModelAndView boardEdit(int no,  SearchAndPageVO sapvo) {
 		ModelAndView mav = new ModelAndView();
 		// model 을 사용할 경우, model.addAttribute("vo", boardService.boardSelect(no));
 		mav.addObject("vo",  boardService.boardSelect(no));
@@ -155,14 +157,14 @@ public class BoardController {
 	}
 	//글쓰기 수정 완료 
 	@RequestMapping(value="/boardEditOk", method=RequestMethod.POST)  //수정할 글(레코드) 수정
-	public ModelAndView boardEditOk(BoardVO vo) {
+	public ModelAndView boardEditOk(BoardVO vo, SearchAndPageVO sapvo ) {
 		
 		ModelAndView mav = new ModelAndView();
-		
+		mav.addObject("sapvo", sapvo);
 		mav.addObject("no", vo.getNo()); //글번호
 
 		if(boardService.boardUpdate(vo)>0) {
-			mav.setViewName("redirect:/boardList");
+			mav.setViewName("redirect:/boardView");
 			System.out.println("controller : 수정성공");
 		}else {
 			mav.setViewName("redirect:boardEdit");
@@ -238,9 +240,10 @@ public class BoardController {
 	
 	//답글 쓰기 폼 이동
 	@RequestMapping("/replyWrite")
-	public ModelAndView replyWriteForm(int no) {
+	public ModelAndView replyWriteForm(int no, SearchAndPageVO sapvo) {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("no", no);
+		mav.addObject("sapvo", sapvo);
 		mav.setViewName("board/replyWrite");
 		return mav;
 	}
@@ -248,7 +251,7 @@ public class BoardController {
 	//답글 작성 - 트랜잭션
 	@RequestMapping(value="/replyWriteOk", method=RequestMethod.POST)
 	@Transactional(rollbackFor= {Exception.class, RuntimeException.class}) //예외가발생하면 롤백처리를해줘라
-	public ModelAndView replyWriteOk(BoardVO vo, HttpServletRequest req) {
+	public ModelAndView replyWriteOk(BoardVO vo, HttpServletRequest req, SearchAndPageVO sapvo) {
 		//트렌잭션 
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();  //객체 생성을 위해 호출해옴
 		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);

@@ -69,20 +69,22 @@
 				location.href="boardEdit?no=${vo.no}";
 			}; */
 		function boardDelete(){
+			console.log(" onclick delete");	
 			//var url ="/myapp/getUserpwd";
 			var loc = "/myapp/boardDelete?no=${vo.no}";	 //이동할 주소
 			var data = "no=${vo.no}&userpwd=";	//필요한 데이터 값
 			getUserpwd( data, loc);//1
-			console.log(" delete data : ", data, " loc :", loc);
+			//console.log(" onclick delete data : ", data, " loc :", loc);
 		};
 
 		function boardEdit(){
+			console.log(" onclick edit");	
 			//var url ="/myapp/getUserpwd";
 			var loc = "/myapp/boardEdit?no=${vo.no}";
 			var data = "no=${vo.no}&userpwd=";
 			//getUserpwd(data, loc);
 			getUserpwd(data, loc);
-			//console.log("edit data : ", data, " loc :", loc);
+			//console.log("on click edit data : ", data, " loc :", loc);
 		};
 	
 		function getUserpwd(data, loc){
@@ -609,12 +611,15 @@ $(function(){
 			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
 		</ul>
 		<div id="btnLine">
-			<%-- <button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button> --%>
+			<%-- <button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button>
 			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
 			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
+			 --%>
+			<button class="btn" onClick="boardEdit()">수정하기</button>
+			<button class="btn" onClick="boardDelete()">삭제하기</button>	
 		
 			<button class="btn" onClick="location.href='<%=request.getContextPath()%>/replyWrite?no=${vo.no}'">답글쓰기</button>	
-				<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'"/>
+				<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList?pageNum=${sapvo.pageNum}'"/>
 		</div>
 		<br/>
 		<hr/>

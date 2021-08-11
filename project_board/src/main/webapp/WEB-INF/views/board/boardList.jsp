@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>list</title>
+<title>목록</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -154,6 +154,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
 		<c:set var="replyRecordNum" value="${replyRecord}"/> 
+	
 		<c:forEach var="vo" items="${list}" varStatus="idx">
 		
 			<!-- 번호 -->
@@ -164,8 +165,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			
 	        <!-- 원글
 	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> 
-	    <c:if test="${vo.step==0}"> <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
-  		<c:if test="${vo.step>0}"> <li class="${vo.ref}">&nbsp;<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
+	    <c:if test="${vo.step>=0}"> <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
+<%--   		<c:if test="${vo.step>0}"> <li class="${vo.ref}">&nbsp;<input type="hidden" name="no" value="${vo.no}"/></li> </c:if> --%>
   		
   		
   		
@@ -176,13 +177,13 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
-						<c:if test="${vo.step == 1}">${vo.lvl} . </c:if>
-						<c:if test="${vo.step > 1}">${vo.lvl-vo.step+1} . <input type="hidden" name="no" value="${vo.no}"/></c:if>
+						 <c:if test="${vo.step == 1}"> ${(vo.lvl-vo.step)+1}  <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
+						<c:if test="${vo.step > 1}">${vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}"/>.</c:if>
 				</c:if>
 		
 			<!-- 제목 -->
 			
-				<a href="boardView?no=${vo.no}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 			</li>
 			
 			<!-- 댓글 -->

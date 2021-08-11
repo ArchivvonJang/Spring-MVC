@@ -6,7 +6,7 @@
  	<select id="boardAllRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="com.myproject.myapp.vo.BoardVO">
  		select*from
 	 		(select*from
-		 		(select rownum, no, subject, userid, userpwd, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
+		 		(select no, subject, userid, userpwd, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
 		 		from board 
 		 		<choose>
 		 			<when test='searchWord!=null'>
@@ -16,8 +16,8 @@
 		 		 order by ref desc, lvl asc )
 	 		    where <![CDATA[rownum<=]]>${pageNum}*${onePageRecord} order by rownum desc)
 				where <![CDATA[rownum<=]]>
-				<if test="pageNum==totalPage">${lastPageRecord} order by rownum desc</if>
-	        	<if test="pageNum!=totalPage">${onePageRecord} order by rownum desc</if>
+				<if test="pageNum==totalPage">${lastPageRecord}</if>
+	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
 	   order by ref desc, lvl asc
  	</select>
  	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">

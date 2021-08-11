@@ -769,7 +769,7 @@ $(function(){
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="답글등록" class="btn"/>
-					<input type="button" value="목록" class="btn"  onClick="location.href='<%=request.getContextPath() %>/boardList'"/> 
+					<input type="button" value="목록" class="btn"  onClick="location.href='<%=request.getContextPath() %>/boardList?pageNum=${sapvo.pageNum}'"/> 
 				<!-- 	<input type="button" value="목록" class="btn" id="returnList"/> -->
 				</li>
 			</ul>
