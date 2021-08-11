@@ -83,19 +83,19 @@
 			var data = "no=${vo.no}&userpwd=";
 			//getUserpwd(data, loc);
 			getUserpwd(data, loc);
-			//console.log("on click edit data : ", data, " loc :", loc);
+			console.log("on click edit data : ", data, " loc :", loc);
 		};
 	
 		function getUserpwd(data, loc){
 			console.log("function getuserpwd in !!");
-			var pwd = prompt("비밀번호를 입력하세요.");
+			var pwd = prompt("비밀번호를 입력해주세요.");
 			var param = data + pwd;
 			console.log("param: "+param);
 			if(pwd != null || pwd != " "){
 				console.log("pwd check ! go to check userpwd");
 				checkUserpwd(param, loc, data);
 			}else{
-				alert("비밀번호를 다시 확인해주세요.AA");
+				alert("비밀번호를 다시 확인해주세요.");
 				getUserpwd(data, loc);
 				return false;
 			}
@@ -110,7 +110,7 @@
 			} */
 		}
 		//function checkUserpwd(url, param, loc){
-		function checkUserpwd(param, loc, data){
+		function checkUserpwd(param, loc, url){
 			console.log("checkUserpwd ajax");
 			var url = "/myapp/getUserpwd";
 			//console.log("check userpwd and loc-> "+loc +" param -> " + param  );
@@ -126,17 +126,17 @@
 					}
 					//else if(result==0){
 					else{
-						alert("비밀번호를 잘못 입력하였습니다.");		
+						//alert("비밀번호를 잘못 입력하였습니다.");		
 						//getUserpwd(url, data, loc);
 						console.log("checkuserpwd password is wrong or result is failed -> ajax check url : ", url, "result-->, result");
 						console.log("chechk reuslt = 0 and url->"+url);
-						getUserpwd(data, loc);
+						getUserpwd(param, loc);
 						return false;
 					}
 					
 				}, error : function(){
-					alert("비밀번호를 다시 확인해주세요.33");		
-					getUserpwd(url, data, loc);
+					alert("비밀번호를 다시 확인해주세요.");		
+					getUserpwd(data, loc);
 					console.log("!!checkUserpwd ajax function error!!");
 				}
 			});
@@ -211,7 +211,7 @@ $(function(){
 							tag += "<div class='cPwdId' style='margin-bottom:6px;'> ";
 							tag += "작성자 : </span> &nbsp; <span class='cId' escapeXml='true' > "+o.userid + "</span> "; 
 						//	tag += "작성자 : <input class='cId' type='text' name='userid' value='"+o.userid+"' maxlength='10' readonly style='border:none; margin-bottom:6px;'> "; //<span id='editidcheck'>/10</span>&nbsp;&nbsp;";
-						//	tag += " <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='4' realonly > "; //<span id='editPwdcheck'>/4</span>";
+						//	tag += " <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='10' realonly > "; //<span id='editPwdcheck'>/10</span>";
 							tag += "</div>";
 							tag += "<div style='height:auto'><textarea class='wordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:100px; width:100%'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
 							tag += "&nbsp;&nbsp;&nbsp;&nbsp;<span class='"+o.cno+"' style='float:right'><input type='submit' class='finish btn' value='수정하기'></span>";
@@ -397,7 +397,7 @@ $(function(){
 	 	
 	//$(obj).parent().parent().parent().parent().next().children().children().eq(4).children().next().next().next().text(commentContent.length+"/150");
 	$('.editContentWord').text(commentContent.length+"/150");
-//	$(obj).parent().parent().parent().parent().next().children().children().eq(3).children().next().text(commentPwd.length+"/4");
+//	$(obj).parent().parent().parent().parent().next().children().children().eq(3).children().next().text(commentPwd.length+"/10");
 //	$(obj).parent().parent().parent().next().children().children().eq(4).children().next().text(commentId.length+"/10");
 
 	
@@ -460,22 +460,22 @@ $(function(){
 		var pw = $("#userpwd").val();
 		
 		if($("#userpwd").val().trim()==""){
-			alert("비밀번호는 숫자 4자리를 입력해주세요.");
+			alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 			$("#userpwd").focus();
 			return false;
 		}
-		if($("#userpwd").val().length < 4){
-			alert("비밀번호는 숫자 4자리를 입력해주세요.");
+		if($("#userpwd").val().length < 6){
+			alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 			$("#userpwd").focus();
 			return false;
 		}
-		if($("#userpwd").val().length > 4 && !check){
-			alert("비밀번호는 숫자 4자리를 입력해주세요.");
+		if($("#userpwd").val().length > 10 && !check){
+			alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 			$("#userpwd").focus();
 			return false;
 	    }
 		if(pw.search(/\s/) != -1){
-			alert("공백으로 비밀번호를 설정할 수 없습니다. \n 비밀번호는 4자리 숫자를 입력해주세요.")
+			alert("공백으로 비밀번호를 설정할 수 없습니다. \n 비밀번호를 다시 입력해주세요.")
 			$("#userpwd").focus();
 			return false;
 		}
@@ -583,18 +583,18 @@ $(function(){
 		
 		var check = pwdField.val().match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
 		var check = pwdField.val().match(/([0-9])/);
-		if(pwdField.val().length < 4){
-			alert(" [수정] 비밀번호는 4자리까지 입력하세요.")
+		if(pwdField.val().length < 10){
+			alert(" [수정] 비밀번호는 10자리까지 입력하세요.")
 			pwdField.focus();
 			flag = false;
 		}
-		if(pwdField.val().length > 4  && !check){
-			alert(" [수정] 비밀번호는 숫자 4자리를 입력해주세요.");
+		if(pwdField.val().length > 10  && !check){
+			alert(" [수정] 비밀번호는 숫자 10자리를 입력해주세요.");
 			pwdField.focus();
 			flag = false;
 	    }
 		if(pwdField.val().search(/\s/) != -1){
-			alert("  [수정] 공백으로만 비밀번호를 설정할 수 없습니다. \n 비밀번호는 숫자 4자리를 입력해주세요.")
+			alert("  [수정] 공백으로만 비밀번호를 설정할 수 없습니다. \n 비밀번호는 숫자 10자리를 입력해주세요.")
 			pwdField.focus();
 			flag = false;
 		}
@@ -672,7 +672,7 @@ $(function(){
 		<div style="margin-bottom:7px;" id="commentIdPwdDiv">
 			<input type="hidden" name="no" value="${vo.no}">
 			<label style="margin-right:16px;">작성자&nbsp;</label>&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span><!-- /<span id="max_count">10</span> --><br/>
-			 <label style="margin-top:12px;">비밀번호</label><input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="4"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
+			 <label style="margin-top:12px;">비밀번호</label><input type="password" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="10"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
 			<textarea name="content" id="content"  id="sub" class="wordCut" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
