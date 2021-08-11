@@ -19,15 +19,15 @@
 <style>
 	#boardList{margin-top:10px;}
 	#boardList li{
-		width:8%; height:50px; line-height:50px; border-bottom:1px solid lightgray; float: left;
+		width:7%; height:50px; line-height:50px; border-bottom:1px solid lightgray; float: left;
 		text-align:center;
 	}
 	.menu, h1{
 		color:#4289DB; font-weight:bold; text-align:center;
 	}
-	#boardList li:nth-child(6n+2){width:58%; text-align:left;}
-	#boardList li:nth-child(6n+2) a{color:black; }
-	#boardList li:nth-child(6n+6){width:10%;}
+	#boardList li:nth-child(7n+2){width:55%; text-align:left;}
+	#boardList li:nth-child(7n+2) a{color:black; }
+	#boardList li:nth-child(7n+7){width:7%;}
 	.search_container{
 		text-align:right; line-height:30px;
 	}
@@ -147,7 +147,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<li class="menu">번호</li>
 			<li class="menu" style="text-align:center">제목</li>
 			<li class="menu">  </li>
-			<li class="menu">글쓴이</li>
+			<li class="menu">작성자</li>
+			<li class="menu">첨부파일</li>
 			<li class="menu">조회수</li>
 			<li class="menu">등록일</li>
 		<!-- 변수 선언 -->
@@ -171,8 +172,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
   		
   		
   		
-			<!-- 답글있으면 표시, 없으면 제목만 ${vo.lvl-vo.step+1} - ${vo.step-1} -->
-			<li class="wordcut" id="sub" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" style="pointer-events: none; cursor : default;"</c:if>>
+			<!-- 답글있으면 표시, 없으면 제목만 ${vo.lvl-vo.step+1} - ${vo.step-1} <li class="wordcut" id="sub" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" style="pointer-events: none; cursor : default;"</c:if>>-->
+			<li class="wordcut" id="sub" >
 				<c:forEach var="i" begin="1" end="${vo.step}">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
@@ -182,23 +183,32 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 						<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
 				</c:if>
 		
-			<!-- 제목 -->
+			<!-- 제목 
 			
 				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
+				-->
+				
+				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut"  ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
 			</li>
 			
 			<!-- 댓글 -->
 			<li>
+			<%-- 	
 				<c:if test="${vo.subject eq '삭제된 글입니다.'}">
 						<span id="cno"> - </span>
 				</c:if>
 				<c:if test="${vo.subject ne '삭제된 글입니다.'}">
 				<span id="cno">[ ${cno[idx.index]} ]</span>
-				</c:if>
+				</c:if> 
+				--%>
+				
+					<span id="cno">[ ${cno[idx.index]} ]</span>
 			</li>
-		
+			
 			<!-- 작성자 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
+			<!-- 데이터여부  -->
+			<li>✉wf</li>
 			<!-- 조회수 -->
 			<li>${vo.hit }</li>
 			<!-- 작성일 -->

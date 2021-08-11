@@ -190,7 +190,7 @@ $(function(){
 						tag += "<div><ul>"
 							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp;&nbsp; [ " + o.cdate + " ] </li>";
 							tag += "<li escapeXml='true' style='height:auto;margin-top:6px;'>";
-							tag += "	<input type='text' value='" + o.content  + "'readonly cols='20' class='cWordcut' style='width:100%; height: 80px;'>";
+							tag += "	<input type='text' value='" + o.content  + "'readonly cols='20' class='cWordcut' style='width:1110px; height: 80px;'>";
 							tag += "	<span  class='"+o.cno+"'><button class='edit btn' >수정</button><button class='delete btn'>삭제</button></span>"
 							tag += "</li>";
 							tag += "<li><input type='hidden' value='"+o.userpwd+"'/></li>";
@@ -210,7 +210,7 @@ $(function(){
 						//	tag += "작성자 : <input class='cId' type='text' name='userid' value='"+o.userid+"' maxlength='10' readonly style='border:none; margin-bottom:6px;'> "; //<span id='editidcheck'>/10</span>&nbsp;&nbsp;";
 						//	tag += " <input class='cPwd' type='password' name='userpwd' value='"+o.userpwd+"' maxlength='4' realonly > "; //<span id='editPwdcheck'>/4</span>";
 							tag += "</div>";
-							tag += "<div style='height:auto'><textarea class='cWordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:100px; width:100%'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
+							tag += "<div style='height:auto'><textarea class='cWordcut' class='cContent' name='content' maxlength='150' wrap='hard' style='margin-bottom:0px; height:100px; width:1110px'>"+o.content+"</textarea><br><span class='editContentWord'>/150</span>";
 							tag += "&nbsp;&nbsp;&nbsp;&nbsp;<span class='"+o.cno+"' style='float:right'><input type='submit' class='finish btn' value='수정하기'></span>";
 							tag += "</div>";
 						//	tag += "<div class='"+o.cno+"'><button class='finish btn'>완료</button></div>";
@@ -627,21 +627,26 @@ $(function(){
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
 			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
 			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
+			
+			<!-- 첨부파일 -->
+			
+			
 			<!-- 내용 -->
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
 		</ul>
 		<div id="btnLine">
-			<%-- <button class="btn"><a href="boardEdit?no=${vo.no}" >수정하기</a></button>
-			<button class="btn" onClick="boardEdit()"><a href="" id="boardEdit" >수정하기</a></button>
-			<button class="btn" onClick="boardDelete()"><a href="" id="boardDel">삭제하기</a></button>	
-			 --%>
+		<!-- 삭제된 글이면 안나오도록 하기  -->
+			<c:if test="${vo.subject ne '삭제된 글입니다.'}">
+
 			<button class="btn" onClick="boardEdit()">수정하기</button>
 			<button class="btn" onClick="boardDelete()">삭제하기</button>	
 		
 			<button class="btn" onClick="location.href='<%=request.getContextPath()%>/replyWrite?no=${vo.no}'">답글쓰기</button>	
-				<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList?pageNum=${sapvo.pageNum}'"/>
+			</c:if>
+			
+			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList?pageNum=${sapvo.pageNum}'"/>
 		</div>
 		<br/>
 		<hr/>
