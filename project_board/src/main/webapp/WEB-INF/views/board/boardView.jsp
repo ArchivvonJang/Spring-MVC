@@ -55,6 +55,24 @@
 	#useridLength, #userpwdLength, #commentLengt{ width: 35px; margin:0; padding:0; }
 </style>
 <script type="text/javascript">
+// -----------------------  파일 다운로드 ------------------------
+$(function(){
+		$("#viewUl a").click(function(){
+			var params = "no="+${vo.no};
+			console.log("params -", params);
+			$.ajax({
+				url : '/myapp/downcount',
+				data:params,
+				success: function(result){
+					var arr = result.split("<hr class='down'/>");
+					${"span"}.text(arr[1].trim());
+				},error: function(){
+					console.log("downcount error");
+				}
+			});
+		});
+	})
+
 
 //------------------------ 게시판 글보기 -------------------------
 
@@ -90,7 +108,7 @@
 	
 		function getUserpwd(data, loc, state){
 			console.log("function getuserpwd in !!");
-			var pwd = prompt("비밀번호를 입력해주세요.AA");
+			var pwd = prompt("비밀번호를 입력해주세요.");
 			var param = data + pwd;
 			var url = "/myapp/getUserpwd";
 			console.log("param: "+param);
@@ -112,7 +130,7 @@
 							}
 				
 						}else{
-							alert("비밀번호를 다시 확인해주세요. 00");
+							alert("비밀번호를 다시 확인해주세요.");
 							getUserpwd(data, loc, state);
 							
 						
@@ -123,8 +141,8 @@
 					}
 				});	
 			}else{
-				alert("비밀번호를 확인해주세요.BB");
-				getUserpwd(data, loc, state);
+				//alert("비밀번호를 확인해주세요.BB"); 여기가 문제였네!!
+				//getUserpwd(data, loc, state);
 				
 			}
 				
@@ -148,7 +166,7 @@
 					
 					//else if(result==0){
 					else{
-						alert("비밀번호를 잘못 입력하였습니다.\n다시 입력해주세요.CC");		
+						alert("비밀번호를 잘못 입력하였습니다.\n다시 입력해주세요.");		
 						//getUserpwd(url, data, loc);
 						console.log("checkuserpwd password is wrong or result is failed -> ajax check url : ", url, "result-->, result");
 						console.log("chechk reuslt = 0 and url->"+url);
@@ -158,7 +176,7 @@
 					}
 					
 				}, error : function(){
-					alert("비밀번호를 다시 확인해주세요.DD");		
+					alert("비밀번호를 다시 확인해주세요.");		
 					getUserpwd(data, loc);
 					console.log("!!checkUserpwd ajax function error!!");
 				}
@@ -653,20 +671,24 @@ $(function(){
 <div class="container">
 	<h2>게시판</h2>
 	<input type="hidden" name="no" value="${vo.no}"/>
-		<ul>
+		<ul id="viewUl">
 			<!-- 작성자 -->
 			<li class="menuLine">
 				<span class="menu">작성자</span>  <span><c:out value="${vo.userid}"  escapeXml="true"></c:out></span>
 			<li>
 			<li class="menuLine"><span class="menu">등록일</span> ${vo.writedate}</li>
-			<%-- <li class="menuLine"><span class="menu">조회수</span> ${vo.hit}</li> --%>
+			 <li class="menuLine"><span class="menu">조회수</span> ${vo.hit} | 첨부파일 다운로드 횟수  <span>${vo.downCount }</span></li> 
 			<!-- 제목 -->
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
 			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
 			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
 			
 			<!-- 첨부파일 -->
-			<li></li>
+			<li>
+				<span class="menu">첨부파일</span> 
+				<!-- filename -->
+ 				<a href="<%=request.getContextPath()%>/upload/${vo.filename}" download>${vo.filename1}</a>
+			 </li>
 			
 			<!-- 내용 -->
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
@@ -674,13 +696,13 @@ $(function(){
 			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
 		</ul>
 		<div id="btnLine">
-		<!-- 삭제된 글이면 안나오도록 하기  -->
+		<!-- 삭제된 글이면 수정, 삭제 불가능  -->
 			<c:if test="${vo.subject ne '삭제된 글입니다.'}">
 
 			<button class="btn" onClick="boardEdit()">수정하기</button>
 			<button class="btn" onClick="boardDelete()">삭제하기</button>	
 		
-			<button class="btn" onClick="location.href='<%=request.getContextPath()%>/replyWrite?no=${vo.no}'">답글쓰기</button>	
+			<button class="btn" onClick="location.href='<%=request.getContextPath()%>/replyWrite?no=${vo.no}&pageNum=${sapvo.pageNum}'">답글쓰기</button>	
 			</c:if>
 			
 			<input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList?pageNum=${sapvo.pageNum}'"/>

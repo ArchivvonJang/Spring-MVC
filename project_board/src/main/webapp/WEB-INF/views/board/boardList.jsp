@@ -189,7 +189,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 						⤷ &nbsp; 
-						 <c:if test="${vo.step == 1}">${replyRecordNum-1} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
+						 <c:if test="${vo.step == 1}">${replyRecordNum-1} ${ref }<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
 						<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
 				</c:if> 
 				
@@ -219,7 +219,13 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<!-- 작성자 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
 			<!-- 데이터여부  -->
-			<li>✉</li>
+	
+			<li>
+				<c:if test="${vo.filename ne '임시파일' || vo.filename != null || vo.filename != ''}">
+				✉
+				</c:if>
+			</li>
+			
 			<!-- 조회수 -->
 			<li>${vo.hit }</li>
 			<!-- 작성일 -->
@@ -277,7 +283,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				</c:if>
 				<!--맨뒤로-->
-				<c:if test="${sapvo.pageNum != sapvo.totalPage } || ${sapvo.pageNum == null } ">
+				<c:if test="${sapvo.pageNum != sapvo.totalPage }  } ">
 	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▶</a>
 			 	</c:if>
 			

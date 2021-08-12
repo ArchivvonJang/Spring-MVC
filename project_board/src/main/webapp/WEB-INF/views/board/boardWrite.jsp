@@ -98,8 +98,8 @@
 				if(userpwd.length == 0 ){
 					console.log("userpwdCheck function 1");
 					pwdMsg.text("1. 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
-						$("#pwdApproval").css("display","none");
-						return false;
+					$("#pwdApproval").css("display","none");
+					return false;
 				}else if(userpwd.search(/\s/) != -1){
 					console.log("userpwdCheck function 2");
 					blankCheck(obj, '비밀번호');
@@ -121,7 +121,7 @@
 					$("#pwdApproval").css("display","none");
 	 				if(userpwd.length > 10){
 	 					setTimeout(function(){
-	 						alert("올바르지 않은 비밀번호입니다. 다시 확인해주세요 \n ");
+	 						alert("올바르지 않은 비밀번호입니다.\n비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 	 					}, 100);
 	 				}
 					return false;
@@ -391,7 +391,7 @@ $(function(){
 			//비밀번호가 10자리 초과라면,
 			if(count>10){
 				console.log("userid keyup over 10 ");
-				alert('BB 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.');
+				alert('비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.');
 				$("#userpwd").focus();
 				$(this).val(content.substring(0,10));
 				$('#userpwdLength').html(10);
@@ -549,20 +549,20 @@ $(function(){
 			//비밀번호
 			
 			if($("#userpwd").val().length<6){
-				console.log("submit userpwd length check");
-				alert('CC 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.');
+				console.log("AAAA submit userpwd length check");
+				alert('비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.');
 				$('#userpwd').focus(); 	
 				return false;
 			} 
 			if(userpwd==' ' || userpwd==null){
-				console.log("submit userpwd check");
-				alert("DD 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+				console.log("BBBB submit userpwd check");
+				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$('#userpwd').focus(); 	
 				return false;
 			}
 			if($('#userpwd')==null){
-				console.log("submit userid null check");
-				alert("EE 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+				console.log("CCCC submit userid null check");
+				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$('#userpwd').focus(); 	
 				return false;
 			}
@@ -686,24 +686,24 @@ $(function(){
 			}
 			//비밀번호 10자리 숫자만 입력하도록 조건 걸어놓기
 			if($("#userpwd").val().length < 6){
-				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+				alert("DDDD 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$("#userpwd").focus();
 				return false;
 			}
 			if(userpwd.length<6){
-				console.log("submit userpwd length check");
+				console.log("EEEE submit userpwd length check");
 				$('#userpwd').focus(); 	
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				return false;
 			}
 			if(userpwd.length>10){
-				console.log("submit userpwd.length over 10 check 1");
+				console.log("FFFF submit userpwd.length over 10 check 1");
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$('#userpwd').focus(); 	
 				return false;
 			}
 			if($('#userpwd').length>10){
-				console.log("submit userpwd.length over 10 check 2");			
+				console.log("GGGG submit userpwd.length over 10 check 2");			
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$('#userpwd').focus(); 	
 				return false;
@@ -750,29 +750,29 @@ $(function(){
 			//비밀번호
 			if(!pwdreg.test(document.getElementById("userpwd").value)){
 				//alert("비밀번호는 10자리 숫자만 입력 가능합니다.");
-					console.log("submit regexp pwd + pwdreg test ");
+					console.log("H submit regexp pwd + pwdreg test ");
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				return false;
 			}
 			if(!pwdreg.match(document.getElementById("userpwd").value)){
-				console.log("submit regexp pwd + pwdreg match");
+				console.log("I submit regexp pwd + pwdreg match");
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				return false;
 			}
 			if(none.test(document.getElementById("userpwd").value)){
-				console.log("submit regexp pwd + none");
+				console.log("J submit regexp pwd + none");
 				alert("비밀번호를 다시 입력해주세요.");
 				return false;
 			}
 			if($("#userpwd").val().length >10 && !pwdreg){
-				console.log("submit pwd length + pwdreg");
+				console.log("K submit pwd length + pwdreg");
 				console.log(check)
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				$("#userpwd").focus();
 				return false;
 		    }
 			if(userpwd.search(/\s/) != -1){
-				console.log("submit pwd search check");
+				console.log("L submit pwd search check");
 				alert("공백으로만 비밀번호를 설정할 수 없습니다. \n 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.")
 				$("#userpwd").focus();
 				return false;
@@ -816,7 +816,7 @@ $(function(){
 				<!-- 
 				<label class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
 					-->
-					 <label class="label">비밀번호</label> <input type="text" name="userpwd" id="userpwd"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
+					 <label class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
 					
 					<span id="userpwdLength"></span>/<span id="max_count">10</span><br/>
 					
@@ -830,7 +830,7 @@ $(function(){
 				</li>
 				<!-- 첨부파일 -->
 				<li>
-					<input type="file" name="filename" id="filename">
+					<span id="fileUpload">첨부파일 </span> <input type="file" name="filename" id="filename" multiple> 
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="등록하기" class="btn"/>

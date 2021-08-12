@@ -1,10 +1,12 @@
 package com.myproject.myapp.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,7 +20,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.util.SystemOutLogger;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
@@ -399,7 +405,7 @@ public class BoardController {
 		HSSFSheet sheet = null; //시트
 		HSSFRow row = null; //행
 		HSSFCell cell = null; //열 
-		int rno = 0; //열 번호
+		int rno = 0; //헤더 생성을 위한 열 번호
 		
 		System.out.println("excelDownlad controller in !!");
 		
@@ -421,13 +427,23 @@ public class BoardController {
 		CellStyle headerStyle = workBook.createCellStyle(); // 제목 스타일
 		headerStyle.setFont(font); //폰트 적용
 		headerStyle.setFillBackgroundColor(HSSFColorPredefined.LEMON_CHIFFON.getIndex());
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		headerStyle.setAlignment(HorizontalAlignment.CENTER);
+		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+		headerStyle.setBorderTop(BorderStyle.THIN);
+		headerStyle.setBorderLeft(BorderStyle.THIN);
+		headerStyle.setBorderRight(BorderStyle.THIN);
+		headerStyle.setBorderBottom(BorderStyle.THIN);
 		
 		//표 목록 스타일
 		CellStyle bodyStyle = workBook.createCellStyle(); //제목 제외 스타일
+		bodyStyle.setFont(font); //폰트 적용
 		bodyStyle.setBorderTop(BorderStyle.THIN);
 		bodyStyle.setBorderLeft(BorderStyle.THIN);
-		bodyStyle.setBorderLeft(BorderStyle.THIN);
+		bodyStyle.setBorderRight(BorderStyle.THIN);
 		bodyStyle.setBorderBottom(BorderStyle.THIN);
+		bodyStyle.setAlignment(HorizontalAlignment.CENTER);
+		bodyStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		bodyStyle.setFillBackgroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
 		
 		sheet = workBook.createSheet("게시판"); //워크시트 생성
@@ -530,4 +546,7 @@ public class BoardController {
 		
 	}
 	
+	public String fileUpload(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
+	}
 }
