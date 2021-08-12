@@ -6,7 +6,7 @@
  	<select id="boardAllRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="com.myproject.myapp.vo.BoardVO">
  		select*from
 	 		(select*from
-		 		(select no, subject, userid, userpwd, filename, orifilename, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
+		 		(select no, subject, userid, userpwd, filename hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
 		 		from board 
 		 		<choose>
 		 			<when test ='searchWord!=null and searchKey=="subject" '>
