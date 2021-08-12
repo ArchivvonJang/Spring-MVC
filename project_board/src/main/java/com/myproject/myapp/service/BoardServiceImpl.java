@@ -145,6 +145,11 @@ public class BoardServiceImpl implements BoardService{
 		return boardDAO.commentUpdate(no, cno, content);
 	}
 
+	@Override
+	public List<BoardVO> excelList(String searchKey, String searchWord) {
+		return boardDAO.excelList(searchKey, searchWord);
+	}
+
 
 
 	

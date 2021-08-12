@@ -7,7 +7,7 @@
 	.replyWordcut{
 		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  text-overflow: clip;  white-space: break-spaces;
 	}
-	.btn{background-color:white; border:1px solid #9DA5AB; color:#9DA5AB; height:33px;  border-radius:0px;}
+	.btn{background-color:white; border:1px solid #9DA5AB; color:lightgray; height:33px;  border-radius:0px;}
 	.cWordCut{
 		white-space:nowrap; overflow:hidden; text-overflow:ellipsys; white-space:normal; word-break:break-all;  white-space: break-spaces; 
 		white-space:pre; width:1110px;

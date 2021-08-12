@@ -21,12 +21,15 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.myproject.myapp" />
-	
 	<!-- 트랜잭션 -->
 	<beans:bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<beans:constructor-arg name="dataSource" ref="dataSource"></beans:constructor-arg>		
 	</beans:bean>
 	
-	
+    
+    <beans:bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+    
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+    
+    <context:component-scan base-package="com.myproject.myapp" />
 </beans:beans>

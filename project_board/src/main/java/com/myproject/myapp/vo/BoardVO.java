@@ -18,7 +18,8 @@ public class BoardVO {
 	//private String filename;
 	//private int downcount;
 	
-	private String filename[]; // 파일명 저장 배열
+	private String filename;
+	private String filenameArr;  // 파일명 저장 배열
 	private String delfile[]; // 삭제할 파일을 담을 변수
 	private int downcount; //다운로드 횟수
 	
@@ -97,11 +98,17 @@ public class BoardVO {
 	public void setReplyRecord(int replyRecord) {
 		this.replyRecord = replyRecord;
 	}
-	public String[] getFilename() {
+	public String getFilename() {
 		return filename;
 	}
-	public void setFilename(String[] filename) {
+	public void setFilename(String filename) {
 		this.filename = filename;
+	}
+	public String getFilenameArr() {
+		return filenameArr;
+	}
+	public void setFilenameArr(String filenameArr) {
+		this.filenameArr = filenameArr;
 	}
 	public String[] getDelfile() {
 		return delfile;
@@ -115,6 +122,7 @@ public class BoardVO {
 	public void setDowncount(int downcount) {
 		this.downcount = downcount;
 	}
+
 	
 	
 

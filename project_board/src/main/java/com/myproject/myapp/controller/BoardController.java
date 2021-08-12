@@ -6,8 +6,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -15,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -378,4 +389,137 @@ public class BoardController {
 		System.out.println("controller comment delete in!!!");
 		return boardService.commentDelete(cno); // !! 문제 해결: param 값으로 cno를 입력받으면서 no를 넣고 있었음!!!!! 
 	}
+	
+	//엑셀 파일 다운 업로드 
+	@RequestMapping(value="/excelDownload", method =RequestMethod.POST)
+	@ResponseBody
+	public void excelDownlad(String fileName, HttpServletResponse res, Model model, SearchAndPageVO sapvo, String searchWord, String searchKey) throws Exception {
+		HSSFWorkbook workBook = new HSSFWorkbook(); // 엑셀 워크북 생성
+		HSSFSheet sheet = null; //시트
+		HSSFRow row = null; //행
+		HSSFCell cell = null; //열 
+		int rno = 0; //열 번호
+		
+		List<BoardVO> excelList = boardService.excelList(searchKey, searchWord);
+		
+		List<Integer> cnoArr = new ArrayList<Integer>(); 
+		
+		for(int i = 0; i<excelList.size(); i++) {
+			cnoArr.add(boardService.getCno(excelList.get(i).getNo() ));
+		}
+		
+		//제목 폰트
+		HSSFFont font = workBook.createFont();
+		font.setFontHeightInPoints((short)9);
+		font.setFontName("맑은고딕");
+		
+		//제목 스타일에 대한 폰트 적용, 정렬
+		HSSFCellStyle headerStyle = workBook.createCellStyle(); // 제목 스타일
+		headerStyle.setFont(font); //폰트 적용
+		headerStyle.setFillBackgroundColor(HSSFColorPredefined.LEMON_CHIFFON.getIndex());
+		
+		//표 목록 스타일
+		CellStyle bodyStyle = workBook.createCellStyle(); //제목 제외 스타일
+		bodyStyle.setBorderTop(BorderStyle.THIN);
+		bodyStyle.setBorderLeft(BorderStyle.THIN);
+		bodyStyle.setBorderLeft(BorderStyle.THIN);
+		bodyStyle.setBorderBottom(BorderStyle.THIN);
+		
+		
+		sheet = workBook.createSheet("게시판"); //워크시트 생성
+		
+		
+		// 1행 (컬럼명)
+/*		row = sheet.createRow(0);
+		row.setHeight((short)0x150);
+		
+		cell = row.createCell(0);
+		cell.setCellValue("번호");
+		cell.setCellStyle(headerStyle);
+		
+		cell = row.createCell(1);
+		cell.setCellValue("제목");
+		cell.setCellStyle(headerStyle);		
+		
+		cell = row.createCell(2);
+		cell.setCellValue("댓글");
+		cell.setCellStyle(headerStyle);
+				
+		cell = row.createCell(3);
+		cell.setCellValue("작성자");
+		cell.setCellStyle(headerStyle);
+		
+		cell = row.createCell(3);
+		cell.setCellValue("첨부파일");
+		cell.setCellStyle(headerStyle);
+		
+		cell = row.createCell(5);
+		cell.setCellValue("조회수");
+		cell.setCellStyle(headerStyle);
+		
+		cell = row.createCell(6);
+		cell.setCellValue("등록일");
+		cell.setCellStyle(headerStyle);*/
+		
+		String[] headerArr = {"번호", "제목", "댓글", "작성자", "첨부파일", "조회수", "등록일"};
+		//1행 (컬렴명)
+		row = sheet.createRow(rno++);
+		for(int i=0; i<headerArr.length; i++) {
+			cell = row.createCell(i);
+			cell.setCellStyle(headerStyle);
+			cell.setCellValue(headerArr[i]);
+		}
+		
+		// 2행 (목록)
+		int esize = excelList.size();
+		for (int i = 0; i < excelList.size(); i++) {
+			
+			row = sheet.createRow(rno+i);
+			//번호
+			cell = row.createCell(0); //0열부터 
+			cell.setCellStyle(bodyStyle); //스타일 적용
+			cell.setCellValue(esize--); //전체 사이즈 == 전체 목록 갯수 최신순일수록 높은 번호로 나오도록
+			rno = 1;
+			//제목
+			cell = row.createCell(1); 
+			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(excelList.get(i).getSubject()); 
+			rno = 1;
+			//댓글
+			cell = row.createCell(2); 
+			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(cnoArr.get(i)); 
+			rno = 1;
+			//작성자
+			cell = row.createCell(3); 
+			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(excelList.get(i).getUserid());
+			rno = 1;
+			//첨부파일
+			cell = row.createCell(4); 
+			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(excelList.get(i).getFilename());
+			rno = 1;
+			//조회수
+			cell = row.createCell(5); 
+			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(excelList.get(i).getHit());
+			rno = 1;
+			//등록일
+			cell = row.createCell(6);
+			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(excelList.get(i).getWritedate()); 
+			rno = 1;
+		}
+		
+		//파일명
+		res.setContentType("ms-vnd/excel");
+		res.setHeader("Content-Disposition", "attachment; filename="+ java.net.URLEncoder.encode("boardlist.xls", "UTF8"));
+		//엑셀 출력
+		workBook.write(res.getOutputStream());
+		workBook.close();
+		
+		
+	}
+	
 }

@@ -66,4 +66,7 @@ public interface BoardService {
 	 public int totalCommentRecord(int no);
 	 //게시판 글 삭제시 해당 글의 댓글 삭제 
 	 public int boardCommentDelete(int no);
+	 
+	 //엑셀
+	 public List<BoardVO> excelList(String searchKey, String searchWord);
 }

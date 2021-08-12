@@ -71,5 +71,8 @@ public interface BoardDAO {
 	 //파일업로드
 	 
 	 //엑셀
+	 public List<BoardVO> excelList(String searchKey, String searchWord);
+	 
+	 
 }
 

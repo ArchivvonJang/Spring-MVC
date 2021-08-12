@@ -27,6 +27,7 @@
 	}
 	#boardList li:nth-child(7n+2){width:55%; text-align:left;}
 	#boardList li:nth-child(7n+2) a{color:black; }
+	#boardList li:nth-child(7n+4){width:8%;}
 	#boardList li:nth-child(7n+7){width:9%;}
 	.search_container{
 		text-align:right; line-height:30px;
@@ -41,7 +42,11 @@
 	a{color:gray;}
 	#totalList{text-align:right; margin: 30px 0 5px 0;}
 	form{text-align:right; height:33px; }
-	#btnLine{text-align:right; }
+	
+	#excelDownload{margin-right:10px;}
+	#writeBtn{margin-right:0px;}
+	#btnLine, #btnLine form, #excelDownload, #writeBtn{float:right;}
+	#btnLine form{width:35px; margin:0 auto; padding: 0;}
 	.btn{margin:10px 0 15px 0; height:33px;} 
 	#sub{
 		white-space:normal;  text-overflow:ellipsis;
@@ -118,7 +123,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			}
 			return true;
 		});
-		if(${sapvo.totalRecord == 0}){
+		if(${sapvo.totalRecord == null}){
 			alert("검색 결과가 없습니다.");		
 			history.back();
 		}
@@ -186,7 +191,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 						⤷ &nbsp; 
 						 <c:if test="${vo.step == 1}">${replyRecordNum-1} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
 						<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
-				</c:if>
+				</c:if> 
+				
 		
 			<!-- 제목 
 			
@@ -224,7 +230,16 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			
 		</ul>
 		<div id="btnLine">
-			<button class="btn"><a href="<%=request.getContextPath()%>/boardWrite">글쓰기</a></button> 
+		<!-- 글쓰기 -->
+			<button class="btn" id="writeBtn"><a href="<%=request.getContextPath()%>/boardWrite">글쓰기</a></button> 
+		<!-- 엑셀 다운로드 -->	
+			<c:if test="${sapvo.totalRecord != null && sapvo.totalRecord != ''}">
+			<form action="/excelDownload" method="post">
+				<input type="hidden" name="searchKey" value="${sapvo.searchKey}">
+				<input type="hidden" name="searchWord" value="${sapvo.searchWord}">
+				<button id="excelDownload" class="btn">엑셀다운받기</button>
+			</form>
+			</c:if>
 		</div>
 		
 	</div>
@@ -261,7 +276,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				</c:if>
 				<!--맨뒤로-->
-				<c:if test="${sapvo.pageNum != sapvo.totalPage }">
+				<c:if test="${sapvo.pageNum != sapvo.totalPage } || ${sapvo.pageNum == null } ">
 	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▶</a>
 			 	</c:if>
 			
