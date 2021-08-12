@@ -88,7 +88,7 @@ public class BoardController {
 		int ref[] = new int[list.size()];
 		for(int i=0; i<list.size(); i++) {
 			ref[i] = list.get(i).getRef();
-			System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
+		//	System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
 		}
 		
 		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
@@ -414,11 +414,11 @@ public class BoardController {
 		
 		//제목 폰트
 		HSSFFont font = workBook.createFont();
-		font.setFontHeightInPoints((short)9);
+		font.setFontHeightInPoints((short)11);
 		font.setFontName("맑은고딕");
 		
 		//제목 스타일에 대한 폰트 적용, 정렬
-		HSSFCellStyle headerStyle = workBook.createCellStyle(); // 제목 스타일
+		CellStyle headerStyle = workBook.createCellStyle(); // 제목 스타일
 		headerStyle.setFont(font); //폰트 적용
 		headerStyle.setFillBackgroundColor(HSSFColorPredefined.LEMON_CHIFFON.getIndex());
 		
@@ -428,7 +428,7 @@ public class BoardController {
 		bodyStyle.setBorderLeft(BorderStyle.THIN);
 		bodyStyle.setBorderLeft(BorderStyle.THIN);
 		bodyStyle.setBorderBottom(BorderStyle.THIN);
-		
+		bodyStyle.setFillBackgroundColor(HSSFColorPredefined.GREY_25_PERCENT.getIndex());
 		
 		sheet = workBook.createSheet("게시판"); //워크시트 생성
 		
@@ -470,8 +470,8 @@ public class BoardController {
 		row = sheet.createRow(rno++);
 		for(int i=0; i<headerArr.length; i++) {
 			cell = row.createCell(i);
-			cell.setCellStyle(headerStyle);
 			cell.setCellValue(headerArr[i]);
+			cell.setCellStyle(headerStyle);
 		}
 		
 		// 2행 (목록)

@@ -72,7 +72,8 @@
 			//var url ="/myapp/getUserpwd";
 			var loc = "/myapp/boardDelete?no=${vo.no}";	 //이동할 주소
 			var data = "no=${vo.no}&userpwd=";	//필요한 데이터 값
-			getUserpwd( data, loc);//1
+			var state = "delete";
+			getUserpwd( data, loc, state);//1
 			//console.log(" onclick delete data : ", data, " loc :", loc);
 		};
 
@@ -81,61 +82,83 @@
 			//var url ="/myapp/getUserpwd";
 			var loc = "/myapp/boardEdit?no=${vo.no}";
 			var data = "no=${vo.no}&userpwd=";
+			var state = "edit"
 			//getUserpwd(data, loc);
-			getUserpwd(data, loc);
+			getUserpwd(data, loc, state);
 			console.log("on click edit data : ", data, " loc :", loc);
 		};
 	
-		function getUserpwd(data, loc){
+		function getUserpwd(data, loc, state){
 			console.log("function getuserpwd in !!");
-			var pwd = prompt("비밀번호를 입력해주세요.");
+			var pwd = prompt("비밀번호를 입력해주세요.AA");
 			var param = data + pwd;
+			var url = "/myapp/getUserpwd";
 			console.log("param: "+param);
-			if(pwd != null || pwd != " "){
+			
+			//if(pwd != null || pwd != " "){
+			if(pwd != null ){
 				console.log("pwd check ! go to check userpwd");
-				checkUserpwd(param, loc, data);
+				//checkUserpwd(param, loc, data);
+				$.ajax({
+					url : url,
+					data : param,
+					success : function(result){
+						if(result>0){
+							if(state == "delete"){
+								location.href = loc;
+								console.log("url-->",url);
+							}else if(state == "edit"){
+								location.href = loc;
+							}
+				
+						}else{
+							alert("비밀번호를 다시 확인해주세요. 00");
+							getUserpwd(data, loc, state);
+							
+						
+						}
+					},error:function(result){
+						console.log(" << 게시글 수정삭제 실패 >> ");
+						
+					}
+				});	
 			}else{
-				alert("비밀번호를 다시 확인해주세요.");
-				getUserpwd(data, loc);
-				return false;
+				alert("비밀번호를 확인해주세요.BB");
+				getUserpwd(data, loc, state);
+				
 			}
-			/* if(pwd != ''){
-				checkUserpwd(pwd, window.location.href);
-			} */
-			/* if(pwd == '' || pwd==null){
-				//alert("다시 입력해주세요");
-				alert("비밀번호를 다시 확인해주세요.");
-				getUserpwd(url, data, loc);
-				//return false;
-			} */
+				
+		//	return false;
+		
 		}
-		//function checkUserpwd(url, param, loc){
+	//이것은 결국...사용하지 않는 함수가 되어버렸습니다. 	
 		function checkUserpwd(param, loc, url){
 			console.log("checkUserpwd ajax");
 			var url = "/myapp/getUserpwd";
-			//console.log("check userpwd and loc-> "+loc +" param -> " + param  );
 			$.ajax({
 				url : url,
 				data : param,
 				success : function(result){
 					
-					if(result>=1){
+					if(result>0){
 						location.href = url;
 						console.log("url-->",url);
 						console.log("result-->",result);
 					}
+					
 					//else if(result==0){
 					else{
-						//alert("비밀번호를 잘못 입력하였습니다.");		
+						alert("비밀번호를 잘못 입력하였습니다.\n다시 입력해주세요.CC");		
 						//getUserpwd(url, data, loc);
 						console.log("checkuserpwd password is wrong or result is failed -> ajax check url : ", url, "result-->, result");
 						console.log("chechk reuslt = 0 and url->"+url);
-						getUserpwd(param, loc);
+						//getUserpwd(param, loc);
+						checkUserpwd(param, loc, url);
 						return false;
 					}
 					
 				}, error : function(){
-					alert("비밀번호를 다시 확인해주세요.");		
+					alert("비밀번호를 다시 확인해주세요.DD");		
 					getUserpwd(data, loc);
 					console.log("!!checkUserpwd ajax function error!!");
 				}
@@ -151,8 +174,8 @@ $(function(){
 	});
 	$('#summernote').summernote('disable');
 });
+/////////////////////////////////////////////////////////////------------------------ ajax를 이용한 댓글처리 -------------------------/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//------------------------ ajax를 이용한 댓글처리 -------------------------
 	//댓글목록
 	function commentList(){
 		var url = "/myapp/commentList";

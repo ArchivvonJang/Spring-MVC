@@ -99,7 +99,7 @@
 	<select id="boardCommentDelete">
 		delete from comments where no = ${param1}
 	</select>
-	<select id="excelDownload" resultType="com.myproject.myapp.vo.BoardVO">
+	<select id="excelList" resultType="com.myproject.myapp.vo.BoardVO">
 		select * from
 		    (select no, subject, content, userid, hit, filename, writedate, ref, lvl, step from board order by ref desc, lvl asc)
 		<if test="param1 != null and param1 != '' and param2 != null and param2 != ''">

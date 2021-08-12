@@ -38,7 +38,7 @@
     font-size: inherit;
     line-height: normal;
 }
-	#searchBtn{color:gray; background-color:white; height:33px;}
+	#searchBtn{color:gray; background-color:white; height:33px; border:1px solid gray;}
 	a{color:gray;}
 	#totalList{text-align:right; margin: 30px 0 5px 0;}
 	form{text-align:right; height:33px; }
@@ -237,7 +237,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<form action="excelDownload" method="post">
 				<input type="hidden" name="searchKey" value="${sapvo.searchKey}">
 				<input type="hidden" name="searchWord" value="${sapvo.searchWord}">
-				<input type="submit" name="excelDownlad" class="btn" value="엑셀다운로드" >
+				<input type="submit" name="excelDownlad" id="excelDownload" class="btn" value="엑셀다운로드" >
 				<!-- <button id="excelDownload" class="btn">엑셀다운받기</button> -->
 			</form>
 			</c:if>
