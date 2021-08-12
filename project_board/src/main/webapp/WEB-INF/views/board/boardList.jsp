@@ -234,10 +234,11 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<button class="btn" id="writeBtn"><a href="<%=request.getContextPath()%>/boardWrite">글쓰기</a></button> 
 		<!-- 엑셀 다운로드 -->	
 			<c:if test="${sapvo.totalRecord != null && sapvo.totalRecord != ''}">
-			<form action="/excelDownload" method="post">
+			<form action="excelDownload" method="post">
 				<input type="hidden" name="searchKey" value="${sapvo.searchKey}">
 				<input type="hidden" name="searchWord" value="${sapvo.searchWord}">
-				<button id="excelDownload" class="btn">엑셀다운받기</button>
+				<input type="submit" name="excelDownlad" class="btn" value="엑셀다운로드" >
+				<!-- <button id="excelDownload" class="btn">엑셀다운받기</button> -->
 			</form>
 			</c:if>
 		</div>

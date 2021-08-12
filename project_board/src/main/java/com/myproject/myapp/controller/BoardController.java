@@ -391,15 +391,19 @@ public class BoardController {
 	}
 	
 	//엑셀 파일 다운 업로드 
-	@RequestMapping(value="/excelDownload", method =RequestMethod.POST)
+	@RequestMapping(value="/excelDownload", method=RequestMethod.POST)
 	@ResponseBody
-	public void excelDownlad(String fileName, HttpServletResponse res, Model model, SearchAndPageVO sapvo, String searchWord, String searchKey) throws Exception {
+	public void excelDownload(String fileName, HttpServletResponse res, Model model, SearchAndPageVO sapvo, String searchWord, String searchKey) throws Exception {
+	//public void excelDownlad(String fileName, HttpServletResponse res, Model model, SearchAndPageVO sapvo, String searchWord, String searchKey) throws Exception {
 		HSSFWorkbook workBook = new HSSFWorkbook(); // 엑셀 워크북 생성
 		HSSFSheet sheet = null; //시트
 		HSSFRow row = null; //행
 		HSSFCell cell = null; //열 
 		int rno = 0; //열 번호
 		
+		System.out.println("excelDownlad controller in !!");
+		
+		try {
 		List<BoardVO> excelList = boardService.excelList(searchKey, searchWord);
 		
 		List<Integer> cnoArr = new ArrayList<Integer>(); 
@@ -518,7 +522,11 @@ public class BoardController {
 		//엑셀 출력
 		workBook.write(res.getOutputStream());
 		workBook.close();
-		
+		System.out.println("엑셀 다운로드 성공");
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("엑셀 다운로드 실패");
+		}
 		
 	}
 	
