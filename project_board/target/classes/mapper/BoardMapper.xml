@@ -72,8 +72,8 @@
 		<![CDATA[update board set lvl = lvl+1 where ref = ${ref} and lvl > ${lvl}]]>
 	</update>
 	<insert id="replyDataInsert" parameterType="com.myproject.myapp.vo.BoardVO">
-		insert into board(no, subject, content, userid, userpwd,  filename, orifilename, ref, step, lvl) 
-		values(boardsq.nextval, '${subject}', '${content}', '${userid}', '${userpwd}','${filename}', '${orifilename}', ${ref}, ${step}, ${lvl})
+		insert into board(no, subject, content, userid, userpwd,  filename, ref, step, lvl) 
+		values(boardsq.nextval, '${subject}', '${content}', '${userid}', '${userpwd}','${filename}',  ${ref}, ${step}, ${lvl})
 	</insert>
 	<select id="getStep" resultType="com.myproject.myapp.vo.BoardVO">
 		select step, userid from board where no=${param1}
