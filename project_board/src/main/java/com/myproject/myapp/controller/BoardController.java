@@ -1,5 +1,6 @@
 package com.myproject.myapp.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
@@ -36,6 +40,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -88,7 +94,10 @@ public class BoardController {
 		for(int i=0; i<list.size(); i++) {
 			cno.add(boardService.getCno(list.get(i).getNo()));
 		}
-		
+		//답글의 갯수
+		BoardVO vo = new BoardVO();
+		int lvlCnt = boardService.lvlCount(vo);
+		mav.addObject("lvlCnt", lvlCnt);
 		
 		//원글번호의 답글덩어리들 쪼개기
 		int ref[] = new int[list.size()];
@@ -131,8 +140,74 @@ public class BoardController {
 	}
 	//글쓰기 완료 후 리스트로 이동
 	@RequestMapping(value="/boardWriteOk", method=RequestMethod.POST)
-	public ModelAndView boardWriteOk(BoardVO vo, SearchAndPageVO sapvo) {
+	public ModelAndView boardWriteOk(BoardVO vo, SearchAndPageVO sapvo, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
+		//---------- 파일 업로드 -------------
+		//파일 업로드 - mutlpartrequest
+		//new MultipartRequest(req 리퀘스트객체, path 어디에 업로드할지, 0 maxsize업로드하는 파일크기에 제한, path 한글인코딩을 뭐로할건지, filerenamepolicy null 객체만 만들어서 넣으면 알아서 리네임)
+	
+				String path = req.getSession().getServletContext().getRealPath("/upload");
+				System.out.println("path ->" +path);
+				//파일 업로드를 위해서 multiparthttp객체로 변
+				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
+				
+				//MultipartHttpServletRequest에서 업로드할 파일 목록을 구하기
+				List<MultipartFile> files = mr.getFiles("file");
+				
+				//올라간 파일 이름을 담을 DB 리스트
+				List<String> uploadDB = new ArrayList<String>(); // 중복파일 담기
+				List<String> orifilename = new ArrayList<String>(); // 원본파일 이름 담기
+				//첨부 파일이 존재하면 실행!
+				if(!files.isEmpty()) {
+					//파일 수 만큼 반복 실행
+					for(MultipartFile mf : files) { 
+						//파일 이름을 담을 변수
+						String originalFilename = mf.getOriginalFilename(); 
+						//파일이름이 공백이 아니면  업로드
+						if(!originalFilename.equals("")) { 
+							//파일을 저장할 위치, 파일이름을 File 객체로 변환해서 담는다.
+							File f = new File(path, originalFilename); 
+							int i = 1;
+							// 중복 검사 
+							while(f.exists()) {
+								int point = originalFilename.lastIndexOf(".");
+								String name = originalFilename.substring(0, point); //파일명
+								String extName = originalFilename.substring(point+1); //확장자 : 중복파일이면, 숫자 붙여주기
+								//업로드 된 파일명 얻어오기(새로운 파일명), getOriginalFileName()은 원래 이름 구하는것, 이건 새로운 이름 구하기
+								//mr.getOriginalFileName(nameAttr); //파일명 (원래 파일명) 기존네임->중복->리네임
+								f = new File(path, name+"_"+ i++ +"."+extName);
+								System.out.println("write file uplaod f : "+ f);
+							}//while end
+							
+							//가져온 파일 업로드
+							try {
+								System.out.println("<<파일 업로드 성공>>");
+								mf.transferTo(f);
+							}catch(Exception e) {
+								System.out.println("<<파일 업로드 실패>>");
+								e.printStackTrace();
+							}
+							//파일 이름 (원본 또는 중복+1 한 파일명 담기 )
+							uploadDB.add(f.getName());//파일의 이름 담기
+							orifilename.add(originalFilename); //원본 파일 이름 담기
+						}// if equals end
+					}//for mf end 
+				}//if isEmpty end
+				
+				//DB에 이름 추가
+				//여러개의 파일명을 하나의 String 으로 만들기 예: 이름 / 이름 /
+				String filename = "";
+				String orifile = ""; //원본파일
+				for(int i=0; i<uploadDB.size(); i++) {
+					filename = filename + uploadDB.get(i)+"/";
+					orifile = orifile + orifilename.get(i)+"/";
+				}
+				vo.setFilename(filename);
+				vo.setOrifilename(orifile);
+				System.out.println("boardWrite get filename --> "+vo.getFilename() + ", orifile 이 있다면, orifilename  ---> " + vo.getOrifilename());				
+				
+				
+		//-----------글 등록 --------
 		  if(boardService.boardInsert(vo)>0) {
 			  mav.addObject("sapvo", sapvo);
 		        mav.setViewName("redirect:boardList");
@@ -546,7 +621,72 @@ public class BoardController {
 		
 	}
 	
-	public String fileUpload(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
-	}
+	
+	 public String fileUpload(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		 	//FileItem이라는 객체를 구하기
+			//저장할 위치에 대한 경로
+			String path = req.getSession().getServletContext().getRealPath("/upload");
+			//파일 업로드를 위해서 multiparthttp객체로 변환해준다
+			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
+			try {
+				//1. factory 객체 생성
+				DiskFileItemFactory dfif = new DiskFileItemFactory();
+				//2.팩토리에 업로드 위치(path ->파일로변환 java07-io 참조)세팅
+				File f = new File(path);
+				dfif.setRepository(f); //저장하는 공간이 어디냐
+				//3. ServletFileUpload 객체 생성
+				ServletFileUpload fileUpload = new ServletFileUpload(dfif); //dfif를 매개변수로 넣어줌
+				//4. 폼의 필드수만큼 FileItem을 얻어온다.
+				List<FileItem> items = fileUpload.parseRequest(req); //req를 넣으면 폼에 있는 필드수만큼 컬렉션이 들어옴
+				
+				BoardVO vo = new BoardVO();
+				
+				//items의 갯수
+				System.out.println("items.size()-> "+items.size());
+				for(FileItem item :items) {
+					//텍스트 필드인지 아니면 첨부파일인지 
+					if(item.isFormField()) { //텍스트 입력할 수 있는 필드냐?라고 묻기
+						//필드명 알아내기
+						String fieldName = item.getFieldName();//필드명
+						String value = item.getString("UTF-8"); //값,    데이터 (인코딩)
+						
+						if(fieldName.equals("subject")) {
+							vo.setSubject(value); 
+						}
+						if(fieldName.equals("content")) {
+							vo.setContent(value);
+						}
+					}else { //필드가 아닐땐 파일일때
+							//파일
+							//파일명 리네임
+							//파일의 크기를 구하여 0보다 크면 업로드 구현	
+							if(item.getSize()>0 ) {		//getSize() - 파일의 크기			
+								String oriFilename = item.getName();//원래 파일명  aaa.gif -> aaa_1.gif  -> aaa_2.gif -> aaa_3.gif 이렇게 이름 중복되지 않도록 새 번호 부여해주기
+								
+								//파일명과 확장자를 분리 ( +중복 파일이름이 있는지 없는지 확인
+								int dot=oriFilename.lastIndexOf(".");//.의 위치
+								String filename = oriFilename.substring(0, dot);
+								String ext=oriFilename.substring(dot+1);
+								
+								File file = new File(path, oriFilename);
+								int idx=1;
+								while(file.exists()) { // 있으면 true, 없으면 false
+									//없는 이름 false가 나올때까지,,계속돌아
+									file = new File(path, filename + "_" + idx++ + "." + ext);
+								}//while end
+								
+								//업로드 실행
+								item.write(file);  // Fileitem items가 반복되다가 여기 실림
+								
+							}//if end
+						}//ifend
+				
+				}//for
+				//---> FileItem 가 구해짐
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+				return "/myapp/boardView.jsp";
+			
+	 }
 }

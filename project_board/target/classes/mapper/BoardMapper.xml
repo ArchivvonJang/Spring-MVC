@@ -6,7 +6,7 @@
  	<select id="boardAllRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="com.myproject.myapp.vo.BoardVO">
  		select*from
 	 		(select*from
-		 		(select no, subject, userid, userpwd, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
+		 		(select no, subject, userid, userpwd, filename, orifilename, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate, step, lvl, ref
 		 		from board 
 		 		<choose>
 		 			<when test ='searchWord!=null and searchKey=="subject" '>
@@ -31,21 +31,30 @@
  	</select>
  	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">
 		select count(no) totalRecord from board 
-					<choose>
-			 			<when test='searchWord!=null'>
-			 				where subject like '%${searchWord}%'
-			 			</when>
-			 		</choose>		 	      
+				<choose>
+		 			<when test ='searchWord!=null and searchKey=="subject" '>
+		 				where subject like '%${searchWord}%'
+		 			</when>
+		 			<when test ='searchWord!=null and searchKey=="content" '>
+		 				where content like '%${searchWord}%'
+		 			</when>
+		 			<when test ='searchWord!=null and searchKey=="reply" '>
+		 				where subject like '%${searchWord}%' and lvl > 1
+		 			</when>
+		 				<when test ='searchWord!=null and searchKey=="userid" '>
+		 				where userid like '%${searchWord}%' 
+		 			</when>
+		 		</choose>	 	      
 	</select>
 	 <insert id="boardInsert" parameterType="com.myproject.myapp.vo.BoardVO">
- 		insert into board(no, subject, content, userid, userpwd, ref)
- 		values(boardsq.nextval, '${subject}', '${content}', '${userid}', '${userpwd}', boardsq.currval)
+ 		insert into board(no, subject, content, userid, userpwd, filename, orifilename, ref)
+ 		values(boardsq.nextval, '${subject}', '${content}', '${userid}', '${userpwd}', '${filename}', '${orifilename}', boardsq.currval)
  	</insert>
  	<select id="boardSelect" resultType="com.myproject.myapp.vo.BoardVO">
- 		select no, userid, subject, content, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate from board where no=${param1}
+ 		select no, userid, subject, content, filename, orifilename, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate from board where no=${param1}
  	</select>
  	<update id="boardUpdate" parameterType="com.myproject.myapp.vo.BoardVO">
- 		update board set subject=#{subject}, content=#{content}, userid=#{userid} where no=${no} 
+ 		update board set subject=#{subject}, content=#{content}, userid=#{userid}, filename=#{filename} where no=${no} 
  	</update>
  	<delete id="boardDelete">
  		delete from board where no=${param1}
@@ -63,8 +72,8 @@
 		<![CDATA[update board set lvl = lvl+1 where ref = ${ref} and lvl > ${lvl}]]>
 	</update>
 	<insert id="replyDataInsert" parameterType="com.myproject.myapp.vo.BoardVO">
-		insert into board(no, subject, content, userid, userpwd, ref, step, lvl) 
-		values(boardsq.nextval, '${subject}', '${content}', '${userid}', '${userpwd}', ${ref}, ${step}, ${lvl})
+		insert into board(no, subject, content, userid, userpwd,  filename, orifilename, ref, step, lvl) 
+		values(boardsq.nextval, '${subject}', '${content}', '${userid}', '${userpwd}','${filename}', '${orifilename}', ${ref}, ${step}, ${lvl})
 	</insert>
 	<select id="getStep" resultType="com.myproject.myapp.vo.BoardVO">
 		select step, userid from board where no=${param1}
@@ -105,5 +114,8 @@
 		<if test="param1 != null and param1 != '' and param2 != null and param2 != ''">
 		where ${param1} like '%${param2}%'
 		</if>
+	</select>
+	<select id="getFilename" resultType="String">
+		select filename from board where no = ${param1}
 	</select>
   </mapper>

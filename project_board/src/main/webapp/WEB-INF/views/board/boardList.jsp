@@ -166,7 +166,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
 		<c:set var="replyRecordNum" value="${(vo.lvl-vo.step)+1}"/> 
-	
+		<c:set var="lvlCnt" value="${lvlCnt}"/>
 		<c:forEach var="vo" items="${list}" varStatus="idx">
 		
 			<!-- 번호 -->
@@ -188,9 +188,11 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
 				<c:if test="${vo.step>0}">
-						⤷ &nbsp; 
-						 <c:if test="${vo.step == 1}">${replyRecordNum-1} ${ref }<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
-						<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} <input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
+					
+							⤷ &nbsp; 
+							 <c:if test="${vo.step == 1}">${replyRecordNum-1} ${idx.index}<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
+							<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} ${lvlCnt}<input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
+					
 				</c:if> 
 				
 		
@@ -230,6 +232,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<li>${vo.hit }</li>
 			<!-- 작성일 -->
 			<li>${vo.writedate}</li>
+			<c:set var="lvlCnt" value="${lvlCnt-1}"/>
 			<c:set var="recordNum" value="${recordNum-1}"/>
 			<c:set var="replyRecordNum" value="${replyRecordNum+1}"/>
 		</c:forEach>
