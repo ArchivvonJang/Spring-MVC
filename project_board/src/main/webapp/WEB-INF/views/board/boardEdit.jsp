@@ -18,6 +18,18 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 </head>
 <script>
+$(function(){
+	//파일 삭제 버튼
+	$(".delBtn").click(function(){
+		if(confirm('해당 파일을 삭제하시겠습니까?')){
+			$(this).prev().attr('name', '');
+			$(this).parent().next().attr('name', 'delFile');
+			$(this).parent().css('display','none');
+		}
+	});
+})
+
+
 //작성자
 function useridInput(e){
 	console.log("useridInput function test");
@@ -773,12 +785,13 @@ $(function(){
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
 				<!-- 첫번째 첨부파일 :vo.filename1 = vo.filename[0] -->
-				<li>첨부파일 
-					<div>${vo.filename} <b class="f">⛝</b></span></div>
+			<%-- 	<li>첨부파일 
+					<div>${vo.filename} <b class="f"></b></span></div>
 					<input type="hidden" name="filename" id="filename"/>
 					<!-- 삭제파일명: 사용자는 안보이게 -->
 					<input type="hidden" name="" id="delfile" value="${vo.filename}"/>
-				</li>
+				</li> --%>
+			
 				<%-- 
 				<li>
 				
@@ -799,7 +812,16 @@ $(function(){
 				<%-- 		<textarea name="content" id="content" required><c:out value="${vo.content}"></c:out></textarea> --%>
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
-				
+				<li>첨부 파일  <br>
+							<c:forEach var="file" items="${file}" varStatus="idx">
+								<div>
+									<input type="text" value="${file}" name="initialFile" style="border:none;" readonly/>
+									<a class="delBtn" href="" onclick="return false;" style="margin-left:10px; font-weight: bold;">⛝</a><br>
+								</div>
+								<input type="hidden" name="" value="${file}">
+							</c:forEach>
+				<input type="file" multiple="multiple" name="file"/>
+				</li>
 				<li id="btnLine">
 					<input type="submit" value="수정하기" class="btn"/>
 					 <input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'" /> 

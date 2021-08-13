@@ -683,17 +683,23 @@ $(function(){
 			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
 			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
 			
-			<!-- 첨부파일 -->
-			<li>
-				<span class="menu">첨부파일</span> 
-				<!-- filename -->
- 				<a href="<%=request.getContextPath()%>/upload/${vo.filename}" download>${vo.filename1}</a>
-			 </li>
+		
 			
 			<!-- 내용 -->
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
+				<!-- 첨부파일 -->
+			<li>
+				<span class="menu">첨부파일</span> 
+				<!-- filename -->
+ 				<%-- <a href="<%=request.getContextPath()%>/upload/${vo.filename}" download>${vo.filename}</a>
+ --%> 					<c:forEach var="file" items="${file}" varStatus="idx">
+							<c:forEach var="orifile" items="${orifile}">
+								<a href="<%=request.getContextPath()%>/upload/${file}" download>${orifile}</a><br>
+							</c:forEach>
+					</c:forEach>
+			 </li>
 		</ul>
 		<div id="btnLine">
 		<!-- 삭제된 글이면 수정, 삭제 불가능  -->

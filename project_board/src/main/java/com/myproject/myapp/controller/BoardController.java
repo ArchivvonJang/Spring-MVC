@@ -63,7 +63,7 @@ public class BoardController {
 	
 	//게시판 목록
 	@RequestMapping("/boardList")
-	public ModelAndView boardList(CommentVO cvo, SearchAndPageVO sapvo, HttpServletRequest req) {
+	public ModelAndView boardList(BoardVO vo, CommentVO cvo, SearchAndPageVO sapvo, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
 		
 		//페이징 처리
@@ -82,7 +82,7 @@ public class BoardController {
 		
 		//총 레코드 수 구하기 
 		sapvo.setTotalRecord(boardService.totalRecord(sapvo));
-
+		
 		
 		List<BoardVO> list = boardService.boardAllRecord(sapvo);
 		
@@ -95,18 +95,25 @@ public class BoardController {
 		for(int i=0; i<list.size(); i++) {
 			cno.add(boardService.getCno(list.get(i).getNo()));
 		}
-		//답글의 갯수
-		BoardVO vo = new BoardVO();
-		int lvlCnt = boardService.lvlCount(vo);
-		mav.addObject("lvlCnt", lvlCnt);
+		
 		
 		//원글번호의 답글덩어리들 쪼개기
 		int ref[] = new int[list.size()];
 		for(int i=0; i<list.size(); i++) {
+			//답글 덩어리 쪼개기
 			ref[i] = list.get(i).getRef();
-		//	System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
+			System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
+			//총 답글 수 구하기
+			vo.setReplyCnt(boardService.replyCnt(list.get(i).getNo()));
+			
 		}
-		
+		List<Integer> rcnt = new ArrayList<Integer>();
+		for(int i=0; i<list.size(); i++) {
+			//총 답글 수 구하기
+			rcnt.add(boardService.replyCnt(list.get(i).getNo()));
+			System.out.println("rcnt -> " + rcnt);
+		}
+		System.out.println("list controller -> replyCnt : " + vo.getReplyCnt());
 		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
 		
 		// 게시글 정렬
@@ -127,7 +134,7 @@ public class BoardController {
 		// return ModelAndView
 		mav.addObject("totalRecord", sapvo.getTotalRecord()); //전체 글 갯수
 		mav.addObject("cno", cno); //댓글 갯수
-		mav.addObject("ref", ref); //답글 
+		mav.addObject("replyCnt", vo.getReplyCnt()); //답글 
 		mav.addObject("list", list); //게시판 글 목록
 		mav.addObject("clist", clist); //댓글 글 목록
 		mav.addObject("sapvo",sapvo); //페이징	
@@ -205,6 +212,7 @@ public class BoardController {
 				}
 				vo.setFilename(filename);
 				vo.setOrifilename(orifile);
+				
 				System.out.println("boardWrite get filename --> "+vo.getFilename() + ", orifile 이 있다면, orifilename  ---> " + vo.getOrifilename());				
 				
 				
@@ -229,16 +237,15 @@ public class BoardController {
 		mav.addObject("vo", boardService.boardSelect(no));
 		// 첨부파일
 		BoardVO vo = boardService.boardSelect(no);
-		if(vo.getFilename()!=null || vo.getFilename()!="") {
-			// String으로 파일명 / 파일명 / 파일명.. 이렇게 들어간 데이터를 쪼갠다!
-			StringTokenizer tok = new StringTokenizer(vo.getFilename(),"/");
-			StringTokenizer oritok = new StringTokenizer(vo.getOrifilename(),"/");
-			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
-			System.out.println("boardview path : "+ path);
-			mav.addObject("file", tok);
-			mav.addObject("oritfile", oritok);
-		}
-		
+		/*
+		 * if(vo.getFilename()!=null || vo.getFilename()!="") { // String으로 파일명 / 파일명 /
+		 * 파일명.. 이렇게 들어간 데이터를 쪼갠다! StringTokenizer tok = new
+		 * StringTokenizer(vo.getFilename(),"/"); StringTokenizer oritok = new
+		 * StringTokenizer(vo.getOrifilename(),"/"); String path =
+		 * req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+		 * System.out.println("boardview path : "+ path); mav.addObject("file", tok);
+		 * mav.addObject("oritfile", oritok); }
+		 */
 		mav.setViewName("board/boardView");
 		return mav;
 	}
@@ -396,6 +403,7 @@ public class BoardController {
 		// 답글은 제목, 글내용을 삭제된 글입니다.로 바꾼다. update
 		
 		ModelAndView mav = new  ModelAndView();
+		
 		try {
 			System.out.println("board delete transaction!!!try catch in!!!");
 			//답글 확인
@@ -446,6 +454,7 @@ public class BoardController {
 			 System.out.println("[ rollback - 글 삭제 에러 ]");
 			e.printStackTrace();
 		}
+		
 		return mav;
 	}
 	
@@ -501,7 +510,7 @@ public class BoardController {
 			
 			
 			//---------------답글에 파일 업로드 --------------------------
-			try {
+		
 				////////////////////////////////////////////////////////////////
 				//답글 파일업로드
 				String path = req.getSession().getServletContext().getRealPath("/upload");
@@ -558,16 +567,17 @@ public class BoardController {
 				//insert가 안되었지만 cnt = 0 또는 에러 발생하지 않았을 때, 원글 글 번호와 함께 답글쓰기 폼으로 이동 
 				mav.setViewName("redirect:replyWrite"); System.out.println("[ insert - 답글등록 실패 ]");
 				transactionManager.rollback(status);
-			}
+			} //if else end
 			
 			
 		}catch(Exception e){
+			e.printStackTrace();
 			mav.addObject("no", vo.getNo());
 			mav.setViewName("redirect:replyWrite"); System.out.println("[ rollback - 답글등록 실패 ]");
-		};
+		}//try catch end
 		
 	
-		//return mav; 갑자기 여기서 오류남 210813
+		return mav; //갑자기 여기서 오류남 210813
 	}	
 	
 	//답글 삭제 ---> boardDelete 로 돌아가세요
@@ -671,7 +681,8 @@ public class BoardController {
 		CellStyle headerStyle = workBook.createCellStyle(); // 제목 스타일
 		headerStyle.setFont(font); //폰트 적용
 		headerStyle.setFillBackgroundColor(HSSFColorPredefined.LEMON_CHIFFON.getIndex());
-		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	
+		//headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
 		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 		headerStyle.setBorderTop(BorderStyle.THIN);
@@ -790,8 +801,9 @@ public class BoardController {
 		
 	}
 	
-	
-	 public String fileUpload(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	@RequestMapping(value="/fileUpload", method=RequestMethod.POST)
+	@ResponseBody
+	 public String fileUpload(HttpServletRequest req, HttpServletResponse res, MultipartFile multipartFile) throws ServletException, IOException {
 		 	//FileItem이라는 객체를 구하기
 			//저장할 위치에 대한 경로
 			String path = req.getSession().getServletContext().getRealPath("/upload");

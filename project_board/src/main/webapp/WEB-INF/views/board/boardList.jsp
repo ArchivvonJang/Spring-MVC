@@ -164,9 +164,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<li class="menu">등록일</li>
 		<!-- 변수 선언 -->
 		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
-		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord)}"/>
-		<c:set var="replyRecordNum" value="${(vo.lvl-vo.step)+1}"/> 
-		<c:set var="lvlCnt" value="${lvlCnt}"/>
+		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord) }"/>
+		<c:set var="replyCnt" value="${replyCnt}"/>
 		<c:forEach var="vo" items="${list}" varStatus="idx">
 		
 			<!-- 번호 -->
@@ -177,9 +176,9 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			
 	        <!-- 원글
 	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> 
-	    <c:if test="${vo.step>=0}"> <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
-<%--   		<c:if test="${vo.step>0}"> <li class="${vo.ref}">&nbsp;<input type="hidden" name="no" value="${vo.no}"/></li> </c:if> --%>
-  		
+	    	<c:if test="${vo.step==0}"> <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> </c:if>
+			<c:if test="${vo.step>0}"> <li class="${vo.ref}">${recordNum + vo.lvl} - ${replyCnt - vo.lvl} <input type="hidden" name="no" value="${vo.no}"/></li> </c:if> 
+  			
   		
   		
 			<!-- 답글있으면 표시, 없으면 제목만 ${vo.lvl-vo.step+1} - ${vo.step-1} <li class="wordcut" id="sub" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" style="pointer-events: none; cursor : default;"</c:if>>-->
@@ -188,14 +187,12 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
 				<c:if test="${vo.step>0}">
-					
 							⤷ &nbsp; 
-							 <c:if test="${vo.step == 1}">${replyRecordNum-1} ${idx.index}<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>.</c:if> 
-							<c:if test="${vo.step > 1}">${(vo.lvl-vo.step-1) + 1} ${lvlCnt}<input type="hidden" name="no" value="${vo.no}"/>.</c:if><!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
-					
+							 <c:if test="${vo.step >= 1}">${recordNum + vo.lvl} - ${vo.lvl}<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
+			 
+							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
+						
 				</c:if> 
-				
-		
 			<!-- 제목 
 			
 				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>
@@ -221,10 +218,10 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<!-- 작성자 -->
 			<li class="wordcut" id="sub"><c:out value="${vo.userid}"></c:out></li>
 			<!-- 데이터여부  -->
-	
+
 			<li>
-				<c:if test="${vo.filename ne '임시파일' || vo.filename != null || vo.filename != ''}">
-				✉
+				<c:if test="${vo.filename ne '임시파일' || vo.filename != null || vo.filename ne ''}">
+					✉
 				</c:if>
 			</li>
 			
@@ -232,9 +229,8 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<li>${vo.hit }</li>
 			<!-- 작성일 -->
 			<li>${vo.writedate}</li>
-			<c:set var="lvlCnt" value="${lvlCnt-1}"/>
+			<c:set var="step" value="${step-1}"/>
 			<c:set var="recordNum" value="${recordNum-1}"/>
-			<c:set var="replyRecordNum" value="${replyRecordNum+1}"/>
 		</c:forEach>
 			
 		</ul>

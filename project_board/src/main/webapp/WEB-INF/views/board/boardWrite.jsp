@@ -830,7 +830,7 @@ $(function(){
 				</li>
 				<!-- 첨부파일 -->
 				<li>
-					<span id="fileUpload">첨부파일 </span> <input type="file" name="filename" id="filename" multiple> 
+					<span id="fileUpload">첨부파일 </span> <input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="등록하기" class="btn"/>

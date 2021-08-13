@@ -1,5 +1,7 @@
 package com.myproject.myapp.vo;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class BoardVO {
 	private int no;
 	private int rownum;
@@ -13,14 +15,14 @@ public class BoardVO {
 	private int ref; // 답글 그룹 (== 같은원글번호)
 	private int step; // 답글 들여쓰기
 	private int lvl; //답글 순서
-	
+	private int replyCnt; // 답글 갯수
 	//파일업로드
-	
+
 	private String filename;
 	private String orifilename;
 	private String filenameArr[];  // 파일명 저장 배열
 	private String delfile[]; // 삭제할 파일을 담을 변수
-
+	private MultipartFile uploadFile;
 	
 	private int replyRecord;
 	
@@ -97,12 +99,7 @@ public class BoardVO {
 	public void setReplyRecord(int replyRecord) {
 		this.replyRecord = replyRecord;
 	}
-	public String getFilename() {
-		return filename;
-	}
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+
 
 	public String[] getDelfile() {
 		return delfile;
@@ -123,8 +120,27 @@ public class BoardVO {
 	public void setFilenameArr(String[] filenameArr) {
 		this.filenameArr = filenameArr;
 	}
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	public MultipartFile getUploadFile() {
+		return uploadFile;
+	}
+	public void setUploadFile(MultipartFile uploadFile) {
+		this.uploadFile = uploadFile;
+	}
+
 
 	
+	public int getReplyCnt() {
+		return replyCnt;
+	}
+	public void setReplyCnt(int replyCnt) {
+		this.replyCnt = replyCnt;
+	}
 	
 
 	
