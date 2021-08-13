@@ -82,7 +82,7 @@
 		update board set subject='삭제된 글입니다.',content='해당 글은 삭제되었습니다.' where no=${param1} 
 	</update>
 	<select id="replyCnt" resultType="int">
-		select count(ref) from board where no = ${param1}
+		select count(ref) from board where ref = ${param1}
 	</select>
 	<select id="getCno" resultType="int">
 		select count(no) from comments where no=${param1}

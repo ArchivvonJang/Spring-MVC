@@ -99,8 +99,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int replyCnt(int no) {
-		return boardDAO.replyCnt(no);
+	public int replyCnt(int ref) {
+		return boardDAO.replyCnt(ref);
 	}
 
 	@Override

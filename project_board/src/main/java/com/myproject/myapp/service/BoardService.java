@@ -45,7 +45,7 @@ public interface BoardService {
 	//답글들 삭제된글로 표시
 	public int replyDeleteUpdate(int no);
 	//답글 개수 세기
-	public int replyCnt(int no);
+	public int replyCnt(int ref);
 	
 	//댓글
 	

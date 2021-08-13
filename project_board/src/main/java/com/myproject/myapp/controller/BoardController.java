@@ -96,33 +96,47 @@ public class BoardController {
 			cno.add(boardService.getCno(list.get(i).getNo()));
 		}
 		
+		int listSort = list.size()-1;
 		
-		//원글번호의 답글덩어리들 쪼개기
-		int ref[] = new int[list.size()];
-		for(int i=0; i<list.size(); i++) {
-			//답글 덩어리 쪼개기
-			ref[i] = list.get(i).getRef();
-			System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
-			//총 답글 수 구하기
-			vo.setReplyCnt(boardService.replyCnt(list.get(i).getNo()));
-			
-		}
 		List<Integer> rcnt = new ArrayList<Integer>();
 		for(int i=0; i<list.size(); i++) {
 			//총 답글 수 구하기
 			rcnt.add(boardService.replyCnt(list.get(i).getNo()));
-			System.out.println("rcnt -> " + rcnt);
 		}
-		System.out.println("list controller -> replyCnt : " + vo.getReplyCnt());
+		
+		
+		
+		//원글번호의 답글덩어리들 쪼개기
+		int ref[] = new int[list.size()];
+		int lvl[] = new int[list.size()];
+		int refLength = ref.length;
+		int rc=0;
+		for(int i=0; i<list.size(); i++) {
+			//답글 덩어리 쪼개기
+			ref[i] = list.get(i).getRef();
+			System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
+		//	rcnt.add(list.get(listSort).getLvl());
+		//	listSort--;
+		//	System.out.println("1 -> " + list.get(i).getNo());
+		//	System.out.println("2 -> "+list.get(listSort).getLvl());
+			
+			rc = boardService.replyCnt(ref[i]);
+			System.out.println("list controller ref "+i+":"+ref[i]+" rc : " + rc);
+			
+			
+		}
+		//총 레코드 수 구하기 
+		rcnt.add(rc);
+		
+		System.out.println("list controller -> cno : " + cno);
+		System.out.println("list controller -> rc : " + rc);
+		System.out.println("list controller -> replyCnt : " + rcnt);
+		System.out.println("list controller -> lvl : " + vo.getLvl());
+		System.out.println("list controller -> list.size : " + list.size() );
+		System.out.println("list controller -> reflength : " + refLength);
 		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
 		
-		// 게시글 정렬
-		int listSort = list.size()-1;
-		List<Integer> lvl = new ArrayList<Integer>();
-		for(int i = 0; i<list.size(); i++) {
-			lvl.add(list.get(listSort).getLvl());
-			listSort--;
-		}
+		
 		
 		//System.out.println("댓글이 씌여지는 board no ---> " + cvo.getNo());
 		
@@ -134,7 +148,7 @@ public class BoardController {
 		// return ModelAndView
 		mav.addObject("totalRecord", sapvo.getTotalRecord()); //전체 글 갯수
 		mav.addObject("cno", cno); //댓글 갯수
-		mav.addObject("replyCnt", vo.getReplyCnt()); //답글 
+		mav.addObject("replyCnt", rcnt); //답글 
 		mav.addObject("list", list); //게시판 글 목록
 		mav.addObject("clist", clist); //댓글 글 목록
 		mav.addObject("sapvo",sapvo); //페이징	
