@@ -113,26 +113,27 @@ public class BoardController {
 		for(int i=0; i<list.size(); i++) {
 			//답글 덩어리 쪼개기
 			ref[i] = list.get(i).getRef();
-			System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
-		//	rcnt.add(list.get(listSort).getLvl());
+		//	System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
+		
+			//	rcnt.add(list.get(listSort).getLvl());
 		//	listSort--;
 		//	System.out.println("1 -> " + list.get(i).getNo());
 		//	System.out.println("2 -> "+list.get(listSort).getLvl());
 			
 			rc = boardService.replyCnt(ref[i]);
-			System.out.println("list controller ref "+i+":"+ref[i]+" rc : " + rc);
+		//	System.out.println("list controller ref "+i+":"+ref[i]+" rc : " + rc);
 			
 			
 		}
 		//총 레코드 수 구하기 
 		rcnt.add(rc);
 		
-		System.out.println("list controller -> cno : " + cno);
+/*		System.out.println("list controller -> cno : " + cno);
 		System.out.println("list controller -> rc : " + rc);
 		System.out.println("list controller -> replyCnt : " + rcnt);
 		System.out.println("list controller -> lvl : " + vo.getLvl());
 		System.out.println("list controller -> list.size : " + list.size() );
-		System.out.println("list controller -> reflength : " + refLength);
+		System.out.println("list controller -> reflength : " + refLength);*/
 		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
 		
 		
@@ -245,20 +246,30 @@ public class BoardController {
 
 		// 첨부파일
 		BoardVO vo = boardService.boardSelect(no);
-		
-		if(vo.getFilename()!=null || vo.getFilename()!="") { 
-				 
-			// String으로 파일명 / 파일명 /파일명.. 이렇게 들어간 데이터를 쪼갠다! 
-			StringTokenizer tok = new StringTokenizer(vo.getFilename(),"/");
-			StringTokenizer oritok = new StringTokenizer(vo.getOrifilename(),"/"); 
-			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
-			System.out.println("boardview path : "+ path);
-			System.out.println("boardview getFilename with tok : " + tok);
-	
-			 mav.addObject("orifile", oritok);
-			 mav.addObject("file", tok);
-		 } //if end
-		
+		System.out.println("view filename : " + vo.getFilename());
+		try {
+			if(vo.getFilename()!=null  ) { 	 
+				// String으로 파일명 / 파일명 /파일명.. 이렇게 들어간 데이터를 쪼갠다! 
+				StringTokenizer tok = new StringTokenizer(vo.getFilename(),"/");
+				
+				if(vo.getOrifilename()!=null) {
+					StringTokenizer oritok = new StringTokenizer(vo.getOrifilename(),"/"); 
+					 mav.addObject("orifile", oritok);
+					 System.out.println("boardview getFilename with orifile oritok : " + oritok);
+				}
+				
+				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+				System.out.println("boardview path : "+ path);
+				System.out.println("boardview getFilename with tok : " + tok);
+
+				 mav.addObject("file", tok);
+			 }
+			
+			//if end
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("filename found error");
+		}
 		//페이징
 		mav.addObject("sapvo", sapvo);
 		
@@ -516,6 +527,71 @@ public class BoardController {
 		System.out.println("replywriteOk controller in !!! try catch 들어가기 직전!!!");
 		
 		try {
+			
+			//---------------0. 답글에 파일 업로드 --------------------------
+			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+			System.out.println("reply write path ->" +path);
+			
+			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
+			//MultipartHttpServletRequest에서 업로드할 파일 목록을 구하기
+			List<MultipartFile> files = mr.getFiles("file");
+			//올라간 파일 이름을 담을 DB 리스트
+			 // 중복파일 담기
+			List<String> uploadDB = new ArrayList<String>();
+			// 원본파일 이름 담기
+			List<String> orifilename = new ArrayList<String>();
+			
+			if(!files.isEmpty()) {
+				//파일 수 만큼 반복 실행
+				for(MultipartFile mf : files) {
+					//파일 이름을 담을 변수
+					String originalFilename = mf.getOriginalFilename();
+					//파일이름이 공백이 아니면  업로드
+					if(!originalFilename.equals("")) {
+						//파일을 저장할 위치, 파일이름을 File 객체로 변환해서 담는다.
+						File f = new File(path, originalFilename); 
+						int i = 1;
+						// 중복 검사 
+						while(f.exists()) {
+							int point = originalFilename.lastIndexOf(".");
+							String name = originalFilename.substring(0, point); //파일명
+							String extName = originalFilename.substring(point+1); //확장자 : 중복파일이면, 숫자 붙여주기
+							//업로드 된 파일명 얻어오기(새로운 파일명), getOriginalFileName()은 원래 이름 구하는것, 이건 새로운 이름 구하기
+							//mr.getOriginalFileName(nameAttr); //파일명 (원래 파일명) 기존네임->중복->리네임
+							f = new File(path, name + "(" + i + ")." + extName);
+							System.out.println("write file uplaod f : " + f);
+						}//while end
+						
+						//업로드 시키기
+						try {
+							System.out.println("<< replyWrite 답글 파일 업로드 성공 >>");
+							mf.transferTo(f);
+						}catch(Exception e) {
+							System.out.println("<< replyWrite 답글 파일 업로드 실패 >>");
+							e.printStackTrace();
+						}
+						//파일 이름 담기
+						uploadDB.add(f.getName());//파일의 이름 담기
+						orifilename.add(originalFilename); //원본 파일 이름 담기
+					}// if equals end
+				}//for mf end 
+			}//if isEmpty end
+			
+			//DB에 이름 추가
+			//여러개의 파일명을 하나의 String 으로 만들기 예: 이름 / 이름 /
+			String filename = "";
+			String orifile = ""; //원본파일
+			for(int i=0; i<uploadDB.size(); i++) {
+				filename = filename + uploadDB.get(i)+"/";
+				orifile = orifile + orifilename.get(i)+"/";
+			}
+			
+			vo.setFilename(filename);
+			vo.setOrifilename(orifile);
+			
+			System.out.println("reply Write get filename --> "+vo.getFilename() + ", orifile 이 있다면, orifilename  ---> " + vo.getOrifilename());				
+			
+			// ------------------------ 1. 답글 작성 ----------------------------------			
 			//1. 원글의 ref, step, lvl를 가져온다. (원글의 레코드번호)를 넣으면 vo가 반환 [mapper-select]
 			BoardVO orivo = boardService.oriInfo(vo.getNo());
 			System.out.println("ori no -> " + orivo.getNo());
@@ -542,72 +618,7 @@ public class BoardController {
 			// 0 값이 들어온건 예외발생이 아님 그래서 rollback이 안되므로 rollback 처리해줘야 한다.
 			mav.addObject("no", vo.getNo());
 			
-			
-			//---------------답글에 파일 업로드 --------------------------
 
-				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
-				System.out.println("reply write path ->" +path);
-				
-				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
-				//MultipartHttpServletRequest에서 업로드할 파일 목록을 구하기
-				List<MultipartFile> files = mr.getFiles("file");
-				//올라간 파일 이름을 담을 DB 리스트
-				 // 중복파일 담기
-				List<String> uploadDB = new ArrayList<String>();
-				// 원본파일 이름 담기
-				List<String> orifilename = new ArrayList<String>();
-				
-				if(!files.isEmpty()) {
-					//파일 수 만큼 반복 실행
-					for(MultipartFile mf : files) {
-						//파일 이름을 담을 변수
-						String originalFilename = mf.getOriginalFilename();
-						//파일이름이 공백이 아니면  업로드
-						if(!originalFilename.equals("")) {
-							//파일을 저장할 위치, 파일이름을 File 객체로 변환해서 담는다.
-							File f = new File(path, originalFilename); 
-							int i = 1;
-							// 중복 검사 
-							while(f.exists()) {
-								int point = originalFilename.lastIndexOf(".");
-								String name = originalFilename.substring(0, point); //파일명
-								String extName = originalFilename.substring(point+1); //확장자 : 중복파일이면, 숫자 붙여주기
-								//업로드 된 파일명 얻어오기(새로운 파일명), getOriginalFileName()은 원래 이름 구하는것, 이건 새로운 이름 구하기
-								//mr.getOriginalFileName(nameAttr); //파일명 (원래 파일명) 기존네임->중복->리네임
-								f = new File(path, name + "(" + i + ")." + extName);
-								System.out.println("write file uplaod f : " + f);
-							}//while end
-							
-							//업로드 시키기
-							try {
-								System.out.println("<< replyWrite 답글 파일 업로드 성공 >>");
-								mf.transferTo(f);
-							}catch(Exception e) {
-								System.out.println("<< replyWrite 답글 파일 업로드 실패 >>");
-								e.printStackTrace();
-							}
-							//파일 이름 담기
-							uploadDB.add(f.getName());//파일의 이름 담기
-							orifilename.add(originalFilename); //원본 파일 이름 담기
-						}// if equals end
-					}//for mf end 
-				}//if isEmpty end
-				
-				//DB에 이름 추가
-				//여러개의 파일명을 하나의 String 으로 만들기 예: 이름 / 이름 /
-				String filename = "";
-				String orifile = ""; //원본파일
-				for(int i=0; i<uploadDB.size(); i++) {
-					filename = filename + uploadDB.get(i)+"/";
-					orifile = orifile + orifilename.get(i)+"/";
-				}
-				
-				vo.setFilename(filename);
-				vo.setOrifilename(orifile);
-				
-				System.out.println("reply Write get filename --> "+vo.getFilename() + ", orifile 이 있다면, orifilename  ---> " + vo.getOrifilename());				
-				
-			
 			
 			// 답글 등록 결과  확인
 			if(cnt>0) { //등록 성공
@@ -853,7 +864,7 @@ public class BoardController {
 		}
 		
 	}
-	
+	//파일 업로드하는 메소드 (사용은안하지만, 추가해놓음)
 	@RequestMapping(value="/fileUpload", method=RequestMethod.POST)
 	@ResponseBody
 	 public String fileUpload(HttpServletRequest req, HttpServletResponse res, MultipartFile multipartFile) throws ServletException, IOException {

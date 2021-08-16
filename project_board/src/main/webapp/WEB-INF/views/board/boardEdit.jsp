@@ -770,6 +770,7 @@ $(function(){
 	#pwdMsg{color:red;}
 	#pwdApproval{color:green; display:none;}
 	textarea{width:100%;}
+
 </style>
 <body>
 	<div class="container">
@@ -819,7 +820,7 @@ $(function(){
 								<div>
 									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="text" value="${file}" name="initialFile" style="border:none;" readonly/>
-									<a class="delBtn" href="" onclick="return false;" style="margin-left:10px; font-weight: bold;">⛝</a><br>
+									<a class="delBtn" href="" onclick="return false;" style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>
 								</div>
 								<input type="hidden" name="" value="${file}">
 							</c:forEach>

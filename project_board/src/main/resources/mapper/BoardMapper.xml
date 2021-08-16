@@ -79,7 +79,7 @@
 		select step, userid from board where no=${param1}
 	</select>
 	<update id="replyDeleteUpdate"  parameterType="com.myproject.myapp.vo.BoardVO" >
-		update board set subject='삭제된 글입니다.',content='해당 글은 삭제되었습니다.', filename=' ', orifilename=' '    where no=${param1} 
+		update board set subject='삭제된 글입니다.',content='해당 글은 삭제되었습니다.', filename= null, orifilename=null    where no=${param1} 
 	</update>
 	<select id="replyCnt" resultType="int">
 		select count(ref) from board where ref = ${param1}

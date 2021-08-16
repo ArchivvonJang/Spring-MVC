@@ -694,13 +694,25 @@ $(function(){
 			<c:if test="${vo.filename != null }">
 			<li>
 				<span class="menu">첨부파일</span> 
+				<div style="margin-left:5px">
 				<!-- filename -->
  				<%-- <a href="<%=request.getContextPath()%>/upload/${vo.filename}" download>${vo.filename}</a>
  --%> 					<c:forEach var="file" items="${file}" varStatus="idx">
-							<c:forEach var="orifile" items="${orifile}">
-								<a href="<%=request.getContextPath()%>/WEB-INF/upload/${file}" download>${orifile}</a><br>
-							</c:forEach>
+						<%-- 		
+								<c:forEach var="orifile" items="${orifile}">
+									<a href="<%=request.getContextPath()%>/WEB-INF/upload/${file}" download>${orifile}</a><br>
+								</c:forEach>
+						--%>
+							
+						<!-- 수정해서 orifile이 존재하지 않을 때  -->
+						<%-- 	<c:if test="${orifile==null}"> --%>
+								<c:forEach var="file" items="${file}">
+										<a href="<%=request.getContextPath()%>/WEB-INF/upload/${file}" download>${file}</a><br>
+								</c:forEach>
+						<%-- 	</c:if> --%>
+							
 					</c:forEach>
+				</div>
 			 </li>
 			 </c:if>
 		</ul>

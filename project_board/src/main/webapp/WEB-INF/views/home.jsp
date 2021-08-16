@@ -8,11 +8,11 @@
 <style>
 	a{color:gray; }
 	body{margin:0 auto; padding:0;}
-	h2{text-align:center; margin-top:200px;}
+	h1{text-align:center; margin-top:200px;}
 </style>
 <body>
 <div id="mainDiv">
-	<h2><a href="boardList">BOARD</a></h2>
+	<h1><a href="boardList">BOARD</a></h1>
 </div>
 
 </body>

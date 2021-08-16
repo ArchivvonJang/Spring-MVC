@@ -224,8 +224,11 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			<!-- 데이터여부  -->
 
 			<li>
-				<c:if test="${vo.filename ne '임시파일' || vo.filename != null || vo.filename ne ''}">
+				<c:if test="${vo.filename != null }">
 					✉
+				</c:if>
+				<c:if test="${vo.filename == null || vo.subject eq '삭제된 글입니다.'  }">
+					&nbsp;
 				</c:if>
 			</li>
 			
