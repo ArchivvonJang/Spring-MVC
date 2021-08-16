@@ -177,9 +177,11 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 			--%>
 			
 	        <!-- 원글
-	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> 
+	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> <%-- ${replyCnt[idx.index]-1}   --%>
 	    	<c:if test="${vo.step>=0}"> 
-	    		<li class="${vo.ref}">${recordNum} | ${replyCnt[idx.index]-1}  <input type="hidden" name="no" value="${vo.no}"/></li> 
+	    		<li class="${vo.ref}">${recordNum} 
+	    			<input type="hidden" name="no" value="${vo.no}"/>
+	    		</li> 
 	    	</c:if>
 			
   			
@@ -192,10 +194,10 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				</c:forEach>
 				<c:if test="${vo.step>0}">
 							⤷ &nbsp; 
-							 <c:if test="${vo.step >= 1}">${recordNum + vo.lvl} - ${vo.lvl}<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
-			 
-							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
-						
+							 <c:if test="${vo.step == 1}">${recordNum + vo.lvl} -  ${ replyCnt[idx.index] + vo.lvl } -${vo.lvl}<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
+			 							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
+	
+							 <c:if test="${vo.step > 1}">${recordNum + vo.lvl } -  ${ replyCnt[idx.index]-vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
 				</c:if> 
 			<!-- 제목 
 			
@@ -243,7 +245,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 		</ul>
 		<div id="btnLine">
 		<!-- 글쓰기 -->
-			<button class="btn" id="writeBtn"><a href="<%=request.getContextPath()%>/boardWrite">글쓰기</a></button> 
+			<button class="btn" id="writeBtn"><a href="<%=request.getContextPath()%>/boardWrite?pageNum=${sapvo.pageNum}">글쓰기</a></button> 
 		<!-- 엑셀 다운로드 -->	
 			<c:if test="${sapvo.totalRecord != null && sapvo.totalRecord != ''}">
 			<form action="excelDownload" method="post">

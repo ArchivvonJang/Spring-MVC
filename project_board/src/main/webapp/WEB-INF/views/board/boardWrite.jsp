@@ -820,7 +820,7 @@ $(function(){
 					
 					<span id="userpwdLength"></span>/<span id="max_count">10</span><br/>
 					
-					</span> <span id="pwdMsg"></span>
+					 <span id="pwdMsg"></span>
 					<span id="pwdApproval">사용가능한 비밀번호입니다.</span>
 				</li>
 				<!-- 내용 -->

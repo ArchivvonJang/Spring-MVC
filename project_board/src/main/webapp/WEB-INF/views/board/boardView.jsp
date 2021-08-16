@@ -677,7 +677,7 @@ $(function(){
 				<span class="menu">작성자</span>  <span><c:out value="${vo.userid}"  escapeXml="true"></c:out></span>
 			<li>
 			<li class="menuLine"><span class="menu">등록일</span> ${vo.writedate}</li>
-			 <li class="menuLine"><span class="menu">조회수</span> ${vo.hit} </span></li> 
+			 <li class="menuLine"><span class="menu">조회수</span> ${vo.hit}</li> 
 			<!-- 제목 -->
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
 			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
@@ -707,7 +707,7 @@ $(function(){
 						<!-- 수정해서 orifile이 존재하지 않을 때  -->
 						<%-- 	<c:if test="${orifile==null}"> --%>
 								<c:forEach var="file" items="${file}">
-										<a href="/WEB-INF/upload/${file}" download>${file}</a><br>
+										<a href="<%=request.getContextPath()%>/WEB-INF/upload/${file}" download>${file}</a><br>
 							
 								</c:forEach>
 						<%-- 	</c:if> --%>
