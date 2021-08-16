@@ -3,7 +3,7 @@ package com.myproject.myapp.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -39,6 +39,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -248,6 +249,7 @@ public class BoardController {
 		BoardVO vo = boardService.boardSelect(no);
 		System.out.println("view filename : " + vo.getFilename());
 		try {
+			
 			if(vo.getFilename()!=null  ) { 	 
 				// String으로 파일명 / 파일명 /파일명.. 이렇게 들어간 데이터를 쪼갠다! 
 				StringTokenizer tok = new StringTokenizer(vo.getFilename(),"/");
@@ -261,7 +263,7 @@ public class BoardController {
 				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 				System.out.println("boardview path : "+ path);
 				System.out.println("boardview getFilename with tok : " + tok);
-
+				System.out.println("board view file name from vo  : " + vo.getFilename());
 				 mav.addObject("file", tok);
 			 }
 			
@@ -934,4 +936,18 @@ public class BoardController {
 				return "/myapp/boardView.jsp";
 			
 	 }
+	//파일 다운로드
+	@RequestMapping("/fileDownload")
+	public ModelAndView fileDownload(HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		//절대경로
+		//파일 업로드된 경로
+		//서버에 실제 저장된 파일명
+		//실제 내보낼 파일명
+		//파일 읽어 스트림에 담기
+		// 파일 다운로드 헤더 지정
+		
+		
+		return mav;
+	}
 }
