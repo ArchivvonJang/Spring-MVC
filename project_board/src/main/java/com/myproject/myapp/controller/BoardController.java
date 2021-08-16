@@ -3,7 +3,7 @@ package com.myproject.myapp.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -11,13 +11,13 @@ import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -25,11 +25,10 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
+
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.util.SystemOutLogger;
-import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
@@ -152,6 +151,7 @@ public class BoardController {
 		mav.addObject("list", list); //게시판 글 목록
 		mav.addObject("clist", clist); //댓글 글 목록
 		mav.addObject("sapvo",sapvo); //페이징	
+		
 		mav.setViewName("board/boardList"); //보내줄 view name 
 		return mav;
 	}
@@ -168,7 +168,7 @@ public class BoardController {
 		//파일 업로드 - mutlpartrequest
 		//new MultipartRequest(req 리퀘스트객체, path 어디에 업로드할지, 0 maxsize업로드하는 파일크기에 제한, path 한글인코딩을 뭐로할건지, filerenamepolicy null 객체만 만들어서 넣으면 알아서 리네임)
 	
-				String path = req.getSession().getServletContext().getRealPath("/upload");
+				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 				System.out.println("path ->" +path);
 				//파일 업로드를 위해서 multiparthttp객체로 변
 				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
@@ -204,7 +204,7 @@ public class BoardController {
 							//가져온 파일 업로드
 							try {
 								System.out.println("<<파일 업로드 성공>>");
-								mf.transferTo(f);
+								mf.transferTo(f); 
 							}catch(Exception e) {
 								System.out.println("<<파일 업로드 실패>>");
 								e.printStackTrace();
@@ -242,24 +242,34 @@ public class BoardController {
 	@RequestMapping("/boardView")
 	public ModelAndView boardView(int no, SearchAndPageVO sapvo, HttpServletRequest req) {
 		ModelAndView mav = new ModelAndView();
-		//페이징
-		mav.addObject("sapvo", sapvo);
-		//조회수
-		mav.addObject(boardService.hitCnt(no));
-	//	mav.addObject("cvo", boardService.commentAllList(no));
-		//선택한 게시판 글의 내용
-		mav.addObject("vo", boardService.boardSelect(no));
+
 		// 첨부파일
 		BoardVO vo = boardService.boardSelect(no);
-		/*
-		 * if(vo.getFilename()!=null || vo.getFilename()!="") { // String으로 파일명 / 파일명 /
-		 * 파일명.. 이렇게 들어간 데이터를 쪼갠다! StringTokenizer tok = new
-		 * StringTokenizer(vo.getFilename(),"/"); StringTokenizer oritok = new
-		 * StringTokenizer(vo.getOrifilename(),"/"); String path =
-		 * req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
-		 * System.out.println("boardview path : "+ path); mav.addObject("file", tok);
-		 * mav.addObject("oritfile", oritok); }
-		 */
+		
+		if(vo.getFilename()!=null || vo.getFilename()!="") { 
+				 
+			// String으로 파일명 / 파일명 /파일명.. 이렇게 들어간 데이터를 쪼갠다! 
+			StringTokenizer tok = new StringTokenizer(vo.getFilename(),"/");
+			StringTokenizer oritok = new StringTokenizer(vo.getOrifilename(),"/"); 
+			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+			System.out.println("boardview path : "+ path);
+			System.out.println("boardview getFilename with tok : " + tok);
+	
+			 mav.addObject("orifile", oritok);
+			 mav.addObject("file", tok);
+		 } //if end
+		
+		//페이징
+		mav.addObject("sapvo", sapvo);
+		
+		//조회수
+		mav.addObject(boardService.hitCnt(no));
+		//mav.addObject("cvo", boardService.commentAllList(no));
+		
+		//선택한 게시판 글의 내용
+		mav.addObject("vo", boardService.boardSelect(no));
+		
+		//보낼 페이지 이름 
 		mav.setViewName("board/boardView");
 		return mav;
 	}
@@ -301,17 +311,13 @@ public class BoardController {
 	public ModelAndView boardEditOk(BoardVO vo, SearchAndPageVO sapvo,HttpServletRequest req ) {
 		
 		ModelAndView mav = new ModelAndView();
-		// 페이징 - 수정 후 다시 return 하는 목록이 해당 게시글이 있는 페이지로 넘어가야함 PageNum을 보내기 위해 추가!
-		mav.addObject("sapvo", sapvo);
-		
-		//글번호
-		mav.addObject("no", vo.getNo()); 
+
 		
 		//파일 업로드 수정
-		String path = req.getSession().getServletContext().getRealPath("/upload");
+		String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)req;
 		
-		System.out.println("boardEdit path  : " + path);
+		System.out.println("boardEditOk path  : " + path);
 		
 		// 처음 글쓰기할 때 업로드한 파일
 		String initialFile[] = req.getParameterValues("initialFile");
@@ -338,7 +344,7 @@ public class BoardController {
 							String filename = oriFilename.substring(0, point);
 							String extName = oriFilename.substring(point+1);
 							
-							ff = new File(path, filename+"("+ i++ +")." + extName);
+							ff = new File(path, filename+"("+ i +")." + extName);
 						}//while
 						
 						try {
@@ -363,7 +369,8 @@ public class BoardController {
 			}
 			vo.setFilename(filename);
 		}
-		//삭제 성공 실패 여부 
+		
+		//전체적인 Edit 삭제 성공 실패 여부 
 		if(boardService.boardUpdate(vo)>0) {
 			
 			//수정하면서 삭제된 파일들
@@ -383,6 +390,7 @@ public class BoardController {
 			
 			mav.setViewName("redirect:/boardView");
 			System.out.println("controller : 수정성공");
+			
 		}else {
 			
 			// 글 수정 실패 --> 새로 업로드한 파일 reset
@@ -395,13 +403,22 @@ public class BoardController {
 					}catch(Exception e) {
 						System.out.println("<< boardEdit 새로운파일 업로드 실패 지우기! >>" );
 						e.printStackTrace();
-					}
-				}
-			}
-		
+					}//try catch end
+				}// if string new file end
+			}// if newuplaod end
+			
+			mav.addObject("no",vo.getNo());
 			mav.setViewName("redirect:boardEdit");
 			System.out.println("controller :  수정실패");
-		}
+		}//if else end
+		
+		// 페이징 - 수정 후 다시 return 하는 목록이 해당 게시글이 있는 페이지로 넘어가야함 PageNum을 보내기 위해 추가!
+		mav.addObject("sapvo", sapvo);
+		
+		//글번호
+		mav.addObject("no", vo.getNo()); 
+		
+		
 		return mav;
 	}
 	
@@ -409,9 +426,11 @@ public class BoardController {
 	@RequestMapping("/boardDelete")
 	@Transactional(rollbackFor = {Exception.class, RuntimeException.class})
 	public ModelAndView boardDelete(int no) {
+		
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = transactionManager.getTransaction(def);	
+		
 		System.out.println("delete no-->"+no);
 		// 원글 삭제가 가능하고 답글이 있는경우답글까지 지운다. delete
 		// 답글은 제목, 글내용을 삭제된 글입니다.로 바꾼다. update
@@ -462,6 +481,7 @@ public class BoardController {
 				System.out.println("[ delete - 글 삭제 실패 ]");
 				transactionManager.rollback(status);
 			}
+			
 		}catch(Exception e) {
 			mav.addObject("no", no);
 			mav.setViewName("redirect:boardView");
@@ -471,7 +491,7 @@ public class BoardController {
 		
 		return mav;
 	}
-	
+//----------------------------------------!!! 답글 !!!------------------------------------------------------	
 	//답글 쓰기 폼 이동
 	@RequestMapping("/replyWrite")
 	public ModelAndView replyWriteForm(int no, SearchAndPageVO sapvo) {
@@ -493,7 +513,7 @@ public class BoardController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		System.out.println("replywriteOk controller 까지 왔습니다. try catch 들어가기 직전");
+		System.out.println("replywriteOk controller in !!! try catch 들어가기 직전!!!");
 		
 		try {
 			//1. 원글의 ref, step, lvl를 가져온다. (원글의 레코드번호)를 넣으면 vo가 반환 [mapper-select]
@@ -524,29 +544,40 @@ public class BoardController {
 			
 			
 			//---------------답글에 파일 업로드 --------------------------
-		
-				////////////////////////////////////////////////////////////////
-				//답글 파일업로드
-				String path = req.getSession().getServletContext().getRealPath("/upload");
+
+				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+				System.out.println("reply write path ->" +path);
 				
 				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
-				
+				//MultipartHttpServletRequest에서 업로드할 파일 목록을 구하기
 				List<MultipartFile> files = mr.getFiles("file");
+				//올라간 파일 이름을 담을 DB 리스트
+				 // 중복파일 담기
 				List<String> uploadDB = new ArrayList<String>();
+				// 원본파일 이름 담기
+				List<String> orifilename = new ArrayList<String>();
 				
 				if(!files.isEmpty()) {
+					//파일 수 만큼 반복 실행
 					for(MultipartFile mf : files) {
+						//파일 이름을 담을 변수
 						String originalFilename = mf.getOriginalFilename();
+						//파일이름이 공백이 아니면  업로드
 						if(!originalFilename.equals("")) {
-							File f = new File(path, originalFilename);
+							//파일을 저장할 위치, 파일이름을 File 객체로 변환해서 담는다.
+							File f = new File(path, originalFilename); 
 							int i = 1;
+							// 중복 검사 
 							while(f.exists()) {
 								int point = originalFilename.lastIndexOf(".");
-								String name = originalFilename.substring(0, point);
-								String extName = originalFilename.substring(point+1);
-								
-								f = new File(path, name+"("+ i++ +")."+extName);
-							}//while
+								String name = originalFilename.substring(0, point); //파일명
+								String extName = originalFilename.substring(point+1); //확장자 : 중복파일이면, 숫자 붙여주기
+								//업로드 된 파일명 얻어오기(새로운 파일명), getOriginalFileName()은 원래 이름 구하는것, 이건 새로운 이름 구하기
+								//mr.getOriginalFileName(nameAttr); //파일명 (원래 파일명) 기존네임->중복->리네임
+								f = new File(path, name + "(" + i + ")." + extName);
+								System.out.println("write file uplaod f : " + f);
+							}//while end
+							
 							//업로드 시키기
 							try {
 								System.out.println("<< replyWrite 답글 파일 업로드 성공 >>");
@@ -556,19 +587,26 @@ public class BoardController {
 								e.printStackTrace();
 							}
 							//파일 이름 담기
-							uploadDB.add(f.getName());
-						}// if
-						
-					}// for
-				}//if
+							uploadDB.add(f.getName());//파일의 이름 담기
+							orifilename.add(originalFilename); //원본 파일 이름 담기
+						}// if equals end
+					}//for mf end 
+				}//if isEmpty end
 				
-				//리스트에 넣은 파일 이름 데이터베이스에 넣어주기
-				//1. 여러개의 파일명을 하나의 String으로 만들어주어야한다
+				//DB에 이름 추가
+				//여러개의 파일명을 하나의 String 으로 만들기 예: 이름 / 이름 /
 				String filename = "";
+				String orifile = ""; //원본파일
 				for(int i=0; i<uploadDB.size(); i++) {
 					filename = filename + uploadDB.get(i)+"/";
+					orifile = orifile + orifilename.get(i)+"/";
 				}
+				
 				vo.setFilename(filename);
+				vo.setOrifilename(orifile);
+				
+				System.out.println("reply Write get filename --> "+vo.getFilename() + ", orifile 이 있다면, orifilename  ---> " + vo.getOrifilename());				
+				
 			
 			
 			// 답글 등록 결과  확인
@@ -587,7 +625,8 @@ public class BoardController {
 		}catch(Exception e){
 			e.printStackTrace();
 			mav.addObject("no", vo.getNo());
-			mav.setViewName("redirect:replyWrite"); System.out.println("[ rollback - 답글등록 실패 ]");
+			mav.setViewName("redirect:replyWrite"); 
+			System.out.println("[ rollback - 답글등록 실패 ]");
 		}//try catch end
 		
 	
@@ -820,7 +859,7 @@ public class BoardController {
 	 public String fileUpload(HttpServletRequest req, HttpServletResponse res, MultipartFile multipartFile) throws ServletException, IOException {
 		 	//FileItem이라는 객체를 구하기
 			//저장할 위치에 대한 경로
-			String path = req.getSession().getServletContext().getRealPath("/upload");
+			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 			//파일 업로드를 위해서 multiparthttp객체로 변환해준다
 			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
 			try {

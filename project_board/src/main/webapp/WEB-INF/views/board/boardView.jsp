@@ -57,7 +57,7 @@
 <script type="text/javascript">
 // -----------------------  파일 다운로드 ------------------------
 $(function(){
-		$("#viewUl a").click(function(){
+		/* $("#viewUl a").click(function(){
 			var params = "no="+${vo.no};
 			console.log("params -", params);
 			$.ajax({
@@ -70,7 +70,7 @@ $(function(){
 					console.log("downcount error");
 				}
 			});
-		});
+		}); */
 	})
 
 
@@ -669,7 +669,7 @@ $(function(){
 </head>
 <body>
 <div class="container">
-	<h2>게시판</h2>
+	<h2>글 보기</h2>
 	<input type="hidden" name="no" value="${vo.no}"/>
 		<ul id="viewUl">
 			<!-- 작성자 -->
@@ -689,17 +689,20 @@ $(function(){
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
-				<!-- 첨부파일 -->
+			
+			<!-- 첨부파일 -->
+			<c:if test="${vo.filename != null }">
 			<li>
 				<span class="menu">첨부파일</span> 
 				<!-- filename -->
  				<%-- <a href="<%=request.getContextPath()%>/upload/${vo.filename}" download>${vo.filename}</a>
  --%> 					<c:forEach var="file" items="${file}" varStatus="idx">
 							<c:forEach var="orifile" items="${orifile}">
-								<a href="<%=request.getContextPath()%>/upload/${file}" download>${orifile}</a><br>
+								<a href="<%=request.getContextPath()%>/WEB-INF/upload/${file}" download>${orifile}</a><br>
 							</c:forEach>
 					</c:forEach>
 			 </li>
+			 </c:if>
 		</ul>
 		<div id="btnLine">
 		<!-- 삭제된 글이면 수정, 삭제 불가능  -->

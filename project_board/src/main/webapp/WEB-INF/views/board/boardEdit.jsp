@@ -773,7 +773,7 @@ $(function(){
 </style>
 <body>
 	<div class="container">
-	<h2>게시판</h2>
+	<h2>글 수정</h2>
 		<form method="post" name="boardEditFrm" id="boardEditFrm" action="boardEditOk" enctype="multipart/form-data">
 			<input type="hidden" name="no" value="${vo.no}"/>
 			<ul>
@@ -812,19 +812,23 @@ $(function(){
 				<%-- 		<textarea name="content" id="content" required><c:out value="${vo.content}"></c:out></textarea> --%>
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
-				<li>첨부 파일  <br>
+				<li >
+					<label class="label">첨부파일</label>  <br/>
 							<c:forEach var="file" items="${file}" varStatus="idx">
+								
 								<div>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 									<input type="text" value="${file}" name="initialFile" style="border:none;" readonly/>
 									<a class="delBtn" href="" onclick="return false;" style="margin-left:10px; font-weight: bold;">⛝</a><br>
 								</div>
 								<input type="hidden" name="" value="${file}">
 							</c:forEach>
-				<input type="file" multiple="multiple" name="file"/>
+					
+					<br/><input type="file" multiple="multiple" name="file"/>
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="수정하기" class="btn"/>
-					 <input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList'" /> 
+					 <input type="button" value="목록" class="btn" onClick="location.href='<%=request.getContextPath()%>/boardList?pageNum=${sapvo.pageNum}'" /> 
 			<!-- 		<input type="button" value="목록" class="btn" id="returnList" />  -->
 				</li>
 			</ul>

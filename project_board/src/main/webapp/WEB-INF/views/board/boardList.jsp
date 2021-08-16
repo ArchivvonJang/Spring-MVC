@@ -179,7 +179,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 	        <!-- 원글
 	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> 
 	    	<c:if test="${vo.step>=0}"> 
-	    		<li class="${vo.ref}">${recordNum} | ${replyCnt[idx.index]}  <input type="hidden" name="no" value="${vo.no}"/></li> 
+	    		<li class="${vo.ref}">${recordNum} | ${replyCnt[idx.index]-1}  <input type="hidden" name="no" value="${vo.no}"/></li> 
 	    	</c:if>
 			
   			

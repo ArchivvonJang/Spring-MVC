@@ -821,7 +821,7 @@ $(function(){
 					<span id="userpwdLength"></span>/<span id="max_count">10</span><br/>
 					
 					</span> <span id="pwdMsg"></span>
-					<span id="pwdApproval">사용가능</span>
+					<span id="pwdApproval">사용가능한 비밀번호입니다.</span>
 				</li>
 				<!-- 내용 -->
 				<li>
@@ -830,7 +830,8 @@ $(function(){
 				</li>
 				<!-- 첨부파일 -->
 				<li>
-					<span id="fileUpload">첨부파일 </span> <input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
+					<label class="label"><span id="fileUpload">첨부파일 </span></label>
+					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="등록하기" class="btn"/>
