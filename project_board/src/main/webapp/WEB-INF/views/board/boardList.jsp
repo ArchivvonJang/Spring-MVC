@@ -109,6 +109,42 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 
 </style>
 <script>
+
+function replyNumList(){
+	var url = "/myapp/replyNumList";
+//var url = "/myapp/boardList";
+	var params = "ref=$('#no').val()";
+	var tag =""
+	console.log("reply list url --> ",url);
+	console.log("reply list data --> ", params);
+	$.ajax({
+		url:url,
+		data:params,
+		success:function(result){
+			
+			var $result = $(result);
+			console.log("ajax result !!!!!!!!!");
+			var num = result.length; 
+			console.log(" replyNumList num ->",num);
+			tag=""
+			//반복
+				$result.each(function(i, o){
+					console.log(" replyNumList result function in!!!!!!!!!!!!");
+				tag += "<span>("+ num +") </span>";
+					
+						num--;
+					
+				});//each end
+				
+				$("#replyNum").html(tag);				
+			
+			
+		}, error:function(){
+			console.log("답글 번호 데이터 가져오기 에러 발생")
+		}// success, error function end
+	}); //ajax end
+	
+} //commentList end
 	//검색어 확인
 	$(function(){
 		$(".disableLink").css({ 'pointer-events': 'none' });
@@ -180,7 +216,7 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> <%-- ${replyCnt[idx.index]-1}   --%>
 	    	<c:if test="${vo.step>=0}"> 
 	    		<li class="${vo.ref}">${recordNum} 
-	    			<input type="hidden" name="no" value="${vo.no}"/>
+	    			<input type="hidden" name="no" id="no" value="${vo.no}"/>
 	    		</li> 
 	    	</c:if>
 			
@@ -192,13 +228,15 @@ a.disableLink, #boardList li:nth-child(6n+2) a.disableLink, .disableLink {
 				<c:forEach var="i" begin="1" end="${vo.step}">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 				</c:forEach>
+				
 				<c:if test="${vo.step>0}">
 							⤷ &nbsp; 
-							 <c:if test="${vo.step == 1}">${recordNum + vo.lvl} -  ${ replyCnt[idx.index] + vo.lvl } -${vo.lvl}<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
+							 <c:if test="${vo.step >= 1}">${recordNum + vo.lvl}  (${ replyCnt[idx.index] + vo.lvl })<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
 			 							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
-	
-							 <c:if test="${vo.step > 1}">${recordNum + vo.lvl } -  ${ replyCnt[idx.index]-vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
+							<span id="replyNum" ></span>
+						<%-- 	 <c:if test="${vo.step > 1}">${recordNum + vo.lvl } -  ${ replyCnt[idx.index]-vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if>  --%>
 				</c:if> 
+				
 			<!-- 제목 
 			
 				<a href="boardView?no=${vo.no}&pageNum=${sapvo.pageNum}" class="replyWordcut" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" disabled style="pointer-event:none;cursor: default;"</c:if> ><c:out value="${vo.subject}" escapeXml="true"></c:out></a>

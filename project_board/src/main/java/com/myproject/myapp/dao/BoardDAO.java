@@ -47,7 +47,8 @@ public interface BoardDAO {
 	public int replyDeleteUpdate(int no);
 	// 답글 갯수 세기
 	public int replyCnt(int ref);
-	
+	// 해당 ref 번호의 답글목록만 꺼내기
+	public List<BoardVO> replySelect(int ref);
 	//댓글
 	
 	//원글 번호의 댓글 가져오기

@@ -46,6 +46,8 @@ public interface BoardService {
 	public int replyDeleteUpdate(int no);
 	//답글 개수 세기
 	public int replyCnt(int ref);
+	// 해당 ref 번호의 답글목록만 꺼내기
+	public List<BoardVO> replySelect(int ref);
 	
 	//댓글
 	

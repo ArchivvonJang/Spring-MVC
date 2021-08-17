@@ -150,6 +150,11 @@ public class BoardServiceImpl implements BoardService{
 		return boardDAO.excelList(searchKey, searchWord);
 	}
 
+	@Override
+	public List<BoardVO> replySelect(int ref) {
+		return boardDAO.replySelect(ref);
+	}
+
 
 
 	

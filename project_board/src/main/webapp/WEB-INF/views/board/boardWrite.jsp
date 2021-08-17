@@ -97,7 +97,7 @@
 			//var pwdreg = userpwd.match(/([0-9])/);	
 				if(userpwd.length == 0 ){
 					console.log("userpwdCheck function 1");
-					pwdMsg.text("1. 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+					pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
 					$("#pwdApproval").css("display","none");
 					return false;
 				}else if(userpwd.search(/\s/) != -1){
@@ -107,7 +107,7 @@
 					return false;
 	 			}else if(userpwd.length > 10 ){
 					console.log("userpwdCheck function 3");
-					pwdMsg.text("1. 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+					pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
 	 				//alert("10자리를 입력해주세요.");
 	 				$("#pwdApproval").css("display","none");
 	 				if(userpwd.length == 10 ){
@@ -115,7 +115,7 @@
 	 				}
 					return false; 
 				}else if(!pwdreg){
-					pwdMsg.text("2. 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+					pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
 					console.log("userpwdCheck function 10");
 					//alert("3. 비밀번호를 확인해주세요.");
 					$("#pwdApproval").css("display","none");
@@ -125,6 +125,10 @@
 	 					}, 100);
 	 				}
 					return false;
+				}else if(userpwd.length < 6 ){
+					console.log("userpwdCheck function 1");
+					pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+					$("#pwdApproval").css("display","none");
 			    }else{
 					console.log("userpwdCheck function else");
 					pwdMsg.css("display","none");
@@ -506,8 +510,9 @@ $(function(){
 			fileCnt++;
 		}
 		if(fileCnt<1){ //올려진 파일이 0개
-			alert("파일을 첨부하세요.");
-			return false;
+			//alert("파일을 첨부하세요.");
+			//return false;
+			$("#filename").val(null);
 		}
 		
 		//유효성검사

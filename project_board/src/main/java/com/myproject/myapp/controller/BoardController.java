@@ -1,5 +1,6 @@
 package com.myproject.myapp.controller;
 
+import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,7 +37,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,6 +54,8 @@ import com.myproject.myapp.vo.BoardVO;
 import com.myproject.myapp.vo.CommentVO;
 import com.myproject.myapp.vo.SearchAndPageVO;
 
+
+
 @Controller
 public class BoardController {
 	@Autowired
@@ -59,7 +64,18 @@ public class BoardController {
 	@Inject
 	BoardService boardService;
 
-	
+	/*
+	 * @InitBinder public void initBinder(WebDataBinder binder) throws Exception {
+	 * binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport()
+	 * {
+	 * 
+	 * @Override public void setAsText(String text) {
+	 * Logger.debug("initBinder MultipartFile.class: {}; set null;", text);
+	 * setValue(null); }
+	 * 
+	 * }); }
+	 * 
+	 */
 	
 	//게시판 목록
 	@RequestMapping("/boardList")
@@ -105,7 +121,7 @@ public class BoardController {
 		}
 		
 		
-		
+	//	List<BoardVO> rlist = boardService.replySelect(vo.getRef());
 		//원글번호의 답글덩어리들 쪼개기
 		int ref[] = new int[list.size()];
 		int lvl[] = new int[list.size()];
@@ -124,7 +140,8 @@ public class BoardController {
 			rc = boardService.replyCnt(ref[i]);
 		//	System.out.println("list controller ref "+i+":"+ref[i]+" rc : " + rc);
 			
-			
+		//	rlist = boardService.replySelect(ref[i]);
+		//	System.out.println("list reply list ~~~~~~~~~~> "+rlist);
 		}
 		//총 레코드 수 구하기 
 		rcnt.add(rc);
@@ -137,7 +154,7 @@ public class BoardController {
 		System.out.println("list controller -> reflength : " + refLength);*/
 		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
 		
-		
+	
 		
 		//System.out.println("댓글이 씌여지는 board no ---> " + cvo.getNo());
 		
@@ -150,6 +167,7 @@ public class BoardController {
 		mav.addObject("totalRecord", sapvo.getTotalRecord()); //전체 글 갯수
 		mav.addObject("cno", cno); //댓글 갯수
 		mav.addObject("replyCnt", rcnt); //답글 
+	//	mav.addObject("rlist", rlist); //답글 
 		mav.addObject("list", list); //게시판 글 목록
 		mav.addObject("clist", clist); //댓글 글 목록
 		mav.addObject("sapvo",sapvo); //페이징	
@@ -315,17 +333,17 @@ public class BoardController {
 		
 		//선택한 게시판 글 
 		mav.addObject("vo",  vo);
-		
+		mav.addObject("sapvo", sapvo);
 		mav.setViewName("board/boardEdit");
 		return mav;
 	}
 	//글쓰기 수정 완료 
 	@RequestMapping(value="/boardEditOk", method=RequestMethod.POST)  //수정할 글(레코드) 수정
 	public ModelAndView boardEditOk(BoardVO vo, SearchAndPageVO sapvo,HttpServletRequest req ) {
-		
+		//@RequestParam(value="file", required = false, defaultValue=" ") String file
 		ModelAndView mav = new ModelAndView();
 
-		
+	try {	
 		//파일 업로드 수정
 		String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)req;
@@ -339,6 +357,12 @@ public class BoardController {
 		List<MultipartFile> fileList = mr.getFiles("file");
 		List<String> newUpload = new ArrayList<String>();
 		
+		//수정 시 첨부파일이 없으면 에러가 나므로 null을 setting
+		if(vo.getFilename() == null || vo.getFilename() == "" || fileList.size()==0 || newUpload.isEmpty()) {
+			vo.setFilename("");
+		}
+		
+		// 값이 존재하면,
 		if(initialFile != null) {
 			for(int i=0; i<initialFile.length; i++) {
 				newUpload.add(initialFile[i]);
@@ -382,10 +406,14 @@ public class BoardController {
 			}
 			vo.setFilename(filename);
 		}
-		
+	
+		System.out.println("edit filename -> " + vo.getFilename());
+		System.out.println("edit subject -> " + vo.getSubject());
 		//전체적인 Edit 삭제 성공 실패 여부 
-		if(boardService.boardUpdate(vo)>0) {
-			
+		int result = boardService.boardUpdate(vo);
+		System.out.println("EditOk --> update result : " + result);
+		if(result>0) {
+		
 			//수정하면서 삭제된 파일들
 			String delFile[] = req.getParameterValues("delFile");
 			if(delFile != null) {
@@ -400,7 +428,8 @@ public class BoardController {
 					}
 				}
 			}// if delfile null end
-			
+			//수정 시 첨부파일이 없으면 에러가 나므로 null을 setting
+		
 			mav.setViewName("redirect:/boardView");
 			System.out.println("controller : 수정성공");
 			
@@ -424,7 +453,10 @@ public class BoardController {
 			mav.setViewName("redirect:boardEdit");
 			System.out.println("controller :  수정실패");
 		}//if else end
-		
+	}catch(Exception e) {
+		e.printStackTrace();
+		System.out.println("edit ok 전체적인 에러 발생!");
+	}
 		// 페이징 - 수정 후 다시 return 하는 목록이 해당 게시글이 있는 페이지로 넘어가야함 PageNum을 보내기 위해 추가!
 		mav.addObject("sapvo", sapvo);
 		
@@ -485,7 +517,8 @@ public class BoardController {
 			//삭제가 되었으면 리스트로 이동, 삭제 안되었으면 글내용보기로 이동 
 			if(result>0) {
 				//System.out.println("comment delete check ---> "+ commentDel);
-				mav.setViewName("redirect:boardList");
+				//mav.setViewName("redirect:boardList");
+				mav.setViewName("redirect:boardView");
 				transactionManager.commit(status);
 				 System.out.println("[ 글 삭제 성공 ]");
 			}else {
@@ -529,7 +562,10 @@ public class BoardController {
 		System.out.println("replywriteOk controller in !!! try catch 들어가기 직전!!!");
 		
 		try {
-			
+			//수정 시 첨부파일이 없으면 에러가 나므로 null을 setting
+			if(vo.getFilename() == null || vo.getFilename() == "" ) {
+				vo.setFilename("");
+			}
 			//---------------0. 답글에 파일 업로드 --------------------------
 			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
 			System.out.println("reply write path ->" +path);
@@ -561,7 +597,7 @@ public class BoardController {
 							//업로드 된 파일명 얻어오기(새로운 파일명), getOriginalFileName()은 원래 이름 구하는것, 이건 새로운 이름 구하기
 							//mr.getOriginalFileName(nameAttr); //파일명 (원래 파일명) 기존네임->중복->리네임
 							f = new File(path, name + "(" + i + ")." + extName);
-							System.out.println("write file uplaod f : " + f);
+							//System.out.println("write file uplaod f : " + f);
 						}//while end
 						
 						//업로드 시키기
@@ -648,6 +684,20 @@ public class BoardController {
 	
 	//답글 삭제 ---> boardDelete 로 돌아가세요
 
+	@RequestMapping("/replyNumList")
+	@ResponseBody
+	public List<BoardVO> replyNumList(int ref) {
+		List<BoardVO> rlist = boardService.replySelect(ref);
+		
+		System.out.println("댓글이 씌여지는 board no ---> " + ref );
+	
+		for(int i=0; i<rlist.size(); i++) {
+			System.out.println("reply num list ref" +i+ "-> " + rlist.get(i).getRef());
+		}
+		
+		return rlist;
+		
+	}
 //------------------------------------!!!!  댓글  !!!!------------------------------------------------------
 	//댓글 목록
 	

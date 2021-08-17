@@ -461,6 +461,18 @@ $(function(){
 //====================== submit 넘기기 전에 유효성 검사 ========================================	
 $(function(){
 	 $("#boardEditFrm").on('submit',function(){
+		//파일	 
+		var fileCnt = 0;
+		if($("#filename").val()!=""){
+			//해당 아이디에 첨부파일이 선택되어 있으면,
+			fileCnt++;
+		}
+		if($("#filename").val()==""){ //올려진 파일이 0개
+			//alert("파일을 첨부하세요.");
+			//return false;
+			$("#filename").val(null);
+		}
+	 
 		//유효성검사
 		var idreg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
 		//var pwdreg = /[0-9]$/;
@@ -782,7 +794,7 @@ $(function(){
 					&nbsp;<span id="count"></span>/<span id="max_count">100</span><br/>
 				</li>
 				<li>
-					<label class="label">작성자</label> <input type="text" name="userid" id="userid" maxlength="10"  class="wordcut"  value="<c:out value="${vo.userid}"  escapeXml="true"></c:out>" required oninput="useridInput(this.value);">
+					<label for="userid" class="label">작성자</label> <input type="text" name="userid" id="userid" maxlength="10"  class="wordcut"  value="<c:out value="${vo.userid}"  escapeXml="true"></c:out>" required oninput="useridInput(this.value);">
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
 				<!-- 첫번째 첨부파일 :vo.filename1 = vo.filename[0] -->
@@ -814,7 +826,7 @@ $(function(){
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
 				<li >
-					<label class="label">첨부파일</label>  <br/>
+					<label for="file" class="label">첨부파일</label>  <br/>
 							<c:forEach var="file" items="${file}" varStatus="idx">
 								
 								<div>
@@ -825,7 +837,8 @@ $(function(){
 								<input type="hidden" name="" value="${file}">
 							</c:forEach>
 					
-					<br/><input type="file" multiple="multiple" name="file"/>
+					<br/>
+					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" />
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="수정하기" class="btn"/>
@@ -834,6 +847,7 @@ $(function(){
 				</li>
 			</ul>
 		</form>
+		
 	</div>
 </body>
 </html>

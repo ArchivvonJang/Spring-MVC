@@ -459,6 +459,17 @@ $(function(){
 $(function(){
 	$("#replyForm").on('submit',function(){
 		console.log("~~~~~~~~~~~submit~~~~~~~~~~~~~~~");
+		// 첨부파일
+		var fileCnt = 0;
+		if($("#filename").val()!=""){
+			//해당 아이디에 첨부파일이 선택되어 있으면,
+			fileCnt++;
+		}
+		if(fileCnt<1){ //올려진 파일이 0개
+			//alert("파일을 첨부하세요.");
+			//return false;
+			$("#filename").val(null);
+		}
 		//유효성검사
 		var idreg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
 		var pwdreg = /([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])$/;

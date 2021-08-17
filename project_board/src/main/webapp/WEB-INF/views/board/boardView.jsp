@@ -53,8 +53,62 @@
 	
 	.edit, .delete{border:none;}
 	#useridLength, #userpwdLength, #commentLengt{ width: 35px; margin:0; padding:0; }
+	#pwdMsg{color:red; }
+	#pwdApproval{color:green; display:none;}
 </style>
 <script type="text/javascript">
+
+//userpwdCheck 비밀번호 확인
+function userpwdCheck(){
+		console.log("userpwdCheck function 0");
+		var userpwd = $("#userpwd").val();
+		console.log("userpwdCheck get userpwd ---> "+userpwd);
+		var pwdMsg =$("#pwdMsg");
+		var pwdreg = userpwd.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
+		//var pwdreg = userpwd.match(/([0-9])/);	
+			if(userpwd.length == 0 ){
+				console.log("userpwdCheck function 1");
+				pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+				$("#pwdApproval").css("display","none");
+				return false;
+			}else if(userpwd.search(/\s/) != -1){
+				console.log("userpwdCheck function 2");
+				blankCheck(obj, '비밀번호');
+ 				$("#pwdApproval").css("display","none");
+				return false;
+ 			}else if(userpwd.length > 10 ){
+				console.log("userpwdCheck function 3");
+				pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+ 				//alert("10자리를 입력해주세요.");
+ 				$("#pwdApproval").css("display","none");
+ 				if(userpwd.length == 10 ){
+ 					pwdMsg.css("display","none");
+ 				}
+				return false; 
+			}else if(!pwdreg){
+				pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+				console.log("userpwdCheck function 10");
+				//alert("3. 비밀번호를 확인해주세요.");
+				$("#pwdApproval").css("display","none");
+ 				if(userpwd.length > 10){
+ 					setTimeout(function(){
+ 						alert("올바르지 않은 비밀번호입니다.\n비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
+ 					}, 100);
+ 				}
+				return false;
+			}else if(userpwd.length < 6 ){
+				console.log("userpwdCheck function 1");
+				pwdMsg.text("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요. ");
+				$("#pwdApproval").css("display","none");
+		    }else{
+				console.log("userpwdCheck function else");
+				pwdMsg.css("display","none");
+		    	$("#pwdApproval").css("display",'inline-block');
+		    	pwdMsg.text("");
+		    }
+		
+};
+
 // -----------------------  파일 다운로드 ------------------------
 $(function(){
 		/* $("#viewUl a").click(function(){
@@ -98,7 +152,7 @@ $(function(){
 		function boardEdit(){
 			console.log(" onclick edit");	
 			//var url ="/myapp/getUserpwd";
-			var loc = "/myapp/boardEdit?no=${vo.no}";
+			var loc = "/myapp/boardEdit?no=${vo.no}&pageNum=${sapvo.pageNum}";
 			var data = "no=${vo.no}&userpwd=";
 			var state = "edit"
 			//getUserpwd(data, loc);
@@ -197,7 +251,6 @@ $(function(){
 	//댓글목록
 	function commentList(){
 		var url = "/myapp/commentList";
-	//var url = "/myapp/boardList";
 		var params = "no=${vo.no}";
 		var tag =""
 		console.log("comment list url --> ",url);
@@ -309,6 +362,12 @@ $(function(){
 					$('#useridLength').css('display','none');
 					$('#userpwdLength').css('display','none');
 					$('#commentLength').css('display','none');
+					//비밀번호 메세지 지우기
+					//$("#pwdMsg").css("display","none");
+					$("#pwdApproval").css("display","none");
+					//pwdMsg.css("display","none");
+					//pwdApproval.css("display","none");
+	
 					commentList();
 				},error:function(){
 					console.log("url->",url);
@@ -318,7 +377,7 @@ $(function(){
 				
 			});//ajax end
 			$('#useridLength').css('display','block'); $('#userpwdLength').css('display','block');	$('#commentLength').css('display','block');
-			console.log("length block");
+			console.log("length block"); pwdMsg.css("display","block");
 		}//if  
 		return false;
 	}//submitCheck function end
@@ -481,7 +540,7 @@ $(function(){
 		}
 	} //check end
 	
-	// 댓글 입력 유효성 검사
+	// 댓글 입력 submit 유효성 검사
 	function submitCheck(){
 		
 		//작성자
@@ -534,6 +593,7 @@ $(function(){
 		}
 		return true;
 		//return false;
+		
 	}
 	//-------- 댓글 수정 ------------
 	//댓글 작성자 글자수
@@ -558,9 +618,9 @@ $(function(){
 		subjectWordCount(obj, wordcheck);
 	});
 
+	
 
-
-	//키보드 입력	
+	//키보드 입력에 따른 글자수 변경
 	//작성자 글자수
 	userid.oninput = function(){
 		$('#useridLength').css('display','block');
@@ -568,6 +628,7 @@ $(function(){
 		var wordcheck = $("#useridLength");
 		checkblank(obj, '작성자')
 		subjectWordCount(obj, wordcheck);
+		
 	}
 	//비밀번호 글자수 
 	userpwd.oninput = function(e){
@@ -575,7 +636,7 @@ $(function(){
 		var obj = $("#userpwd");
 		var wordcheck = $("#userpwdLength");
 		var pwdAlert = $("#pwdMsg");
-		
+		userpwdCheck();
 		checkblank(obj, '비밀번호')
 		subjectWordCount(obj, wordcheck);
 	}
@@ -588,6 +649,9 @@ $(function(){
 		checkblank(obj, '댓글')
 		subjectWordCount(obj, wordcheck);
 	}
+	
+	
+	
 	
 	//글자수 보여주는 함수--------
 	function subjectWordCount(obj, wordcheck){
@@ -658,6 +722,10 @@ $(function(){
 		}
 		return flag;
 	}
+	
+	
+	
+
 }); //function end
 //----------------------------------------------- 파일 업로드 ----------------------------------------------------------
 
@@ -694,7 +762,7 @@ $(function(){
 			<c:if test="${vo.filename != null }">
 			<li>
 				<span class="menu">첨부파일</span> 
-				<div style="margin-left:5px">
+				<div style="margin-left:5px; margin-bottom:25px;">
 				<!-- filename -->
  				<%-- <a href="<%=request.getContextPath()%>/upload/${vo.filename}" download>${vo.filename}</a>
  --%> 					<c:forEach var="file" items="${file}" varStatus="idx">
@@ -739,7 +807,10 @@ $(function(){
 		<div style="margin-bottom:7px;" id="commentIdPwdDiv">
 			<input type="hidden" name="no" value="${vo.no}">
 			<label style="margin-right:16px;">작성자&nbsp;</label>&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span><!-- /<span id="max_count">10</span> --><br/>
-			 <label style="margin-top:12px;">비밀번호</label><input type="password" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="10"> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span> -->
+			<label style="margin-top:12px;">비밀번호</label><input type="password" name="userpwd" id="userpwd" maxlength="10" required oninput="userpwdCheck()"/> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span>  inputmode="numeric" class="input-number-password"  -->
+				<span id="pwdMsg"></span>
+				<span id="pwdApproval">사용가능한 비밀번호입니다.</span>
+				
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
 			<textarea name="content" id="content"  id="sub" class="wordCut" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
