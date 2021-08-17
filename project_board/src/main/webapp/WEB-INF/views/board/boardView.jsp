@@ -775,8 +775,7 @@ $(function(){
 						<!-- 수정해서 orifile이 존재하지 않을 때  -->
 						<%-- 	<c:if test="${orifile==null}"> --%>
 								<c:forEach var="file" items="${file}">
-										<a href="<%=request.getContextPath()%>/WEB-INF/upload/${file}" download="${file}"> ${file}</a><br>
-									<a href="../WEB-INFupload/${file}" download>${file}</a><br>
+										<a href="<%=request.getContextPath()%>/upload/${file}" download="${file}" type="text/html"> ${file}</a><br>
 								</c:forEach>
 						<%-- 	</c:if> --%>
 							

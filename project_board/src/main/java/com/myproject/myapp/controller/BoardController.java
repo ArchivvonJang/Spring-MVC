@@ -188,7 +188,7 @@ public class BoardController {
 		//파일 업로드 - mutlpartrequest
 		//new MultipartRequest(req 리퀘스트객체, path 어디에 업로드할지, 0 maxsize업로드하는 파일크기에 제한, path 한글인코딩을 뭐로할건지, filerenamepolicy null 객체만 만들어서 넣으면 알아서 리네임)
 	
-				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+				String path = req.getSession().getServletContext().getRealPath("/upload");
 				System.out.println("path ->" +path);
 				//파일 업로드를 위해서 multiparthttp객체로 변
 				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
@@ -278,7 +278,7 @@ public class BoardController {
 					 System.out.println("boardview getFilename with orifile oritok : " + oritok);
 				}
 				
-				String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+				String path = req.getSession().getServletContext().getRealPath("/upload");
 				System.out.println("boardview path : "+ path);
 				System.out.println("boardview getFilename with tok : " + tok);
 				System.out.println("board view file name from vo  : " + vo.getFilename());
@@ -345,7 +345,7 @@ public class BoardController {
 
 	try {	
 		//파일 업로드 수정
-		String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+		String path = req.getSession().getServletContext().getRealPath("/upload");
 		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)req;
 		
 		System.out.println("boardEditOk path  : " + path);
@@ -567,7 +567,7 @@ public class BoardController {
 				vo.setFilename("");
 			}
 			//---------------0. 답글에 파일 업로드 --------------------------
-			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+			String path = req.getSession().getServletContext().getRealPath("/upload");
 			System.out.println("reply write path ->" +path);
 			
 			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
@@ -922,7 +922,7 @@ public class BoardController {
 	 public String fileUpload(HttpServletRequest req, HttpServletResponse res, MultipartFile multipartFile) throws ServletException, IOException {
 		 	//FileItem이라는 객체를 구하기
 			//저장할 위치에 대한 경로
-			String path = req.getSession().getServletContext().getRealPath("/WEB-INF/upload");
+			String path = req.getSession().getServletContext().getRealPath("/upload");
 			//파일 업로드를 위해서 multiparthttp객체로 변환해준다
 			MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
 			try {
