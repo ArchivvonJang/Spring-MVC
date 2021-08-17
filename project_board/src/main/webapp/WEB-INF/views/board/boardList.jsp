@@ -233,7 +233,7 @@ function replyNumList(){
 							⤷ &nbsp; 
 							 <c:if test="${vo.step >= 1}">${recordNum + vo.lvl}  (${ replyCnt[idx.index] + vo.lvl })<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
 			 							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
-							<span id="replyNum" ></span>
+							<span id="replyNum"></span>
 						<%-- 	 <c:if test="${vo.step > 1}">${recordNum + vo.lvl } -  ${ replyCnt[idx.index]-vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if>  --%>
 				</c:if> 
 				
