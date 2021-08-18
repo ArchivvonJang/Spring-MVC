@@ -877,7 +877,7 @@ $(function(){
 	}	
 	h2{font-color:navy; margin-bottom:40px;}
 	li{margin-bottom:20px;}
-	#notice{margin-top:5px; color:lightgray; font-size:0.9em;}
+	#notice{margin-top:5px; color:#919C9A; font-size:0.9em;}
 	input[type="file"]{font-color:#BDC5C9; margin:10px;}
 	#articlefileChange{margin:10px; }
 }
@@ -913,7 +913,7 @@ $(function(){
 				<li>
 					<label class="label" for="filename">
 						<span id="fileUpload">첨부파일 </span> &nbsp;&nbsp;
-						<span id="notice">첨부파일은 최대 1MB까지 업로드 가능합니다.</span>
+						<span id="notice">첨부파일은 최대 1MB, 최대 5개까지 업로드 가능합니다.</span>
 					</label>
 					<div id="articlefileChange"></div>
 					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
