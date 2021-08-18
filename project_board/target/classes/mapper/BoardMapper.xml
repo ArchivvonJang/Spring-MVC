@@ -27,7 +27,7 @@
 				where <![CDATA[rownum<=]]>
 				<if test="pageNum==totalPage">${lastPageRecord}</if>
 	        	<if test="pageNum!=totalPage">${onePageRecord}</if>
-	   order by ref desc, lvl asc , rownum desc
+	   order by ref desc, lvl asc
  	</select>
  	<select id="totalRecord" parameterType="com.myproject.myapp.vo.SearchAndPageVO" resultType="int">
 		select count(no) totalRecord from board 
@@ -82,7 +82,7 @@
 		update board set subject='삭제된 글입니다.',content='해당 글은 삭제되었습니다.', filename= null, orifilename=null    where no=${param1} 
 	</update>
 	<select id="replyCnt" resultType="int">
-		select count(ref) from board where ref = ${param1}
+		select count(no) from board where ref = ${param1}
 	</select>
 	<select id="replySelect" resultType="com.myproject.myapp.vo.BoardVO" >
 		select rownum, no, ref, lvl, step, userid, userpwd, subject,content, filename, orifilename,to_char(writedate,'YY/MM/DD HH:MI') as writedate from board where ref=${param1} order by no desc

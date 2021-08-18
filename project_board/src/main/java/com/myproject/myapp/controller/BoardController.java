@@ -87,20 +87,23 @@ public class BoardController {
 		if (reqPageNum != null) { // 리퀘스트했을 때, 페이지번호가 있으면 세팅/ 없으면 기본 값=1
 			sapvo.setPageNum(Integer.parseInt(reqPageNum));
 		}
-		System.out.println("getPageNum-->"+sapvo.getPageNum());
-		System.out.println("onePageRecord-->"+sapvo.getOnePageRecord());
-		System.out.println("reqPageNum --> "+reqPageNum);
+		//System.out.println("getPageNum-->"+sapvo.getPageNum());
+		//System.out.println("onePageRecord-->"+sapvo.getOnePageRecord());
+		//System.out.println("reqPageNum --> "+reqPageNum);
 		
 		// 검색어와 검색키
 		sapvo.setSearchWord(sapvo.getSearchWord());
 		sapvo.setSearchKey(sapvo.getSearchKey()); 
-		System.out.println("searchword->" + sapvo.getSearchWord());
+		//System.out.println("searchword->" + sapvo.getSearchWord());
 		
 		//총 레코드 수 구하기 
 		sapvo.setTotalRecord(boardService.totalRecord(sapvo));
 		
-		
+		//게시판목록
 		List<BoardVO> list = boardService.boardAllRecord(sapvo);
+		
+		//답글
+		List<BoardVO> rlist = boardService.replySelect(vo.getRef());
 		
 		//댓글
 		//int no = Integer.parseInt(req.getParameter("no"));
@@ -114,20 +117,23 @@ public class BoardController {
 		
 		int listSort = list.size()-1;
 		
+		//답글갯수
 		List<Integer> rcnt = new ArrayList<Integer>();
+		
 		for(int i=0; i<list.size(); i++) {
 			//총 답글 수 구하기
-			rcnt.add(boardService.replyCnt(list.get(i).getNo()));
+			rcnt.add(boardService.replyCnt(list.get(i).getRef()));
+		//	System.out.println(i+"의 rcnt add :" +list.get(i).getNo());
+		//	System.out.println(rcnt);
 		}
 		
-		
-	//	List<BoardVO> rlist = boardService.replySelect(vo.getRef());
+	
 		//원글번호의 답글덩어리들 쪼개기
 		int ref[] = new int[list.size()];
 		int lvl[] = new int[list.size()];
 		int refLength = ref.length;
 		int rc=0;
-		for(int i=0; i<list.size(); i++) {
+		for(int i=1; i<list.size(); i++) {
 			//답글 덩어리 쪼개기
 			ref[i] = list.get(i).getRef();
 		//	System.out.println("답글SET ref["+i+"]   ----> "+ ref[i]);
@@ -138,24 +144,25 @@ public class BoardController {
 		//	System.out.println("2 -> "+list.get(listSort).getLvl());
 			
 			rc = boardService.replyCnt(ref[i]);
-		//	System.out.println("list controller ref "+i+":"+ref[i]+" rc : " + rc);
+		//System.out.println("list controller ref "+i+":"+ref[i]+" rc : " + rc);
 			
-		//	rlist = boardService.replySelect(ref[i]);
-		//	System.out.println("list reply list ~~~~~~~~~~> "+rlist);
+			rlist = boardService.replySelect(ref[i]);
+			//System.out.println("list reply list ~~~~~~~~~~> "+rlist);
 		}
 		//총 레코드 수 구하기 
-		rcnt.add(rc);
+		//rcnt.add(rc);
 		
-/*		System.out.println("list controller -> cno : " + cno);
-		System.out.println("list controller -> rc : " + rc);
-		System.out.println("list controller -> replyCnt : " + rcnt);
-		System.out.println("list controller -> lvl : " + vo.getLvl());
-		System.out.println("list controller -> list.size : " + list.size() );
-		System.out.println("list controller -> reflength : " + refLength);*/
+		/*
+		 * System.out.println("list controller -> cno : " + cno);
+		 * System.out.println("list controller -> rc : " + rc);
+		 * System.out.println("list controller -> replyCnt : " + rcnt);
+		 * System.out.println("list controller -> lvl : " + vo.getLvl());
+		 * System.out.println("list controller -> list.size : " + list.size() );
+		 * System.out.println("list controller -> reflength : " + refLength);
+		 */
 		//ref[i]가 같은 번호의 갯수를 구해서 1까지 for문을 돌려서 갯수를 구해준다?
 		
 	
-		
 		//System.out.println("댓글이 씌여지는 board no ---> " + cvo.getNo());
 		
 		/*
@@ -166,8 +173,8 @@ public class BoardController {
 		// return ModelAndView
 		mav.addObject("totalRecord", sapvo.getTotalRecord()); //전체 글 갯수
 		mav.addObject("cno", cno); //댓글 갯수
-		mav.addObject("replyCnt", rcnt); //답글 
-	//	mav.addObject("rlist", rlist); //답글 
+		mav.addObject("rcnt", rcnt); //답글 
+		mav.addObject("rlist", rlist); //답글 
 		mav.addObject("list", list); //게시판 글 목록
 		mav.addObject("clist", clist); //댓글 글 목록
 		mav.addObject("sapvo",sapvo); //페이징	
@@ -175,6 +182,7 @@ public class BoardController {
 		mav.setViewName("board/boardList"); //보내줄 view name 
 		return mav;
 	}
+	
 	//글쓰기 폼으로 이동
 	@RequestMapping("/boardWrite")
 	public String boardWrite() {

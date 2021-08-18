@@ -193,7 +193,7 @@ function replyNumList(){
 		<ul id="boardList">
 			<li class="menu">번호</li>
 			<li class="menu" style="text-align:center">제목</li>
-			<li class="menu">  </li>
+			<li class="menu">댓글</li>
 			<li class="menu">작성자</li>
 			<li class="menu">첨부파일</li>
 			<li class="menu">조회수</li>
@@ -201,11 +201,8 @@ function replyNumList(){
 		<!-- 변수 선언 -->
 		<!-- 글번호 순서대로 매겨주기 				총 레코드 수 - ((현재 페이지-1) * 한 페이지 레코드 ) -->
 		<c:set var="recordNum" value="${totalRecord - ((sapvo.pageNum-1) * sapvo.onePageRecord) }"/>
-	<%-- 	<c:set var="replyCnt"  value="${replyCnt[idx.index]}" /> --%>
-	<%-- 	<c:forEach var="replyCnt" items="${replyCnt}" varStatus="i"> --%>
-
-		<c:forEach var="vo" items="${list}" varStatus="idx">
 		
+		<c:forEach var="vo" items="${list}" varStatus="idx">
 			<!-- 번호 -->
 			
 			<%-- 
@@ -214,15 +211,21 @@ function replyNumList(){
 			
 	        <!-- 원글
 	        <li class="${vo.ref}">${recordNum}<input type="hidden" name="no" value="${vo.no}"/></li> --> <%-- ${replyCnt[idx.index]-1}   --%>
-	    	<c:if test="${vo.step>=0}"> 
-	    		<li class="${vo.ref}">${recordNum} 
+	    	
+	    	<li class="${vo.ref}">
+	    <%-- 		<c:if test="${vo.step==0 && (rcnt[idx.index]-1) == -1}"> 
+	    			${recordNum - (rcnt[idx.index-1]+1)}
 	    			<input type="hidden" name="no" id="no" value="${vo.no}"/>
-	    		</li> 
-	    	</c:if>
-			
-  			
-  		
-  		
+	    		 </c:if> --%>
+	    		<c:if test="${vo.step>=0}"> 
+	    			${recordNum}	
+	    			<input type="hidden" name="no" id="no" value="${vo.no}"/>
+	    		 </c:if>
+	    <%-- 		 <c:if test="${vo.step >= 1}">
+			 	<span style="color:gray;"> ${recordNum + vo.lvl}  (${replyCnt[idx.index] + vo.lvl }) </span><input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/>
+			 	</c:if>  --%>
+	    	</li> 
+
 			<!-- 답글있으면 표시, 없으면 제목만 ${vo.lvl-vo.step+1} - ${vo.step-1} <li class="wordcut" id="sub" <c:if test="${vo.subject eq '삭제된 글입니다.'}">class="disableLink" style="pointer-events: none; cursor : default;"</c:if>>-->
 			<li class="wordcut" id="sub" >
 				<c:forEach var="i" begin="1" end="${vo.step}">
@@ -230,13 +233,20 @@ function replyNumList(){
 				</c:forEach>
 				
 				<c:if test="${vo.step>0}">
+			
 							⤷ &nbsp; 
-							 <c:if test="${vo.step == 1}">${recordNum + vo.lvl}  (${ replyCnt[idx.index] + vo.lvl })<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
-							 <c:if test="${vo.step >=2}"> ${recordNum + vo.lvl} ${vo.lvl-replyCnt[idx.index]} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if> 
-			 							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
-							<span id="replyNum"></span>
-						<%-- 	 <c:if test="${vo.step > 1}">${recordNum + vo.lvl } -  ${ replyCnt[idx.index]-vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if>  --%>
+							 <c:if test="${vo.step >= 1}">
+							 	<span <c:if test="${vo.subject eq '삭제된 글입니다.'}">style="color:gray;"</c:if>>
+							 		${recordNum + vo.lvl}  (${replyCnt[idx.index] + vo.lvl })<input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> 
+							 	. </span>	
+							 		 </c:if> 
+							 <%-- <c:if test="${vo.step >=2}"> ${recordNum + vo.lvl} ${vo.lvl-replyCnt[idx.index]} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if>  --%>
+							 <%-- 	 <c:if test="${vo.step > 1}">${recordNum + vo.lvl } -  ${ replyCnt[idx.index]-vo.lvl-vo.step} <input type="hidden" name="no" value="${vo.no}" class="${vo.ref}"/> . </c:if>  --%>
 					
+			 							<!-- ${vo.step } - ${(vo.lvl-vo.step-1) + 1}  -->
+			 							
+							<span id="replyNum"></span>
+				
 				</c:if> 
 				
 			<!-- 제목 
@@ -331,7 +341,7 @@ function replyNumList(){
 	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				</c:if>
 				<!--맨뒤로-->
-				<c:if test="${sapvo.pageNum != sapvo.totalPage }  } ">
+				<c:if test="${sapvo.pageNum != sapvo.totalPage }">
 	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▶</a>
 			 	</c:if>
 			
