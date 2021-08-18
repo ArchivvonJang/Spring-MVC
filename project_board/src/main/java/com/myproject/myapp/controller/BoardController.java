@@ -1,5 +1,6 @@
 package com.myproject.myapp.controller;
 
+import java.awt.Color;
 import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +27,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
-
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.util.SystemOutLogger;
@@ -784,6 +785,13 @@ public class BoardController {
 		HSSFRow row = null; //행
 		HSSFCell cell = null; //열 
 		int rno = 0; //헤더 생성을 위한 열 번호
+		 
+		//엑셀에 답글 넣기 위해서 추가
+		List<BoardVO> list = boardService.boardAllRecord(sapvo);
+		
+		for (int i = 0; i < list.size(); i++) {
+		
+		}
 		
 		System.out.println("excelDownlad controller in !!");
 		
@@ -798,14 +806,16 @@ public class BoardController {
 		
 		//제목 폰트
 		HSSFFont font = workBook.createFont();
-		font.setFontHeightInPoints((short)11);
+		font.setFontHeightInPoints((short)15);
 		font.setFontName("맑은고딕");
 		
 		//제목 스타일에 대한 폰트 적용, 정렬
 		CellStyle headerStyle = workBook.createCellStyle(); // 제목 스타일
 		headerStyle.setFont(font); //폰트 적용
-		headerStyle.setFillBackgroundColor(HSSFColorPredefined.LEMON_CHIFFON.getIndex());
-	
+		//headerStyle.setFillBackgroundColor(HSSFColorPredefined.LEMON_CHIFFON.getIndex());
+		headerStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
+		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
 		//headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		headerStyle.setAlignment(HorizontalAlignment.CENTER);
 		headerStyle.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -829,7 +839,7 @@ public class BoardController {
 		
 		
 		// 1행 (컬럼명)
-/*		row = sheet.createRow(0);
+		row = sheet.createRow(0);
 		row.setHeight((short)0x150);
 		
 		cell = row.createCell(0);
@@ -838,17 +848,17 @@ public class BoardController {
 		
 		cell = row.createCell(1);
 		cell.setCellValue("제목");
-		cell.setCellStyle(headerStyle);		
-		
+		cell.setCellStyle(headerStyle);				
+			
 		cell = row.createCell(2);
 		cell.setCellValue("댓글");
 		cell.setCellStyle(headerStyle);
-				
+		
 		cell = row.createCell(3);
 		cell.setCellValue("작성자");
 		cell.setCellStyle(headerStyle);
-		
-		cell = row.createCell(3);
+	
+		cell = row.createCell(4);
 		cell.setCellValue("첨부파일");
 		cell.setCellStyle(headerStyle);
 		
@@ -858,7 +868,7 @@ public class BoardController {
 		
 		cell = row.createCell(6);
 		cell.setCellValue("등록일");
-		cell.setCellStyle(headerStyle);*/
+		cell.setCellStyle(headerStyle);
 		
 		String[] headerArr = {"번호", "제목", "댓글", "작성자", "첨부파일", "조회수", "등록일"};
 		//1행 (컬렴명)
@@ -882,6 +892,7 @@ public class BoardController {
 			//제목
 			cell = row.createCell(1); 
 			cell.setCellStyle(bodyStyle);
+			cell.setCellValue(excelList.get(i).getLvl()); 
 			cell.setCellValue(excelList.get(i).getSubject()); 
 			rno = 1;
 			//댓글

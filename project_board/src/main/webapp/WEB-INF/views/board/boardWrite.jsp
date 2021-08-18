@@ -22,6 +22,21 @@
 //<![CDATA[
 	//①CDATA로 감싼 javascript 부분이 의도치않게 XML Parser에 의해 잘못 인식되는 것을 막기 위해
 	//②XHTML이 아닌 HTML로 인식되는 경우에도 javascript가 문제 없이 동작하도록 하기 위해
+	//파일 업로드제한
+	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	var maxSize = 1048576; //1MB
+	
+	function checkFileExtension(fileName, fileSize){
+		if(fileSize >= maxSize){
+			alert("파일 사이즈가 초과되었습니다.\n파일은 1MB미만으로 첨부해주세요.");
+			return false;
+		}
+		if(fileReg.test(fileName)){
+			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			return false;
+		}
+	}
+	
 	
 	//제목
 	function subInput(e){
@@ -800,8 +815,8 @@ $(function(){
 	}	
 	h2{margin-bottom:40px;}
 	li{margin-bottom:20px;}
-
-}
+	#notice{margin-top:5px; color:lightgray; font-size:0.9em;}
+	input[type="file"]{font-color:#BDC5C9}
 </style>
 <body>
 	<div class="container">
@@ -810,18 +825,18 @@ $(function(){
 		
 			<ul>
 			
-				<li class="menu"><label class="label">제목</label><input type="text" name="subject" id="subject" class="wordcut" maxlength="100" size="100" required oninput="subInput(this.val)"/>
+				<li class="menu"><label class="label" for="subject">제목</label><input type="text" name="subject" id="subject" class="wordcut" maxlength="100" size="100" required oninput="subInput(this.val)"/>
 								&nbsp;<span id="count"></span>/<span id="max_count">100</span><br/>
 				</li>
 				<li>
-					<label class="label">작성자</label> <input type="text" name="userid" id="userid" class="wordcut" maxlength="10" required oninput="useridInput(this.val)"/>
+					<label class="label" for="userid">작성자</label> <input type="text" name="userid" id="userid" class="wordcut" maxlength="10" required oninput="useridInput(this.val)"/>
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
 				<li>
 				<!-- 
 				<label class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
 					-->
-					 <label class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
+					 <label class="label" for="userpwd">비밀번호</label> <input type="password" name="userpwd" id="userpwd"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
 					
 					<span id="userpwdLength"></span>/<span id="max_count">10</span><br/>
 					
@@ -835,8 +850,12 @@ $(function(){
 				</li>
 				<!-- 첨부파일 -->
 				<li>
-					<label class="label"><span id="fileUpload">첨부파일 </span></label>
+					<label class="label" for="filename">
+						<span id="fileUpload">첨부파일 </span> &nbsp;&nbsp;
+						<span id="notice">첨부파일은 최대 1MB까지 업로드 가능합니다.</span>
+					</label>
 					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
+					
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="등록하기" class="btn"/>

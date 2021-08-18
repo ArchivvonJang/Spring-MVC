@@ -805,8 +805,8 @@ $(function(){
 		<form method="post" id="commentForm" >
 		<div style="margin-bottom:7px;" id="commentIdPwdDiv">
 			<input type="hidden" name="no" value="${vo.no}">
-			<label style="margin-right:16px;">작성자&nbsp;</label>&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span><!-- /<span id="max_count">10</span> --><br/>
-			<label style="margin-top:12px;">비밀번호</label><input type="password" name="userpwd" id="userpwd" maxlength="10" required oninput="userpwdCheck()"/> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span>  inputmode="numeric" class="input-number-password"  -->
+			<label for="userid" style="margin-right:16px;">작성자&nbsp;</label>&nbsp;<input type="text" name="userid" id="userid" maxlength="10"> <span id="useridLength"></span><!-- /<span id="max_count">10</span> --><br/>
+			<label for="userpwd" style="margin-top:12px;">비밀번호</label><input type="password" name="userpwd" id="userpwd" maxlength="10" required oninput="userpwdCheck()"/> <span id="userpwdLength"></span><!-- /<span id="max_count">4</span>  inputmode="numeric" class="input-number-password"  -->
 				<span id="pwdMsg"></span>
 				<span id="pwdApproval">사용가능한 비밀번호입니다.</span>
 				

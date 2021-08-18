@@ -790,11 +790,11 @@ $(function(){
 		<form method="post" name="boardEditFrm" id="boardEditFrm" action="boardEditOk" enctype="multipart/form-data">
 			<input type="hidden" name="no" value="${vo.no}"/>
 			<ul>
-				<li class="menu"><label class="label">제목</label><input type="text" name="subject" id="subject" value="<c:out value="${vo.subject}" escapeXml="true"></c:out>" required  class="wordcut" size="100"  maxlength="100" oninput="useridInput(this.val)"/>
+				<li class="menu"><label for="subject" class="label">제목</label><input type="text" name="subject" id="subject" value="<c:out value="${vo.subject}" escapeXml="true"></c:out>" required  class="wordcut" size="100"  maxlength="100" oninput="useridInput(this.val)"/>
 					&nbsp;<span id="count"></span>/<span id="max_count">100</span><br/>
 				</li>
 				<li>
-					<label for="userid" class="label">작성자</label> <input type="text" name="userid" id="userid" maxlength="10"  class="wordcut"  value="<c:out value="${vo.userid}"  escapeXml="true"></c:out>" required oninput="useridInput(this.value);">
+					<label for="userid" for="userid" class="label">작성자</label> <input type="text" name="userid" id="userid" maxlength="10"  class="wordcut"  value="<c:out value="${vo.userid}"  escapeXml="true"></c:out>" required oninput="useridInput(this.value);">
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
 				<!-- 첫번째 첨부파일 :vo.filename1 = vo.filename[0] -->
@@ -826,7 +826,7 @@ $(function(){
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
 				<li >
-					<label for="file" class="label">첨부파일</label>  <br/>
+					<label for="file" for="filename" class="label">첨부파일</label>  <br/>
 							<c:forEach var="file" items="${file}" varStatus="idx">
 								
 								<div>

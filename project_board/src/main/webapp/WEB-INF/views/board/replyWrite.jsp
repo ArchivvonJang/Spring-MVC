@@ -748,7 +748,8 @@ $(function(){
 	}	
 	h2{font-color:navy; margin-bottom:40px;}
 	li{margin-bottom:20px;}
-
+	#notice{margin-top:5px; color:lightgray; font-size:0.9em;}
+	input[type="file"]{font-color:#BDC5C9}
 }
 </style>
 <body>
@@ -758,16 +759,16 @@ $(function(){
 		<input type="hidden" name="no" value="${no}"/>
 			<ul>
 			
-				<li class="menu"><label class="label">제목</label><input type="text" name="subject" id="subject" class="wordcut" maxlength="100" size="100" required oninput="subInput(this.val)"/>
+				<li class="menu"><label for="subject" class="label">제목</label><input type="text" name="subject" id="subject" class="wordcut" maxlength="100" size="100" required oninput="subInput(this.val)"/>
 								&nbsp;<span id="count"></span>/<span id="max_count">100</span><br/>
 				</li>
 				<li>
-					<label class="label">작성자</label> <input type="text" name="userid" id="userid" class="wordcut" maxlength="10" required oninput="useridInput(this.val)"/>
+					<label for="userid" class="label">작성자</label> <input type="text" name="userid" id="userid" class="wordcut" maxlength="10" required oninput="useridInput(this.val)"/>
 					<span id="useridLength"></span>/<span id="max_count">10</span><br/>
 				</li>
 				<li>
 					<!-- <label class="label">비밀번호</label> <input type="number" name="userpwd" id="userpwd" inputmode="numeric" class="input-number-password"  maxlength="10" class="wordcut" required oninput="userpwdCheck()"/> -->
-					<label class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd" maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
+					<label for="userpwd" class="label">비밀번호</label> <input type="password" name="userpwd" id="userpwd" maxlength="10" class="wordcut" required oninput="userpwdCheck()"/>
 					<span id="userpwdLength"></span>/<span id="max_count">10</span><br/>
 					
 					</span> <span id="pwdMsg"></span>
@@ -780,7 +781,10 @@ $(function(){
 				</li>
 				<!-- 첨부파일 -->
 				<li>
-					<label class="label"><span id="fileUpload">첨부파일 </span></label>
+					<label class="label" for="filename">
+						<span id="fileUpload">첨부파일 </span> &nbsp;&nbsp;
+						<span id="notice">첨부파일은 최대 1MB까지 업로드 가능합니다.</span>
+					</label>
 					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
 				</li>
 				<li id="btnLine">
