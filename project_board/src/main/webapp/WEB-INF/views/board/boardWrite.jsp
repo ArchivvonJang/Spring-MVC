@@ -24,15 +24,20 @@
 	//②XHTML이 아닌 HTML로 인식되는 경우에도 javascript가 문제 없이 동작하도록 하기 위해
 
 //--------------------------------------------- 첨부파일 ------------------------------------------------------------
-	//파일 첨부시 함수 실행되도록 하기 
-	$(function(){
-		$('#filename').on('change',checkFile);
-	});	
+//파일 첨부시 함수 실행되도록 하기 
+$(function(){
+
+	//$('#filename').on('change',checkFileSize);
+	$('#filename').on('change',checkFile);
+});		
 	
 	//파일 업로드 제한되는 파일 형식
 	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 	//최대 크기 
-	var maxSize = 1048576; //1MB
+	var maxSize = 3*1024*1024 //1048579==1MB
+	//파일 크기
+	//var fileSize = $('#filename').getMaxSize();
+	var fileSize=0;
 	// 파일 현재 필드 숫자 totalCount랑 비교값
 	var fileCount = 0;
 	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
@@ -41,23 +46,31 @@
 	var fileNum = 0;
 	// 첨부파일 배열
 	var attachFiles = new Array();
+	//var filename = $('#filename').val();
 	
-	
+	//파일용량, 확장자 체크	
 	function checkFileSize(fileName, fileSize){
 		if(fileSize >= maxSize){
 			alert("파일 사이즈가 초과되었습니다.\n파일은 1MB미만으로 첨부해주세요.");
+			 $("#filename").val(""); 
+			 $('#articlefileChange').html("");
 			return false;
 		}
 		if(fileReg.test(fileName)){
 			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			 $("#filename").val(""); 
+			 $('#articlefileChange').html("");
 			return false;
 		}
 	}
+	//파일 리스트 나오게 하기, 삭제는 주석처리함 
 	function checkFile(e){
+		//$('#filename').val("");
 		var files = e.target.files;
-	    
 	    // 파일 배열 담기
 	    var filesArr = Array.prototype.slice.call(files);
+	    //초기화
+	    $('#articlefileChange').html("");
 	    
 	    // 파일 개수 확인 및 제한
 	    if (fileCount + filesArr.length > totalCount) {
@@ -73,43 +86,49 @@
 	      var reader = new FileReader();
 	      reader.onload = function (e) {
 	        attachFiles.push(f);
+	    
 	        $('#articlefileChange').append(
-	       		'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
-	       		+ '<font style="font-size:12px">' + f.name + '</font>'  
-	       		+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\')" style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
-	       		+ '<div/>'
+	       //  	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
+	       		'<div id="file' + fileNum + '">'
+	       		+ '<font style="font-size:12px"> ' + f.name + '</font>'  
+	       //	+ '<span  onclick="fileDelete(\'file' + fileNum + '\')" style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'
+	       //	+ '<span   style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'	
+	      		+ '<div/>'
 			);
 	        fileNum ++;
+	        checkFileSize(f.name, f.size);
+	        console.log("check f name : " , f.name," /f size : " ,f.size);
 	      };
 	      reader.readAsDataURL(f);
 	    });
-	    console.log(attachFiles);
-	    console.log(filesArr);
-	    console.log(fileNum)
+	    console.log("check attachFiles : " , attachFiles);
+	    console.log("check filesArr : ", filesArr);
+	    console.log("check fileNum : " ,fileNum);
+	   
 	    //초기화 한다.
-	  //  $("#filename").val("");  
+	 //  $("#filename").val("");  
 	}
 	// 파일 부분 삭제 함수
 	function fileDelete(fileNum){
 	    var no = fileNum.replace(/[^0-9]/g, ""); 
-	    content_files[no].is_delete = true;
+	    attachFiles[no].is_delete = true;
 		$('#' + fileNum).remove();
 		fileCount --;
-	    console.log(attachFiles);
+	    console.log("#$#$ attachFiles : "+attachFiles);
 	}
 	//폼을 submit
 	function registerAction(){
 		
 		var form = $("form")[0];        
 		var formData = new FormData(form);
-		for (var x = 0; x < content_files.length; x++) {
+		for (var i = 0; i < attachFiles.length; i++) {
+			console.log("attachFiles length : " + attachFiles.length);
 			// 삭제 안한것만 담아 준다. 
-			if(!attachFiles[x].is_delete){
-				formData.append("article_file", attachFiles[x]);
+			if(!attachFiles[i].is_delete){
+				formData.append("file", attachFiles[i]);
 			}
 		}
-		
-	
+
 	//파일업로드 multiple ajax처리
     
 		$.ajax({
@@ -125,7 +144,7 @@
 				} else
 					alert("서버내 오류로 처리가 지연되고있습니다. 잠시 후 다시 시도해주세요");
 	   	      },
-	   	      error: function (xhr, status, error) {
+	   	      error: function () {
 	   	    	alert("서버오류로 지연되고있습니다. 잠시 후 다시 시도해주시기 바랍니다.");
 	   	     return false;
 	   	      }
@@ -715,7 +734,7 @@ $(function(){
 				$('#summernote').summernote('focus');
 				return false;
 			}
-	         var t = $('#summernote').currentTarget.innerText;
+	/*          var t = $('#summernote').currentTarget.innerText;
 	         console.log("submit check t.length :" , t.length);         
     		if(t.length > 500){
     			
@@ -723,15 +742,16 @@ $(function(){
     			alert("내용은 500자까지 작성가능합니다.");
     			$(this).text(t.substring(0,500));
     			return false;
-    		}
+    		} */
+    		
 			//---------------- 공백문자
-			if(subject.text()=='&nbsp' || subject.equals('&nbsp')){
+		/* 	if($("#subject").text()=='&nbsp' || $("#subject").equals('&nbsp;')){
 				console.log("submit subject &nbsp");
 				alert("제목을 다시 입력해주세요.");
 				$('#subject').focus(); 
 				return false;	
 			}	
-			
+			 */
 			//-------------------공백 , trim, 정규식 공백 유효성검사
 			//제목
 			if($("#subject").val().trim()==""){

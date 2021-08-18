@@ -201,6 +201,7 @@ public class BoardController {
 				System.out.println("path ->" +path);
 				//파일 업로드를 위해서 multiparthttp객체로 변
 				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
+			
 				
 				//MultipartHttpServletRequest에서 업로드할 파일 목록을 구하기
 				List<MultipartFile> files = mr.getFiles("file");
@@ -227,7 +228,7 @@ public class BoardController {
 								//업로드 된 파일명 얻어오기(새로운 파일명), getOriginalFileName()은 원래 이름 구하는것, 이건 새로운 이름 구하기
 								//mr.getOriginalFileName(nameAttr); //파일명 (원래 파일명) 기존네임->중복->리네임
 								f = new File(path, name+"("+ i+")."+extName);
-								System.out.println("write file uplaod f : "+ f);
+								//System.out.println("write file uplaod f : "+ f);
 							}//while end
 							
 							//가져온 파일 업로드

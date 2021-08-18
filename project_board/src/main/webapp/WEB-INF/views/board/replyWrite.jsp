@@ -17,7 +17,136 @@
 		<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 </head>
-<script>	
+<script>
+
+//--------------------------------------------- 첨부파일 ------------------------------------------------------------
+//파일 첨부시 함수 실행되도록 하기 
+$(function(){
+
+	//$('#filename').on('change',checkFileSize);
+	$('#filename').on('change',checkFile);
+});		
+	
+	//파일 업로드 제한되는 파일 형식
+	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	//최대 크기 
+	var maxSize = 3*1024*1024 //1048579==1MB
+	//파일 크기
+	//var fileSize = $('#filename').getMaxSize();
+	var fileSize=0;
+	// 파일 현재 필드 숫자 totalCount랑 비교값
+	var fileCount = 0;
+	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
+	var totalCount = 5;
+	// 파일 고유넘버
+	var fileNum = 0;
+	// 첨부파일 배열
+	var attachFiles = new Array();
+	//var filename = $('#filename').val();
+	
+	
+	//파일용량, 확장자 체크	
+	function checkFileSize(fileName, fileSize){
+		if(fileSize >= maxSize){
+			alert("파일 사이즈가 초과되었습니다.\n파일은 1MB미만으로 첨부해주세요.");
+			 $("#filename").val(""); 
+			 $('#articlefileChange').html("");
+			return false;
+		}
+		if(fileReg.test(fileName)){
+			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			 $("#filename").val(""); 
+			 $('#articlefileChange').html("");
+			return false;
+		}
+	}
+	//파일 리스트 나오게 하기, 삭제는 주석처리함 
+	function checkFile(e){
+		//$('#filename').val("");
+		var files = e.target.files;
+	    // 파일 배열 담기
+	    var filesArr = Array.prototype.slice.call(files);
+	    //초기화
+	    $('#articlefileChange').html("");
+	    // 파일 개수 확인 및 제한
+	    if (fileCount + filesArr.length > totalCount) {
+	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
+	        $("#filename").val("");  
+	      return false;
+	    } else {
+	    	 fileCount = fileCount + filesArr.length;
+	    }
+	    
+	 // 각각의 파일 배열담기 및 기타
+	    filesArr.forEach(function (f) {
+	      var reader = new FileReader();
+	      reader.onload = function (e) {
+	        attachFiles.push(f);
+	        $('#articlefileChange').append(
+	       //  	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
+	       		'<div id="file' + fileNum + '">'
+	       		+ '<font style="font-size:12px"> ' + f.name + '</font>'  
+	       //	+ '<span  onclick="fileDelete(\'file' + fileNum + '\')" style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'
+	       //	+ '<span   style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'	
+	      		+ '<div/>'
+			);
+	        fileNum ++;
+	        checkFileSize(f.name, f.size);
+	        console.log("check f name : " , f.name," /f size : " ,f.size);
+	      };
+	      reader.readAsDataURL(f);
+	    });
+	    console.log("check attachFiles : " , attachFiles);
+	    console.log("check filesArr : ", filesArr);
+	    console.log("check fileNum : " ,fileNum);
+	    //초기화 한다.
+	 //  $("#filename").val("");  
+	}
+	// 파일 부분 삭제 함수
+	function fileDelete(fileNum){
+	    var no = fileNum.replace(/[^0-9]/g, ""); 
+	    attachFiles[no].is_delete = true;
+		$('#' + fileNum).remove();
+		fileCount --;
+	    console.log("#$#$ attachFiles : "+attachFiles);
+	}
+	//폼을 submit
+	function registerAction(){
+		
+		var form = $("form")[0];        
+		var formData = new FormData(form);
+		for (var i = 0; i < attachFiles.length; i++) {
+			console.log("attachFiles length : " + attachFiles.length);
+			// 삭제 안한것만 담아 준다. 
+			if(!attachFiles[i].is_delete){
+				formData.append("file", attachFiles[i]);
+			}
+		}
+
+	//파일업로드 multiple ajax처리
+  
+		$.ajax({
+	   	      type: "POST",
+	   	   	  enctype: "multipart/form-data",
+	   	      url: "/upload",
+	       	  data : formData,
+	       	  processData: false,
+	   	      contentType: false,
+	   	      success: function (data) {
+	   	    	if(JSON.parse(data)['result'] == "OK"){
+	   	    		alert("파일업로드 성공");
+				} else
+					alert("서버내 오류로 처리가 지연되고있습니다. 잠시 후 다시 시도해주세요");
+	   	      },
+	   	      error: function () {
+	   	    	alert("서버오류로 지연되고있습니다. 잠시 후 다시 시도해주시기 바랍니다.");
+	   	     return false;
+	   	      }
+	   	    });
+	   	    return false;
+	}
+	
+// -------------------------- 답글 쓰기 -------------------------------------------
 	//제목
 	function subInput(e){
 		console.log("subInput function test");
@@ -749,7 +878,8 @@ $(function(){
 	h2{font-color:navy; margin-bottom:40px;}
 	li{margin-bottom:20px;}
 	#notice{margin-top:5px; color:lightgray; font-size:0.9em;}
-	input[type="file"]{font-color:#BDC5C9}
+	input[type="file"]{font-color:#BDC5C9; margin:10px;}
+	#articlefileChange{margin:10px; }
 }
 </style>
 <body>
@@ -785,6 +915,7 @@ $(function(){
 						<span id="fileUpload">첨부파일 </span> &nbsp;&nbsp;
 						<span id="notice">첨부파일은 최대 1MB까지 업로드 가능합니다.</span>
 					</label>
+					<div id="articlefileChange"></div>
 					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" > 
 				</li>
 				<li id="btnLine">
