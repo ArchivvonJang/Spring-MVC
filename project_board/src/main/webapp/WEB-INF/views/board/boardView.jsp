@@ -749,7 +749,7 @@ $(function(){
 			<!-- 제목 -->
 			<%-- <li class="menuLine" id="sub" >${vo.subject}</li> --%>
 			<%-- <li> <input id="sub" type="text" value="<c:out value="${vo.subject}"></c:out>"  readonly></li> --%>
-			<li> <textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
+			<li><textarea id="sub" readonly><c:out value="${vo.subject}" escapeXml="true"></c:out></textarea></li>
 			
 		
 			
@@ -757,8 +757,7 @@ $(function(){
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li>
-				<label for="content"></label>
-				<textarea id="summernote" title="content" id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
+				<textarea id="summernote" name="content" title="content" id="main content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
 			</li> 
 			
 			<!-- 첨부파일 -->
@@ -802,7 +801,7 @@ $(function(){
 		<br/>
 		<hr/>
 		
-		<!------------------- 댓글 작성 ----------------------->
+		<!------------------ 댓글 작성 ----------------------->
 		<h4>comment</h4>
 		<div id="commentContainer">
 		<form method="post" id="commentForm" >
@@ -815,8 +814,8 @@ $(function(){
 				
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
-			<label for="content"></label>
-			<textarea name="content" id="content"  id="sub" class="wordCut"  title="content" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+			<label for="content" style="display:none;">content</label>
+			<textarea name="content" id="content"  id="sub" class="wordCut"  title="commentContent" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
 				 
 		</form>
 		</div>

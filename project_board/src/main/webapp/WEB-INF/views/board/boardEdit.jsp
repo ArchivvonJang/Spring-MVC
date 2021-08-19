@@ -72,9 +72,15 @@ $(function(){
 	    var filesArr = Array.prototype.slice.call(files);
 	    //초기화
 	    $('#articlefileChange').html("");
+	  
 	    //수정전 기존의 파일 배열
-	    var initialFiles = $('#initialFileDiv').files;
+	    var initialFiles = new Array();
+	    $('#initialFileDiv').each(function(){
+	    	initialFiles.push($(this));
+	    })
+	    
 	    var initialFilesArr = Array.prototype.slice.call(initialFiles);
+	    
 	    console.log("initialFiles : " + initialFiles );
 	    console.log("initialFilesArr : " + initialFilesArr );
 	    
@@ -125,7 +131,7 @@ $(function(){
 		
 	    var no = fileNum.replace(/[^0-9]/g, ""); 
 	    attachFiles[no].is_delete = true;
-		$('#' + fileNum).remove();
+		$('#file' + fileNum).remove();
 		fileCount --;
 	    console.log("delete attachFiles : "+attachFiles);
 	}
