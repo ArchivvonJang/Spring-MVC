@@ -758,6 +758,7 @@ $(function(){
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li>
+				<label for="content"></label>
 				<textarea id="summernote" name="content" title="content" id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
 			</li> 
 			
@@ -815,8 +816,8 @@ $(function(){
 				
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
-			<label for="content" style="display:none;">content</label>
-			<textarea  id="content"  id="sub" class="wordCut"  title="commentContent" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+			<label for="commentContent">댓글</label>
+			<textarea  id="commentContent"  id="sub" class="wordCut"  title="commentContent" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
 				 <!-- name="content" -->
 		</form>
 		</div>

@@ -86,7 +86,7 @@ $(function(){
 	    //수정전 기존의 파일 배열
 	    var initialFiles = new Array();
 	    $('#initialFileDiv').each(function(){
-	    	initialFiles.push($(this));
+	    	initialFiles.push($(this).attr());
 	    	console.log("초기 파일 arr : " +$(this).val());
 	    })
 	    
