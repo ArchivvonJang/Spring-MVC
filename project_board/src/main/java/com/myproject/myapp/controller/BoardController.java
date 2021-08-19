@@ -821,7 +821,6 @@ public class BoardController {
 		
 		try {
 		List<BoardVO> excelList = boardService.excelList(searchKey, searchWord);
-		
 		List<Integer> cnoArr = new ArrayList<Integer>(); 
 		
 		for(int i = 0; i<excelList.size(); i++) {
@@ -920,8 +919,7 @@ public class BoardController {
 			//제목
 			cell = row.createCell(1); 
 			cell.setCellStyle(bodyStyle);
-			cell.setCellValue(excelList.get(i).getLvl()); 
-			cell.setCellValue(excelList.get(i).getSubject()); 
+			cell.setCellValue(excelList.get(i).getLvl() +"번째답글 : "+excelList.get(i).getSubject()); 
 			rno = 1;
 			
 			//답글
@@ -929,7 +927,7 @@ public class BoardController {
 			cell.setCellStyle(bodyStyle);
 			if(excelList.get(i).getLvl() > 0) {
 				
-				cell.setCellValue( excelList.get(i).getLvl() +"번째 답글" ); 
+				cell.setCellValue( excelList.get(i).getLvl() +" 답글" ); 
 			}else {
 				cell.setCellValue("원글");
 			}
