@@ -26,10 +26,23 @@
 //--------------------------------------------- 첨부파일 ------------------------------------------------------------
 //파일 첨부시 함수 실행되도록 하기 
 $(function(){
-
+	
+	// 추가 예정 - 파일 삭제 버튼
+/* 	$(".delBtn").click(function(){
+		if(confirm('해당 파일을 삭제하시겠습니까?')){
+			$(this).prev().attr('name', '');
+			$(this).parent().next().attr('name', 'delFile');
+			$(this).parent().css('display','none');
+		}
+	}); //delBtn  */
+	
 	//$('#filename').on('change',checkFileSize);
 	$('#filename').on('change',checkFile);
-});		
+	
+	
+	
+	
+});	//function end	
 	
 	//파일 업로드 제한되는 파일 형식
 	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
@@ -88,11 +101,13 @@ $(function(){
 	        attachFiles.push(f);
 	    
 	        $('#articlefileChange').append(
-	       //  	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
+	        // 	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
 	       		'<div id="file' + fileNum + '">'
 	       		+ '<font style="font-size:12px"> ' + f.name + '</font>'  
-	       //	+ '<span  onclick="fileDelete(\'file' + fileNum + '\')" style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'
+	       //	+ '<input type="text" value="${f.name}" name="firstFile" style="border:none;" readonly/>'
+	       	//+ '<span  onclick="fileDelete(\'file' + fileNum + '\')" style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'
 	       //	+ '<span   style="margin-left:10px; color:gray; font-weight: bold;">⛝</span><br>'	
+	       	//	+ '<a  class="delBtn" href="" onclick="return false;"  style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'	
 	      		+ '<div/>'
 			);
 	        fileNum ++;
@@ -111,12 +126,17 @@ $(function(){
 	}
 	// 파일 부분 삭제 함수
 	function fileDelete(fileNum){
+		$(this).prev().attr('name', '');
+		$(this).parent().next().attr('name', 'delFile');
+		$(this).parent().css('display','none');
+		
 	    var no = fileNum.replace(/[^0-9]/g, ""); 
 	    attachFiles[no].is_delete = true;
 		$('#' + fileNum).remove();
 		fileCount --;
 	    console.log("delete attachFiles : "+attachFiles);
 	}
+	
 	//폼을 submit
 	function registerAction(){
 		
@@ -128,7 +148,7 @@ $(function(){
 			if(!attachFiles[i].is_delete){
 				formData.append("file", attachFiles[i]);
 			}
-		}
+		}//for end
 
 	//파일업로드 multiple ajax처리
     
@@ -149,9 +169,10 @@ $(function(){
 	   	    	alert("서버오류로 지연되고있습니다. 잠시 후 다시 시도해주시기 바랍니다.");
 	   	     return false;
 	   	      }
-	   	    });
+	   	    }); //ajax end
 	   	    return false;
-	}
+	} // function registerAction end
+	
 	
 //---------------------------------------------   글쓰기 ------------------------------------------------------------
 	//제목

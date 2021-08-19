@@ -1,11 +1,8 @@
 package com.myproject.myapp.controller;
 
-import java.awt.Color;
-import java.beans.PropertyEditorSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -30,7 +27,6 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
-import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
@@ -38,12 +34,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -209,6 +202,17 @@ public class BoardController {
 				//올라간 파일 이름을 담을 DB 리스트
 				List<String> uploadDB = new ArrayList<String>(); // 중복파일 담기
 				List<String> orifilename = new ArrayList<String>(); // 원본파일 이름 담기
+				
+				// 처음 업로드한 파일 담아놓을 배열
+				String firstFile[] = req.getParameterValues("firstFile");
+				
+				//처음 업로드한 값이 존재하면,
+				if(firstFile != null) {
+					for(int j=0; j<firstFile.length; j++) {
+						uploadDB.add(firstFile[j]);
+					}
+				}// if firstFile end
+				
 				//첨부 파일이 존재하면 실행!
 				if(!files.isEmpty()) {
 					//파일 수 만큼 반복 실행
@@ -242,9 +246,11 @@ public class BoardController {
 							//파일 이름 (원본 또는 중복+1 한 파일명 담기 )
 							uploadDB.add(f.getName());//파일의 이름 담기
 							orifilename.add(originalFilename); //원본 파일 이름 담기
+					
 						}// if equals end
 					}//for mf end 
 				}//if isEmpty end
+				
 				
 				//DB에 이름 추가
 				//여러개의 파일명을 하나의 String 으로 만들기 예: 이름 / 이름 /
@@ -259,11 +265,27 @@ public class BoardController {
 				
 				System.out.println("boardWrite get filename --> "+vo.getFilename() + ", orifile 이 있다면, orifilename  ---> " + vo.getOrifilename());				
 				
-				
 		//-----------글 등록 --------
 		  if(boardService.boardInsert(vo)>0) {
+			  
+			  //글쓰다가 삭제한 파일
+				String delFile[] = req.getParameterValues("delFile");
+				if(delFile != null) {
+					for(String dFile : delFile) {
+						try {
+							System.out.println("<< 글쓰기 파일 삭제 성공 >>" );
+							File dFileObj = new File(path, dFile);
+							dFileObj.delete();
+						}catch(Exception e) {
+							System.out.println("<< 글쓰기 파일 삭제 실패 >>" );
+							e.printStackTrace();
+						}
+					}
+				}// if delfile null end
+			  
+			  
 			  mav.addObject("sapvo", sapvo);
-		        mav.setViewName("redirect:boardList");
+		      mav.setViewName("redirect:boardList");
 		    }else {
 		        mav.setViewName("redirect:boardWrite");
 		    }
@@ -360,7 +382,7 @@ public class BoardController {
 		
 		//System.out.println("boardEditOk path  : " + path);
 		
-		// 처음 글쓰기할 때 업로드한 파일
+		// 처음 글쓰기할 때 업로드한 파일 담아놓을 배열
 		String initialFile[] = req.getParameterValues("initialFile");
 		
 		//수정하면서 새로 추가하거나 수정되는 파일
@@ -569,7 +591,7 @@ public class BoardController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		System.out.println("replywriteOk controller in !!! try catch 들어가기 직전!!!");
+		//System.out.println("replywriteOk controller in !!! try catch 들어가기 직전!!!");
 		
 		try {
 			//수정 시 첨부파일이 없으면 에러가 나므로 null을 setting
