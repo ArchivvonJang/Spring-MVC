@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>write form</title>
@@ -96,6 +96,7 @@ $(function(){
 	      		+ '<div/>'
 			);
 	        fileNum ++;
+	        //파일 용량과 확장자를 제한하는 함수로 넘겨준다 
 	        checkFileSize(f.name, f.size);
 	        console.log("check f name : " , f.name," /f size : " ,f.size);
 	      };
@@ -114,7 +115,7 @@ $(function(){
 	    attachFiles[no].is_delete = true;
 		$('#' + fileNum).remove();
 		fileCount --;
-	    console.log("#$#$ attachFiles : "+attachFiles);
+	    console.log("delete attachFiles : "+attachFiles);
 	}
 	//폼을 submit
 	function registerAction(){

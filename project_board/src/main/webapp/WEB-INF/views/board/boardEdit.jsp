@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
-<head>
+<head lang="ko">
 <meta charset="UTF-8">
 <title>Edit Form</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>

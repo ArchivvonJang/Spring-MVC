@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>목록</title>
@@ -180,7 +180,7 @@ function replyNumList(){
 				<option value="content">내용</option>
 				<option value="userid">작성자</option>
 			</select>
-			<input type="text" id="searchWord" name="searchWord" placeholder="검색하기" <c:if test="${sapvo.searchWord != null || sapvo.searchWord != ''}">value="${sapvo.searchWord}"</c:if>><input type="submit" id="searchBtn" value="검색"/>			
+			<input type="text" id="searchWord" name="searchWord" placeholder="검색하기" title="searchWord" <c:if test="${sapvo.searchWord != null || sapvo.searchWord != ''}">value="${sapvo.searchWord}"</c:if>><input type="submit" id="searchBtn" value="검색"/>			
 		</form>	
 		</div>
 		<div id="totalList">

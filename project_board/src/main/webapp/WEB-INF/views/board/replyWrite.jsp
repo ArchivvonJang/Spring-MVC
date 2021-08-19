@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html  lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>답글쓰기</title>
@@ -687,7 +687,7 @@ $(function(){
 				$('#summernote').summernote('focus');
 				return false;
 			}
-	         var t = $('#summernote').currentTarget.innerText;
+	 /*         var t = $('#summernote').currentTarget.innerText;
 	         console.log("submit check t.length :" , t.length);         
     		if(t.length > 500){
     			
@@ -695,14 +695,14 @@ $(function(){
     			alert("내용은 500자까지 작성가능합니다.");
     			$(this).text(t.substring(0,500));
     			return false;
-    		}
+    		} */
 			//---------------- 공백문자
-			if(subject.text()=='&nbsp' || subject.equals('&nbsp')){
+			/* if(subject.text()=='&nbsp' || subject.equals('&nbsp')){
 				console.log("submit subject &nbsp");
 				alert("제목을 다시 입력해주세요.");
 				$('#subject').focus(); 
 				return false;	
-			}	
+			}	 */
 			
 			//-------------------공백 , trim, 정규식 공백 유효성검사
 			//제목

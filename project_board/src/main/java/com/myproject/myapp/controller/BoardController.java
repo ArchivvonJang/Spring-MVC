@@ -198,7 +198,7 @@ public class BoardController {
 		//new MultipartRequest(req 리퀘스트객체, path 어디에 업로드할지, 0 maxsize업로드하는 파일크기에 제한, path 한글인코딩을 뭐로할건지, filerenamepolicy null 객체만 만들어서 넣으면 알아서 리네임)
 	
 				String path = req.getSession().getServletContext().getRealPath("/upload");
-				System.out.println("path ->" +path);
+				//System.out.println("path ->" +path);
 				//파일 업로드를 위해서 multiparthttp객체로 변
 				MultipartHttpServletRequest mr = (MultipartHttpServletRequest) req;
 			
@@ -275,7 +275,7 @@ public class BoardController {
 
 		// 첨부파일
 		BoardVO vo = boardService.boardSelect(no);
-		System.out.println("view filename : " + vo.getFilename());
+		//System.out.println("view filename : " + vo.getFilename());
 		try {
 			
 			if(vo.getFilename()!=null  ) { 	 
@@ -289,9 +289,9 @@ public class BoardController {
 				}
 				
 				String path = req.getSession().getServletContext().getRealPath("/upload");
-				System.out.println("boardview path : "+ path);
-				System.out.println("boardview getFilename with tok : " + tok);
-				System.out.println("board view file name from vo  : " + vo.getFilename());
+				//System.out.println("boardview path : "+ path);
+				//System.out.println("boardview getFilename with tok : " + tok);
+				//System.out.println("board view file name from vo  : " + vo.getFilename());
 				 mav.addObject("file", tok);
 			 }
 			
@@ -358,7 +358,7 @@ public class BoardController {
 		String path = req.getSession().getServletContext().getRealPath("/upload");
 		MultipartHttpServletRequest mr = (MultipartHttpServletRequest)req;
 		
-		System.out.println("boardEditOk path  : " + path);
+		//System.out.println("boardEditOk path  : " + path);
 		
 		// 처음 글쓰기할 때 업로드한 파일
 		String initialFile[] = req.getParameterValues("initialFile");
@@ -402,7 +402,7 @@ public class BoardController {
 							e.printStackTrace();
 						}
 						newUpload.add(ff.getName());
-						System.out.println("수정하면서 새로 추가되는 파일 길이 :" + newUpload.size());
+						//System.out.println("수정하면서 새로 추가되는 파일 길이 :" + newUpload.size());
 					}//if oriname end
 				}// if mf end
 			}// for mf end
@@ -417,11 +417,11 @@ public class BoardController {
 			vo.setFilename(filename);
 		}
 	
-		System.out.println("edit filename -> " + vo.getFilename());
-		System.out.println("edit subject -> " + vo.getSubject());
+		//System.out.println("edit filename -> " + vo.getFilename());
+		//System.out.println("edit subject -> " + vo.getSubject());
 		//전체적인 Edit 삭제 성공 실패 여부 
 		int result = boardService.boardUpdate(vo);
-		System.out.println("EditOk --> update result : " + result);
+		//System.out.println("EditOk --> update result : " + result);
 		if(result>0) {
 		
 			//수정하면서 삭제된 파일들
@@ -486,7 +486,7 @@ public class BoardController {
 		def.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
 		TransactionStatus status = transactionManager.getTransaction(def);	
 		
-		System.out.println("delete no-->"+no);
+		//System.out.println("delete no-->"+no);
 		// 원글 삭제가 가능하고 답글이 있는경우답글까지 지운다. delete
 		// 답글은 제목, 글내용을 삭제된 글입니다.로 바꾼다. update
 		
@@ -509,7 +509,7 @@ public class BoardController {
 			System.out.println("board Delete rdeleteupdate (result) check ---> "+ result);
 		//	System.out.println("comment delete check ---> "+ commentDel);
 			//원글정보 - 원글인지 확인 step=0 or no = ref 인지 확인
-			System.out.println("board delete no :" + no);
+		//	System.out.println("board delete no :" + no);
 			//BoardVO orivo = boardService.getStep(no);
 			//String userpwd = boardService.getUserpwd(no);
 			
@@ -699,7 +699,7 @@ public class BoardController {
 	public List<BoardVO> replyNumList(int ref) {
 		List<BoardVO> rlist = boardService.replySelect(ref);
 		
-		System.out.println("댓글이 씌여지는 board no ---> " + ref );
+	//	System.out.println("댓글이 씌여지는 board no ---> " + ref );
 	
 		for(int i=0; i<rlist.size(); i++) {
 			System.out.println("reply num list ref" +i+ "-> " + rlist.get(i).getRef());
@@ -716,7 +716,7 @@ public class BoardController {
 	public List<CommentVO> commentList(int no) {
 		List<CommentVO> list = boardService.commentAllList(no);
 		
-		System.out.println("댓글이 씌여지는 board no ---> " + no );
+		//System.out.println("댓글이 씌여지는 board no ---> " + no );
 		//댓글 페이징 처리s
 		//String reqPageNum = req.getParameter("pageNum");// pageNum = 1로 sapvo에 이미 기본값 세팅이 되어 있음
 		//if (reqPageNum != null) { // 리퀘스트했을 때, 페이지번호가 있으면 세팅/ 없으면 기본 값=1
@@ -724,7 +724,7 @@ public class BoardController {
 		//}
 		
 		for(int i=0; i<list.size(); i++) {
-			System.out.println("cno" +i+ "-> " + list.get(i).getCno());
+		//	System.out.println("cno" +i+ "-> " + list.get(i).getCno());
 		}
 		
 		return list;
@@ -745,7 +745,7 @@ public class BoardController {
 	@RequestMapping(value="/commentWriteOk", method=RequestMethod.GET)
 	@ResponseBody
 	public int commentWriteOk(CommentVO cvo) {
-		System.out.println("controller comment write ok in!!!");
+		//System.out.println("controller comment write ok in!!!");
 		int result = boardService.commentInsert(cvo);
 		return result;
 	}
@@ -753,7 +753,7 @@ public class BoardController {
 	@RequestMapping("/commentCheck")
 	@ResponseBody
 	public Integer commentCheck(int cno, String userpwd) {
-		System.out.println("controller check comment no ->" + cno);
+		//System.out.println("controller check comment no ->" + cno);
 		System.out.println("controller check comment userpwd -> " + userpwd);
 		return boardService.commentCheck(cno, userpwd);
 	}
@@ -959,7 +959,7 @@ public class BoardController {
 				BoardVO vo = new BoardVO();
 				
 				//items의 갯수
-				System.out.println("items.size()-> "+items.size());
+				//System.out.println("items.size()-> "+items.size());
 				for(FileItem item :items) {
 					//텍스트 필드인지 아니면 첨부파일인지 
 					if(item.isFormField()) { //텍스트 입력할 수 있는 필드냐?라고 묻기
