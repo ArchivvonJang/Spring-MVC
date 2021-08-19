@@ -28,7 +28,7 @@
 		width: 100%; 
 		margin-bottom:15px; 
 	 }
-	#content{
+	#content, #commentContent{
 		 padding:10px; width: 100%; height:500px auto; border:1px solid lightgray; word-break:break-all; overflow:auto;
 		margin-bottom:15px; 
 	}
@@ -41,6 +41,7 @@
 	input[type="text"]::-webkit-outer-spin-button,
 	input[type="text"]::-webkit-inner-spin-button,
 	#content,
+	#commentContent,
 	input[type="text"]
 	 {
     -webkit-appearance: none;
@@ -757,7 +758,7 @@ $(function(){
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li>
-				<textarea id="summernote" name="content" title="content" id="main content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
+				<textarea id="summernote" name="content" title="content" id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
 			</li> 
 			
 			<!-- 첨부파일 -->
@@ -815,8 +816,8 @@ $(function(){
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
 			<label for="content" style="display:none;">content</label>
-			<textarea name="content" id="content"  id="sub" class="wordCut"  title="commentContent" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
-				 
+			<textarea  id="content"  id="sub" class="wordCut"  title="commentContent" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+				 <!-- name="content" -->
 		</form>
 		</div>
 		<hr/>

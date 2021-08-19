@@ -24,11 +24,11 @@ $(function(){
 	$('#filename').on('change',checkFile);
 	//파일 삭제 버튼
 	$(".delBtn").click(function(){
-		//if(confirm('해당 파일을 삭제하시겠습니까?')){
+		if(confirm('해당 파일을 삭제하시겠습니까?')){
 			$(this).prev().attr('name', '');
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).parent().css('display','none');
-		//}
+		}
 	});
 })
 //파일 업로드 제한되는 파일 형식
@@ -103,9 +103,10 @@ $(function(){
 	        // 	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
 	       		'<div id="file' + fileNum + '"  >'
 	       		//+ '<font style="font-size:12px"> ' + f.name + '</font>'  
-	       		+ '<label for="firstFile"></label>'
-	      		+ '<input type="text" value="'+f.name+'" name="firstFile" style="border:none;" readonly/>'
-				+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\') style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
+	       		+ '<label for="initalFile"></label>'
+	      		+ '<input type="text" value="'+f.name+'" name="initialFile" style="border:none;" readonly/>'
+				+ '<a class="delBtn" href="" onclick="deleteBtn()" style=" color:gray; ">⛝</a><br>'
+	      		//+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\') style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
 	      		+ '<div/>'
 	      	
 			);
@@ -123,11 +124,19 @@ $(function(){
 	    //초기화 한다.
 	 //  $("#filename").val("");  
 	}
+	//삭제 함수 1
+	function deleteBtn(){
+		if(confirm('해당 파일을 삭제하시겠습니까?')){
+			$(this).prev().attr('name', '');
+			//$(this).parent().next().parent().attr('name', 'delFile');
+			$(this).css('display','none');
+		}
+	}
 	// 파일 부분 삭제 함수
 	function fileDelete(fileNum){
 		$(this).prev().attr('name', '');
-		$(this).parent().next().attr('name', 'delFile');
-		$(this).parent().css('display','none');
+		$(this).parent().parent().next().attr('name', 'delFile');
+		$(this).parent().parent().css('display','none');
 		
 	    var no = fileNum.replace(/[^0-9]/g, ""); 
 	    attachFiles[no].is_delete = true;
@@ -928,8 +937,8 @@ $(function(){
 	textarea{width:100%;}
 	#notice{margin-top:5px; color:#919C9A; font-size:0.9em;}
 	input[type="file"]{font-color:#BDC5C9; margin:10px; width:800px;}
-	#articlefileChange input[type="text"]{width:250px;}
-	#initialFile{margin-left:10px; width:250px;}
+	#articlefileChange input[type="text"]{width:250px auto;}
+	#initialFile{margin-left:10px; width:250px auto;}
 	#initialFileDiv a{margin:0;}
 	.delBtn{color:gray;}
 </style>
