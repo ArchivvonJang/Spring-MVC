@@ -18,17 +18,155 @@
 <link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/boardStyle.css">
 </head>
 <script>
+// --------------------------------------- 파일수정 -------------------------------------------------
 $(function(){
+	//파일 체킹 함수
+	$('#filename').on('change',checkFile);
 	//파일 삭제 버튼
 	$(".delBtn").click(function(){
-		if(confirm('해당 파일을 삭제하시겠습니까?')){
+		//if(confirm('해당 파일을 삭제하시겠습니까?')){
 			$(this).prev().attr('name', '');
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).parent().css('display','none');
-		}
+		//}
 	});
 })
+//파일 업로드 제한되는 파일 형식
+	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	//최대 크기 
+	var maxSize = 3*1024*1024 //1048579==1MB
+	//파일 크기
+	//var fileSize = $('#filename').getMaxSize();
+	var fileSize=0;
+	// 파일 현재 필드 숫자 totalCount랑 비교값
+	var fileCount = 0;
+	// 해당 숫자를 수정하여 전체 업로드 갯수를 정한다.
+	var totalCount = 5;
+	// 파일 고유넘버
+	var fileNum = 0;
+	// 첨부파일 배열
+	var attachFiles = new Array();
+	//var filename = $('#filename').val();
+	
+	//파일용량, 확장자 체크	
+	function checkFileSize(fileName, fileSize){
+		if(fileSize >= maxSize){
+			alert("파일 사이즈가 초과되었습니다.\n파일은 1MB미만으로 첨부해주세요.");
+			 $("#filename").val(""); 
+			 $('#articlefileChange').html("");
+			return false;
+		}
+		if(fileReg.test(fileName)){
+			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			 $("#filename").val(""); 
+			 $('#articlefileChange').html("");
+			return false;
+		}
+	}
+	//파일 리스트 나오게 하기, 삭제는 주석처리함 
+	function checkFile(e){
+		console.log("check file function in!");
+		//$('#filename').val("");
+		var files = e.target.files;
+	    // 파일 배열 담기
+	    var filesArr = Array.prototype.slice.call(files);
+	    //초기화
+	    $('#articlefileChange').html("");
+	    //수정전 기존의 파일 배열
+	    var initialFiles = $('#initialFileDiv').files;
+	    var initialFilesArr = Array.prototype.slice.call(initialFiles);
+	    console.log("initialFiles : " + initialFiles );
+	    console.log("initialFilesArr : " + initialFilesArr );
+	    
+	    // 파일 개수 확인 및 제한
+	    if (fileCount + filesArr.length > totalCount) {
+	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
+	        $("#filename").val("");  
+	      return false;
+	    } else {
+	    	 fileCount = fileCount + filesArr.length;
+	    }
+	    
+	 // 각각의 파일 배열담기 및 기타
+	    filesArr.forEach(function (f) {
+	      var reader = new FileReader();
+	      reader.onload = function (e) {
+	        attachFiles.push(f);
+	    
+	        $('#articlefileChange').append(
+	        // 	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
+	       		'<div id="file' + fileNum + '"  >'
+	       		//+ '<font style="font-size:12px"> ' + f.name + '</font>'  
+	       		+ '<label for="firstFile"></label>'
+	      		+ '<input type="text" value="'+f.name+'" name="firstFile" style="border:none;" readonly/>'
+				+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\') style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
+	      		+ '<div/>'
+	      	
+			);
+	        fileNum ++;
+	        //파일 용량과 확장자를 제한하는 함수로 넘겨준다 
+	        checkFileSize(f.name, f.size);
+	        console.log("check f name : " , f.name," /f size : " ,f.size);
+	      };
+	      reader.readAsDataURL(f);
+	    });
+	    console.log("check attachFiles : " , attachFiles);
+	    console.log("check filesArr : ", filesArr);
+	    console.log("check fileNum : " ,fileNum);
+	   
+	    //초기화 한다.
+	 //  $("#filename").val("");  
+	}
+	// 파일 부분 삭제 함수
+	function fileDelete(fileNum){
+		$(this).prev().attr('name', '');
+		$(this).parent().next().attr('name', 'delFile');
+		$(this).parent().css('display','none');
+		
+	    var no = fileNum.replace(/[^0-9]/g, ""); 
+	    attachFiles[no].is_delete = true;
+		$('#' + fileNum).remove();
+		fileCount --;
+	    console.log("delete attachFiles : "+attachFiles);
+	}
+	
+	//폼을 submit
+	function registerAction(){
+		
+		var form = $("form")[0];        
+		var formData = new FormData(form);
+		for (var i = 0; i < attachFiles.length; i++) {
+			console.log("attachFiles length : " + attachFiles.length);
+			// 삭제 안한것만 담아 준다. 
+			if(!attachFiles[i].is_delete){
+				formData.append("file", attachFiles[i]);
+			}
+		}//for end
 
+	//파일업로드 multiple ajax처리
+    
+		$.ajax({
+	   	      type: "POST",
+	   	   	  enctype: "multipart/form-data",
+	   	      url: "/upload",
+	       	  data : formData,
+	       	  processData: false,
+	   	      contentType: false,
+	   	      success: function (data) {
+	   	    	if(JSON.parse(data)['result'] == "OK"){
+	   	    		alert("파일업로드 성공");
+				} else
+					alert("서버내 오류로 처리가 지연되고있습니다. 잠시 후 다시 시도해주세요");
+	   	      },
+	   	      error: function () {
+	   	    	alert("서버오류로 지연되고있습니다. 잠시 후 다시 시도해주시기 바랍니다.");
+	   	     return false;
+	   	      }
+	   	    }); //ajax end
+	   	    return false;
+	} // function registerAction end
+	
+// ----------------------------------------- 수정하기 ------------------------------------------------
 
 //작성자
 function useridInput(e){
@@ -782,7 +920,12 @@ $(function(){
 	#pwdMsg{color:red;}
 	#pwdApproval{color:green; display:none;}
 	textarea{width:100%;}
-
+	#notice{margin-top:5px; color:#919C9A; font-size:0.9em;}
+	input[type="file"]{font-color:#BDC5C9; margin:10px; width:800px;}
+	#articlefileChange input[type="text"]{width:250px;}
+	#initialFile{margin-left:10px; width:250px;}
+	#initialFileDiv a{margin:0;}
+	.delBtn{color:gray;}
 </style>
 <body>
 	<div class="container">
@@ -826,19 +969,19 @@ $(function(){
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
 				<li >
-					<label for="file" for="filename" class="label">첨부파일</label>  <br/>
+					<label for="file" for="filename" class="label">첨부파일</label> <span id="notice">첨부파일은 최대 1MB, 최대 5개까지 업로드 가능합니다.</span> <br/>
 							<c:forEach var="file" items="${file}" varStatus="idx">
 								
-								<div>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="text" value="${file}" name="initialFile" style="border:none;" readonly/>
-									<a class="delBtn" href="" onclick="return false;" style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>
+								<div id="initialFileDiv">
+						<!-- 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+									<label for="initialFile" style="display:none;"></label>
+									<input type="text" value="${file}" name="initialFile" style="border:none;" id="initialFile" readonly/>
+									<a class="delBtn" href="" onclick="return false;" style=" color:gray; ">⛝</a><br>
 								</div>
 								<input type="hidden" name="" value="${file}">
 							</c:forEach>
-					
-					<br/>
-					<input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" id="filename"  multiple="multiple" />
+					<div id="articlefileChange"></div>
+					<input type="file" name="file" id="filename" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, image/*, text/html, video/*, audio/*, .pdf" multiple="multiple" />
 				</li>
 				<li id="btnLine">
 					<input type="submit" value="수정하기" class="btn"/>

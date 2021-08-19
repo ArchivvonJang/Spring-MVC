@@ -756,7 +756,10 @@ $(function(){
 			<!-- 내용 -->
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
-			<li><textarea id="summernote"  id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea></li> 
+			<li>
+				<label for="content"></label>
+				<textarea id="summernote" title="content" id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
+			</li> 
 			
 			<!-- 첨부파일 -->
 			<c:if test="${vo.filename != null }">
@@ -812,7 +815,8 @@ $(function(){
 				
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
-			<textarea name="content" id="content"  id="sub" class="wordCut" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+			<label for="content"></label>
+			<textarea name="content" id="content"  id="sub" class="wordCut"  title="content" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
 				 
 		</form>
 		</div>

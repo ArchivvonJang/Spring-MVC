@@ -798,6 +798,7 @@ public class BoardController {
 		return boardService.commentDelete(cno); // !! 문제 해결: param 값으로 cno를 입력받으면서 no를 넣고 있었음!!!!! 
 	}
 	
+//------------------------------------ 엑셀 --------------------------------------	
 	//엑셀 파일 다운 업로드 
 	@RequestMapping(value="/excelDownload", method=RequestMethod.POST)
 	@ResponseBody
@@ -874,26 +875,30 @@ public class BoardController {
 		cell.setCellStyle(headerStyle);				
 			
 		cell = row.createCell(2);
-		cell.setCellValue("댓글");
+		cell.setCellValue("답글");
 		cell.setCellStyle(headerStyle);
 		
 		cell = row.createCell(3);
+		cell.setCellValue("댓글");
+		cell.setCellStyle(headerStyle);
+		
+		cell = row.createCell(4);
 		cell.setCellValue("작성자");
 		cell.setCellStyle(headerStyle);
 	
-		cell = row.createCell(4);
+		cell = row.createCell(5);
 		cell.setCellValue("첨부파일");
 		cell.setCellStyle(headerStyle);
 		
-		cell = row.createCell(5);
+		cell = row.createCell(6);
 		cell.setCellValue("조회수");
 		cell.setCellStyle(headerStyle);
 		
-		cell = row.createCell(6);
+		cell = row.createCell(7);
 		cell.setCellValue("등록일");
 		cell.setCellStyle(headerStyle);
 		
-		String[] headerArr = {"번호", "제목", "댓글", "작성자", "첨부파일", "조회수", "등록일"};
+		String[] headerArr = {"번호","제목","답글" ,"댓글", "작성자", "첨부파일", "조회수", "등록일"};
 		//1행 (컬렴명)
 		row = sheet.createRow(rno++);
 		for(int i=0; i<headerArr.length; i++) {
@@ -918,28 +923,41 @@ public class BoardController {
 			cell.setCellValue(excelList.get(i).getLvl()); 
 			cell.setCellValue(excelList.get(i).getSubject()); 
 			rno = 1;
-			//댓글
+			
+			//답글
 			cell = row.createCell(2); 
+			cell.setCellStyle(bodyStyle);
+			if(excelList.get(i).getLvl() > 0) {
+				
+				cell.setCellValue( excelList.get(i).getLvl() +"번째 답글" ); 
+			}else {
+				cell.setCellValue("원글");
+			}
+			rno = 1;
+			
+			//댓글
+			cell = row.createCell(3); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(cnoArr.get(i)); 
 			rno = 1;
+			
 			//작성자
-			cell = row.createCell(3); 
+			cell = row.createCell(4); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getUserid());
 			rno = 1;
 			//첨부파일
-			cell = row.createCell(4); 
+			cell = row.createCell(5); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getFilename());
 			rno = 1;
 			//조회수
-			cell = row.createCell(5); 
+			cell = row.createCell(6); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getHit());
 			rno = 1;
 			//등록일
-			cell = row.createCell(6);
+			cell = row.createCell(7);
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getWritedate()); 
 			rno = 1;
