@@ -24,17 +24,27 @@ $(function(){
 	$('#filename').on('change',checkFile);
 	//파일 삭제 버튼
 	$(".delBtn").click(function(){
-		if(confirm('해당 파일을 삭제하시겠습니까?')){
+		//if(confirm('해당 파일을 삭제하시겠습니까?')){
 			$(this).prev().attr('name', '');
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).parent().css('display','none');
-		}
+		//}
+	});
+	
+	$(".delBtnA").click(function(){
+		//if(confirm('해당 파일을 삭제하시겠습니까?')){
+			console.lg("파일 삭제!");
+			$(this).prev().attr('name', ''); 
+			$(this).parent().next().attr('name', 'delFile');
+			$(this).prev().css('display','none');
+			$(this).css('display','none');
+		//}
 	});
 })
 //파일 업로드 제한되는 파일 형식
 	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 	//최대 크기 
-	var maxSize = 3*1024*1024 //1048579==1MB
+	var maxSize = 3*1024*1024; //1048579==1MB
 	//파일 크기
 	//var fileSize = $('#filename').getMaxSize();
 	var fileSize=0;
@@ -77,12 +87,14 @@ $(function(){
 	    var initialFiles = new Array();
 	    $('#initialFileDiv').each(function(){
 	    	initialFiles.push($(this));
+	    	console.log("초기 파일 arr : " +$(this).val());
 	    })
 	    
 	    var initialFilesArr = Array.prototype.slice.call(initialFiles);
 	    
 	    console.log("initialFiles : " + initialFiles );
 	    console.log("initialFilesArr : " + initialFilesArr );
+	    console.log("initialFilesArr 의 length : " + initialFilesArr.length );
 	    
 	    // 파일 개수 확인 및 제한
 	    if (fileCount + filesArr.length > totalCount) {
@@ -105,10 +117,11 @@ $(function(){
 	       		//+ '<font style="font-size:12px"> ' + f.name + '</font>'  
 	       		+ '<label for="initalFile"></label>'
 	      		+ '<input type="text" value="'+f.name+'" name="initialFile" style="border:none;" readonly/>'
-				+ '<a class="delBtn" href="" onclick="deleteBtn()" style=" color:gray; ">⛝</a><br>'
+	      		+ '<a class="delBtnA" href="" onclick="return false;" style=" color:gray; ">⛝</a><br>'
+				//+ '<a  href="" onclick="deleteBtn()" style=" color:gray; ">⛝</a><br>'
 	      		//+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\') style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
 	      		+ '<div/>'
-	      	
+	      		+ '<input type="hidden" name="" value="'+f.name+'">'
 			);
 	        fileNum ++;
 	        //파일 용량과 확장자를 제한하는 함수로 넘겨준다 
@@ -126,9 +139,12 @@ $(function(){
 	}
 	//삭제 함수 1
 	function deleteBtn(){
+		 console.log("chcek delete Btn function in");
 		if(confirm('해당 파일을 삭제하시겠습니까?')){
-			$(this).prev().attr('name', '');
-			//$(this).parent().next().parent().attr('name', 'delFile');
+			console.lg("파일 삭제 한다고 확인 누름!");
+			$(this).prev().attr('name', ''); 
+			$(this).parent().next().attr('name', 'delFile');
+			$(this).prev().css('display','none');
 			$(this).css('display','none');
 		}
 	}

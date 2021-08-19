@@ -30,7 +30,7 @@ $(function(){
 	//파일 업로드 제한되는 파일 형식
 	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 	//최대 크기 
-	var maxSize = 3*1024*1024 //1048579==1MB
+	var maxSize = 3*1024*1024; //1048579==1MB
 	//파일 크기
 	//var fileSize = $('#filename').getMaxSize();
 	var fileSize=0;

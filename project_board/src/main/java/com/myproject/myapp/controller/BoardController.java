@@ -874,30 +874,26 @@ public class BoardController {
 		cell.setCellStyle(headerStyle);				
 			
 		cell = row.createCell(2);
-		cell.setCellValue("답글");
-		cell.setCellStyle(headerStyle);
-		
-		cell = row.createCell(3);
 		cell.setCellValue("댓글");
 		cell.setCellStyle(headerStyle);
 		
-		cell = row.createCell(4);
+		cell = row.createCell(3);
 		cell.setCellValue("작성자");
 		cell.setCellStyle(headerStyle);
 	
-		cell = row.createCell(5);
+		cell = row.createCell(4);
 		cell.setCellValue("첨부파일");
 		cell.setCellStyle(headerStyle);
 		
-		cell = row.createCell(6);
+		cell = row.createCell(5);
 		cell.setCellValue("조회수");
 		cell.setCellStyle(headerStyle);
 		
-		cell = row.createCell(7);
+		cell = row.createCell(6);
 		cell.setCellValue("등록일");
 		cell.setCellStyle(headerStyle);
 		
-		String[] headerArr = {"번호","제목","답글" ,"댓글", "작성자", "첨부파일", "조회수", "등록일"};
+		String[] headerArr = {"번호","제목","댓글", "작성자", "첨부파일", "조회수", "등록일"};
 		//1행 (컬렴명)
 		row = sheet.createRow(rno++);
 		for(int i=0; i<headerArr.length; i++) {
@@ -916,46 +912,44 @@ public class BoardController {
 			cell.setCellStyle(bodyStyle); //스타일 적용
 			cell.setCellValue(esize--); //전체 사이즈 == 전체 목록 갯수 최신순일수록 높은 번호로 나오도록
 			rno = 1;
+			
 			//제목
 			cell = row.createCell(1); 
 			cell.setCellStyle(bodyStyle);
-			cell.setCellValue(excelList.get(i).getLvl() +"번째답글 : "+excelList.get(i).getSubject()); 
-			rno = 1;
-			
-			//답글
-			cell = row.createCell(2); 
-			cell.setCellStyle(bodyStyle);
-			if(excelList.get(i).getLvl() > 0) {
-				
-				cell.setCellValue( excelList.get(i).getLvl() +" 답글" ); 
+			if(excelList.get(i).getLvl() > 0) {	
+				for(int j = 0; j < excelList.get(i).getStep() ; j++) {
+					cell.setCellValue( "RE: "); 
+				}
+				cell.setCellValue( "("+excelList.get(i).getLvl()+") "+excelList.get(i).getStep()+"번째 답글 : " + excelList.get(i).getSubject()); 
 			}else {
-				cell.setCellValue("원글");
+				cell.setCellValue(excelList.get(i).getSubject()); 
 			}
 			rno = 1;
 			
+			
 			//댓글
-			cell = row.createCell(3); 
+			cell = row.createCell(2); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(cnoArr.get(i)); 
 			rno = 1;
 			
 			//작성자
-			cell = row.createCell(4); 
+			cell = row.createCell(3); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getUserid());
 			rno = 1;
 			//첨부파일
-			cell = row.createCell(5); 
+			cell = row.createCell(4); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getFilename());
 			rno = 1;
 			//조회수
-			cell = row.createCell(6); 
+			cell = row.createCell(5); 
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getHit());
 			rno = 1;
 			//등록일
-			cell = row.createCell(7);
+			cell = row.createCell(6);
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(excelList.get(i).getWritedate()); 
 			rno = 1;
