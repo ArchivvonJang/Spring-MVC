@@ -24,22 +24,22 @@ $(function(){
 	$('#filename').on('change',checkFile);
 	//파일 삭제 버튼
 	$(".delBtn").click(function(){
-		//if(confirm('해당 파일을 삭제하시겠습니까?')){
+		if(confirm('해당 파일을 삭제하시겠습니까?')){
 			$(this).prev().attr('name', '');
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).parent().css('display','none');
-		//}
+		}
 	});
 	
-	$(".delBtnA").click(function(){
-		//if(confirm('해당 파일을 삭제하시겠습니까?')){
+/* 	$(".delBtnA").click(function(){
+		if(confirm('해당 파일을 삭제하시겠습니까?')){
 			console.lg("파일 삭제!");
 			$(this).prev().attr('name', ''); 
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).prev().css('display','none');
 			$(this).css('display','none');
-		//}
-	});
+		}
+	}); */
 })
 //파일 업로드 제한되는 파일 형식
 	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
@@ -80,16 +80,20 @@ $(function(){
 		var files = e.target.files;
 	    // 파일 배열 담기
 	    var filesArr = Array.prototype.slice.call(files);
+	    
 	    //초기화
-	    $('#articlefileChange').html("");
-	  
+	    $('#articlefileChange').html("");	  
 	    //수정전 기존의 파일 배열
 	    var initialFiles = new Array();
 	    $('#initialFileDiv').each(function(){
-	    	initialFiles.push($(this).attr());
-	    	console.log("초기 파일 arr : " +$(this).val());
-	    })
+	    	initialFiles.push($(this).attr('#initialFile'));
+	    	console.log("초기 파일  : " +$(this));
+	    }) 
 	    
+	   /*  var initialFiles = $.makeArray($("#initialFileDiv").map(function(){
+	    		return $(this).attr("initialFile");
+	    	}));
+	     */
 	    var initialFilesArr = Array.prototype.slice.call(initialFiles);
 	    
 	    console.log("initialFiles : " + initialFiles );
@@ -97,12 +101,18 @@ $(function(){
 	    console.log("initialFilesArr 의 length : " + initialFilesArr.length );
 	    
 	    // 파일 개수 확인 및 제한
-	    if (fileCount + filesArr.length > totalCount) {
+	    if (fileCount + filesArr.length + initialFilesArr.length > totalCount) {
 	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
-	        $("#filename").val("");  
+	       	console.log("갯수 : " + fileCount + filesArr.length );
+	       	console.log("fileCount : "+ fileCount );
+	       
+	       	$("#filename").val("");  
+	       	fileCount = 0;
+	        
 	      return false;
 	    } else {
 	    	 fileCount = fileCount + filesArr.length;
+	    	// $("#filename").val(""); 
 	    }
 	    
 	 // 각각의 파일 배열담기 및 기타
@@ -117,7 +127,7 @@ $(function(){
 	       		//+ '<font style="font-size:12px"> ' + f.name + '</font>'  
 	       		+ '<label for="initalFile"></label>'
 	      		+ '<input type="text" value="'+f.name+'" name="initialFile" style="border:none;" readonly/>'
-	      		+ '<a class="delBtnA" href="" onclick="return false;" style=" color:gray; ">⛝</a><br>'
+	      		+ '<a class="delBtnA" href="" onclick="fileDelete(\'file' + fileNum + '\')" style=" color:gray; ">⛝</a><br>'
 				//+ '<a  href="" onclick="deleteBtn()" style=" color:gray; ">⛝</a><br>'
 	      		//+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\') style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
 	      		+ '<div/>'
@@ -132,7 +142,7 @@ $(function(){
 	    });
 	    console.log("check attachFiles : " , attachFiles);
 	    console.log("check filesArr : ", filesArr);
-	    console.log("check fileNum : " ,fileNum);
+	    console.log("check filelength : " ,filesArr.length);
 	   
 	    //초기화 한다.
 	 //  $("#filename").val("");  
@@ -140,8 +150,10 @@ $(function(){
 	//삭제 함수 1
 	function deleteBtn(){
 		 console.log("chcek delete Btn function in");
+			console.log("this value : " + $(this).val());
 		if(confirm('해당 파일을 삭제하시겠습니까?')){
 			console.lg("파일 삭제 한다고 확인 누름!");
+		
 			$(this).prev().attr('name', ''); 
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).prev().css('display','none');
@@ -150,9 +162,10 @@ $(function(){
 	}
 	// 파일 부분 삭제 함수
 	function fileDelete(fileNum){
-		$(this).prev().attr('name', '');
-		$(this).parent().parent().next().attr('name', 'delFile');
-		$(this).parent().parent().css('display','none');
+		/* $(this).prev().attr('name', ''); 
+		$(this).parent().next().attr('name', 'delFile');
+		$(this).prev().css('display','none');
+		$(this).css('display','none'); */
 		
 	    var no = fileNum.replace(/[^0-9]/g, ""); 
 	    attachFiles[no].is_delete = true;
@@ -176,7 +189,7 @@ $(function(){
 
 	//파일업로드 multiple ajax처리
     
-		$.ajax({
+	 	$.ajax({
 	   	      type: "POST",
 	   	   	  enctype: "multipart/form-data",
 	   	      url: "/upload",
@@ -191,10 +204,10 @@ $(function(){
 	   	      },
 	   	      error: function () {
 	   	    	alert("서버오류로 지연되고있습니다. 잠시 후 다시 시도해주시기 바랍니다.");
-	   	     return false;
+	   	  //   return false;
 	   	      }
-	   	    }); //ajax end
-	   	    return false;
+	   	    }); //ajax end */
+	   	 //   return false;
 	} // function registerAction end
 	
 // ----------------------------------------- 수정하기 ------------------------------------------------
@@ -643,16 +656,17 @@ $(function(){
 		}
 	 
 		//유효성검사
-		var idreg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
-		//var pwdreg = /[0-9]$/;
-		var pwdreg = userpwd.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
-		var none=/^<p>(\s*&nbsp;\s*)*<\/p>$/;
 		//변수에 각 input의 value 담기	
 		var subject = $('#subject').val(); 
 		var userid = $('#userid').val();	
-		var userpwd = $('#userpwd').val();
+		//var userpwd = $('#userpwd').val();
 		var content = $('#content').val();
 		console.log("subject : ", subject, " , userid : ", userid);
+		var idreg = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/;
+		//var pwdreg = /[0-9]$/;
+		//var pwdreg = userpwd.match(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
+		var none=/^<p>(\s*&nbsp;\s*)*<\/p>$/;
+		
 		//정규식 유효성검사
 		//var subcheck = subject.value.test(/([a-zA-Z0-9].*[!,@,#,$,%,^,&,*,?,_,~])|([!,@,#,$,%,^,&,*,?,_,~].*[a-zA-Z0-9])/);
 		//var pwdcheck = userpwd.value.test(pwdreg);
@@ -678,12 +692,12 @@ $(function(){
 			$('#subject').focus(); 
 			return false;
 		}
-		if( subject.text()==' '){
+		/* if( subject.text()==' '){
 			console.log("submit subject text blank");
 			alert("제목을 입력해주세요.");
 			$('#subject').focus(); 
 			return false;
-		}
+		} */
 		//작성자
 		if(userid=='' || userid==null){
 			console.log("submit userid null and blank");
@@ -692,7 +706,7 @@ $(function(){
 			return false;
 		}
 		//비밀번호
-
+/* 
 		if($("#userpwd").val().length<6){
 			console.log("submit userpwd length");
 			console.log("password length : ", $("#userpwd").val().length);
@@ -713,7 +727,7 @@ $(function(){
 			alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 			$('#userpwd').focus(); 	
 			return false;
-		}
+		} */
 		//summernote
 		var content = $($("#summernote").summernote("code")).text();
 		var maxlength = 500;

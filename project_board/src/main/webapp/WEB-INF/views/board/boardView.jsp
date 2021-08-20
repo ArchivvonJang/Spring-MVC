@@ -287,7 +287,7 @@ $(function(){
 							tag += "<li> <span>("+ num +") </span> &nbsp; <span  escapeXml='true'> 작성자 : "+o.userid + "</span> &nbsp;&nbsp; [ " + o.cdate + " ] </li>";
 							tag += "<li style='margin-top:6px;'   escapeXml='true'>";
 							//tag += "	<input type='text' value='" + o.content  + "'readonly class='wordcut' style='height:80px; width:100%;'>";
-							tag += "	<textarea name='content' id='content'  id='sub' class='wordCut'  maxlength='150' style='margin-bottom:0px; width:100%; readonly '>"+o.content+"</textarea>";
+							tag += "	<textarea name='content' id='commentContent'  id='sub' class='wordCut'  maxlength='150' style='margin-bottom:0px; width:100%; readonly '>"+o.content+"</textarea>";
 							
 							tag += "	<span  class='"+o.cno+"'><button class='edit btn' >수정</button><button class='delete btn'>삭제</button></span>"
 							tag += "</li>";
@@ -758,8 +758,8 @@ $(function(){
 			<%-- <li>< id="content"><c:out value="${vo.content}" escapeXml="true"></c:out></li> --%>
 			<%-- 	<li><textarea id="content" readonly>${vo.content}</textarea></li>  --%>
 			<li>
-				<label for="content"></label>
-				<textarea id="summernote" name="content" title="content" id="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
+				<label for="summernote"></label>
+				<textarea id="summernote" name="content" readonly><c:out value="${vo.content}" escapeXml="true"></c:out></textarea>
 			</li> 
 			
 			<!-- 첨부파일 -->
@@ -816,8 +816,8 @@ $(function(){
 				
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
-			<label for="commentContent">댓글</label>
-			<textarea  id="commentContent"  id="sub" class="wordCut"  title="commentContent" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+			<label for="content"></label>
+			<textarea  id="content sub"  name="content"  class="wordCut"  title="content" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
 				 <!-- name="content" -->
 		</form>
 		</div>

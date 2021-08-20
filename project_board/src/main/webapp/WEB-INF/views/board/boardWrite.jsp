@@ -985,7 +985,7 @@ $(function(){
 				<!-- 내용 -->
 				<li>
 					<label for="content"></label>
-					<textarea id="summernote"  name="content" title="content" id="content"  rows="10" cols="" maxlength="500"  oninput="lengthCheck()"></textarea >
+					<textarea id="summernote" class="content"  name="content" title="content"  rows="10" cols="" maxlength="500"  oninput="lengthCheck()"></textarea >
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
 				<!-- 첨부파일 -->
