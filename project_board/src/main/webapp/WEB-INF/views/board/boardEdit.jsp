@@ -82,7 +82,8 @@ $(function(){
 	    var filesArr = Array.prototype.slice.call(files);
 	    
 	    //초기화
-	    $('#articlefileChange').html("");	  
+	    $('#articlefileChange').html("");	
+	    
 	    //수정전 기존의 파일 배열
 	    var initialFiles = new Array();
 	    $('#initialFileDiv').each(function(){
@@ -125,8 +126,8 @@ $(function(){
 	        // 	'<div id="file' + fileNum + '" onclick="fileDelete(\'file' + fileNum + '\')">'
 	       		'<div id="file' + fileNum + '"  >'
 	       		//+ '<font style="font-size:12px"> ' + f.name + '</font>'  
-	       		+ '<label for="initalFile"></label>'
-	      		+ '<input type="text" value="'+f.name+'" name="initialFile" style="border:none;" readonly/>'
+	       		+ '<label for="file"></label>'
+	      		+ '<input type="text" value="'+f.name+'" name="file" style="border:none;" readonly/>'
 	      		+ '<a class="delBtnA" href="" onclick="fileDelete(\'file' + fileNum + '\')" style=" color:gray; ">⛝</a><br>'
 				//+ '<a  href="" onclick="deleteBtn()" style=" color:gray; ">⛝</a><br>'
 	      		//+ '<a class="delBtn" href="" onclick="fileDelete(\'file' + fileNum + '\') style="margin-left:10px; color:gray; font-weight: bold;">⛝</a><br>'
@@ -189,7 +190,7 @@ $(function(){
 
 	//파일업로드 multiple ajax처리
     
-	 	$.ajax({
+/* 	 	$.ajax({
 	   	      type: "POST",
 	   	   	  enctype: "multipart/form-data",
 	   	      url: "/upload",
@@ -204,10 +205,13 @@ $(function(){
 	   	      },
 	   	      error: function () {
 	   	    	alert("서버오류로 지연되고있습니다. 잠시 후 다시 시도해주시기 바랍니다.");
-	   	  //   return false;
+	   	    return false;
 	   	      }
-	   	    }); //ajax end */
-	   	 //   return false;
+	   	    }); //ajax end 
+	   	    
+	   	    */ 
+	   	    
+	   	    return false;
 	} // function registerAction end
 	
 // ----------------------------------------- 수정하기 ------------------------------------------------
@@ -756,7 +760,7 @@ $(function(){
 			$('#summernote').summernote('focus');
 			return false;
 		}
-         var t = $('#summernote').currentTarget.innerText;
+        /*  var t = $('#summernote').currentTarget.innerText;
          console.log("submit check t.length :" , t.length);         
 		if(t.length > 500){
 			
@@ -765,15 +769,15 @@ $(function(){
 			alert("내용은 500자까지 작성가능합니다.");
 			$(this).text(t.substring(0,500));
 			return false;
-		}
+		} */
 		//---------------- 공백문자
-		if(subject.text()=='&nbsp' || subject.equals('&nbsp')){
+		/* if(subject.text()=='&nbsp' || subject.equals('&nbsp')){
 			
 			console.log("submit subject &nbsp");
 			alert("제목을 다시 입력해주세요.");
 			$('#subject').focus(); 
 			return false;	
-		}	
+		}	 */
 		//-------------------공백 , trim, 정규식 공백 유효성검사
 		//제목
 		if($("#subject").val().trim()==""){

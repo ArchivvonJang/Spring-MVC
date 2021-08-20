@@ -151,7 +151,7 @@ $(function(){
 		}//for end
 
 	//파일업로드 multiple ajax처리
-    
+/*     
 		$.ajax({
 	   	      type: "POST",
 	   	   	  enctype: "multipart/form-data",
@@ -170,7 +170,7 @@ $(function(){
 	   	     return false;
 	   	      }
 	   	    }); //ajax end
-	   	    return false;
+	   	    return false; */
 	} // function registerAction end
 	
 	
@@ -836,12 +836,12 @@ $(function(){
 			}
 			// ----------------글자 수 
 			//제목
-			if(subject.val.length>100){
+			/* if(subject.val.length>100){
 				console.log("submit subject value length check");
 				alert("제목을 다시 입력해주세요.");
 				$('#subject').focus(); 
 				return false;	
-			}
+			} */
 			//비밀번호 10자리 숫자만 입력하도록 조건 걸어놓기
 			if($("#userpwd").val().length < 6){
 				alert("DDDD 비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
@@ -879,17 +879,17 @@ $(function(){
 				alert("제목을 다시 입력해주세요.");
 				return false;
 			}
-			if(!idreg.test(document.getElementById("subject").value)){
+		/* 	if(!idreg.test(document.getElementById("subject").value)){
 				console.log("submit regexp subject + idreg 1");
 				alert("제목은 한글 또는 영어, 숫자로 입력해주세요");
 				return false;
-			}
-			if(!idreg.test(subject)){
+			} */
+		/* 	if(!idreg.test(subject)){
 				console.log("submit regexp subject + idreg 2");
 				alert("제목은 한글 또는 영어, 숫자로 입력해주세요");
 				return false;
 			}
-			
+			 */
 			//작성자
 			if(!idreg.test(document.getElementById("userid").value)){
 				console.log("submit regexp userid + idreg 2");
@@ -912,11 +912,11 @@ $(function(){
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				return false;
 			}
-			if(!pwdreg.match(document.getElementById("userpwd").value)){
+			/* if(!pwdreg.match(document.getElementById("userpwd").value)){
 				console.log("I submit regexp pwd + pwdreg match");
 				alert("비밀번호는 문자, 숫자, 특수문자의 조합으로 6~10자리로 입력해주세요.");
 				return false;
-			}
+			} */
 			if(none.test(document.getElementById("userpwd").value)){
 				console.log("J submit regexp pwd + none");
 				alert("비밀번호를 다시 입력해주세요.");
@@ -935,6 +935,7 @@ $(function(){
 				$("#userpwd").focus();
 				return false;
 			}
+			console.log("~~~~ submit 의 끝 ~~~~~");
 			return true;
 		//	return true; 
 		}); //submit end

@@ -189,7 +189,7 @@ public class BoardController {
 		//---------- 파일 업로드 -------------
 		//파일 업로드 - mutlpartrequest
 		//new MultipartRequest(req 리퀘스트객체, path 어디에 업로드할지, 0 maxsize업로드하는 파일크기에 제한, path 한글인코딩을 뭐로할건지, filerenamepolicy null 객체만 만들어서 넣으면 알아서 리네임)
-	
+	System.out.println("controller boardWriteOk in!");
 				String path = req.getSession().getServletContext().getRealPath("/upload");
 				//System.out.println("path ->" +path);
 				//파일 업로드를 위해서 multiparthttp객체로 변
@@ -207,14 +207,15 @@ public class BoardController {
 				String firstFile[] = req.getParameterValues("firstFile");
 				
 				//처음 업로드한 값이 존재하면,
-				if(firstFile != null) {
-					for(int j=0; j<firstFile.length; j++) {
-						uploadDB.add(firstFile[j]);
-					}
-				}// if firstFile end
+			//	if(firstFile != null) {
+			//		for(int j=0; j<firstFile.length; j++) {
+			//			uploadDB.add(firstFile[j]);
+			//		}
+			//	}// if firstFile end
 				
 				//첨부 파일이 존재하면 실행!
 				if(!files.isEmpty()) {
+					System.out.println("controller boardWriteOk   file is not empty function  in!");
 					//파일 수 만큼 반복 실행
 					for(MultipartFile mf : files) { 
 						//파일 이름을 담을 변수
@@ -267,7 +268,7 @@ public class BoardController {
 				
 		//-----------글 등록 --------
 		  if(boardService.boardInsert(vo)>0) {
-			  
+			  System.out.println("controller boardWriteOk result over zero! in!");
 			  //글쓰다가 삭제한 파일
 				String delFile[] = req.getParameterValues("delFile");
 				if(delFile != null) {
