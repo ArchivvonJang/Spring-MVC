@@ -30,7 +30,7 @@ $(function(){
 	//파일 업로드 제한되는 파일 형식
 	var fileReg = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
 	//최대 크기 
-	var maxSize = 3*1024*1024; //1048579==1MB
+	var maxSize = 1048579; //1048579==1MB
 	//파일 크기
 	//var fileSize = $('#filename').getMaxSize();
 	var fileSize=0;
@@ -66,6 +66,7 @@ $(function(){
 		var files = e.target.files;
 	    // 파일 배열 담기
 	    var filesArr = Array.prototype.slice.call(files);
+	    console.log("filearr 길이 : " + filesArr.length);
 	    //초기화
 	    $('#articlefileChange').html("");
 	    // 파일 개수 확인 및 제한
