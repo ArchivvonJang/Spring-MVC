@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
@@ -356,11 +357,15 @@ public class BoardController {
 		// model 을 사용할 경우, model.addAttribute("vo", boardService.boardSelect(no));
 		
 		BoardVO vo = boardService.boardSelect(no);
-	
+
 		//파일 이름 추가
 		if(vo.getFilename() != null) {
 			// 파일명/ 파일명/ 파일명 으로 된 filename String 쪼개기
 			StringTokenizer tok = new StringTokenizer(vo.getFilename(), "/");
+			//기존의 파일 갯수 
+			int tokLength = tok.countTokens();
+			//System.out.println("edit initialFileLength  : " + tokLength );
+			mav.addObject("initialFileLength", tokLength);
 			mav.addObject("file", tok);
 		}
 		
@@ -375,6 +380,10 @@ public class BoardController {
 	public ModelAndView boardEditOk(BoardVO vo, SearchAndPageVO sapvo,HttpServletRequest req ) {
 		//@RequestParam(value="file", required = false, defaultValue=" ") String file
 		ModelAndView mav = new ModelAndView();
+		
+		//원래올렸던 파일의 길이 구하기!!
+		int initialFileLength = req.getParameterValues("initialFile").length;
+		System.out.println("edit Ok initialFileLength  : " + initialFileLength );
 
 	try {	
 		//파일 업로드 수정
@@ -385,7 +394,7 @@ public class BoardController {
 		
 		// 처음 글쓰기할 때 업로드한 파일 담아놓을 배열
 		String initialFile[] = req.getParameterValues("initialFile");
-		
+
 		//수정하면서 새로 추가하거나 수정되는 파일
 		List<MultipartFile> fileList = mr.getFiles("file");
 		List<String> newUpload = new ArrayList<String>();

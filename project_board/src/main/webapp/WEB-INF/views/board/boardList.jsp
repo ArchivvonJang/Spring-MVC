@@ -341,7 +341,7 @@ function replyNumList(){
 	         	<a class="arrow next" href="boardList?pageNum=${sapvo.startPageNum + sapvo.onePageNum}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▷</a>
 				</c:if>
 				<!--맨뒤로-->
-				<c:if test="${sapvo.pageNum != sapvo.totalPage }">
+				<c:if test="${sapvo.pageNum != sapvo.totalPage && sapvo.pageNum > sapvo.onePageNum}">
 	         	<a class="arrow nnext" href="boardList?pageNum=${sapvo.totalPage}<c:if test="${sapvo.searchWord != null && sapvo.searchWord != ''}">&searchKey=${sapvo.searchKey}&searchWord=${sapvo.searchWord}</c:if>">▶</a>
 			 	</c:if>
 			

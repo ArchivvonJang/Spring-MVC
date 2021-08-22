@@ -24,11 +24,13 @@ $(function(){
 	$('#filename').on('change',checkFile);
 	//파일 삭제 버튼
 	$(".delBtn").click(function(){
-		if(confirm('해당 파일을 삭제하시겠습니까?')){
+	//	if(confirm('해당 파일을 삭제하시겠습니까?')){
 			$(this).prev().attr('name', '');
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).parent().css('display','none');
-		}
+			iniFileLength--;
+			console.log("intial file length BB : " + iniFileLength);
+	//	}
 	});
 	
 /* 	$(".delBtnA").click(function(){
@@ -56,8 +58,12 @@ $(function(){
 	var fileNum = 0;
 	// 첨부파일 배열
 	var attachFiles = new Array();
+
+	var iniFileLength  = [[${initialFileLength}]];
+	console.log("intial file length AA : " + iniFileLength);
 	//var filename = $('#filename').val();
-	
+		
+		
 	//파일용량, 확장자 체크	
 	function checkFileSize(fileName, fileSize){
 		if(fileSize >= maxSize){
@@ -86,9 +92,9 @@ $(function(){
 	    
 	    //수정전 기존의 파일 배열
 	    var initialFiles = new Array();
-	    $('#initialFileDiv').each(function(){
-	    	initialFiles.push($(this).attr('#initialFile'));
-	    	console.log("초기 파일  : " +$(this));
+	    $('#fileContainer').each(function(){
+	    	initialFiles.push($(this).attr('#initialFileDiv'));
+	    	console.log("초기 파일  : " +$(this).length);
 	    }) 
 	    
 	   /*  var initialFiles = $.makeArray($("#initialFileDiv").map(function(){
@@ -102,17 +108,23 @@ $(function(){
 	    console.log("initialFilesArr 의 length : " + initialFilesArr.length );
 	    
 	    // 파일 개수 확인 및 제한
-	    if (fileCount + filesArr.length + initialFilesArr.length > totalCount) {
+	   // console.log("AA 갯수 1 : " + fileCount + filesArr.length );
+	   // console.log("AA 갯수 2 : " + fileCount + filesArr.length );
+	   // console.log("AA 갯수 3 : " + fileCount + filesArr.length + iniFileLength );
+	   //제대로 덧셈됨 console.log("AA 갯수 4 : ", parseInt(fileCount)-0 + parseInt(filesArr.length)-0 + parseInt(iniFileLength) );
+	  
+		var fileTotalCount = parseInt(fileCount)-0 + parseInt(filesArr.length)-0 + parseInt(iniFileLength);
+	    if (fileTotalCount > +totalCount) {
 	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
-	       	console.log("갯수 : " + fileCount + filesArr.length );
-	       	console.log("fileCount : "+ fileCount );
+	       	console.log("전체 갯수 111: " + fileTotalCount );
 	       
 	       	$("#filename").val("");  
 	       	fileCount = 0;
 	        
 	      return false;
 	    } else {
-	    	 fileCount = fileCount + filesArr.length;
+	    	 fileCount = fileTotalCount;
+	    	 console.log("전체 갯수 222 : " + fileTotalCount);
 	    	// $("#filename").val(""); 
 	    }
 	    
@@ -163,16 +175,28 @@ $(function(){
 	}
 	// 파일 부분 삭제 함수
 	function fileDelete(fileNum){
-		/* $(this).prev().attr('name', ''); 
+		 $(this).prev().attr('name', ''); 
 		$(this).parent().next().attr('name', 'delFile');
 		$(this).prev().css('display','none');
-		$(this).css('display','none'); */
+		$(this).css('display','none'); 
 		
-	    var no = fileNum.replace(/[^0-9]/g, ""); 
-	    attachFiles[no].is_delete = true;
-		$('#file' + fileNum).remove();
-		fileCount --;
-	    console.log("delete attachFiles : "+attachFiles);
+	    $.ajax({
+	   	      url: "/boardEdit",
+	       	  data : $("#articlefileChange").val(),
+	   	      success: function (data) {
+	   	       	var no = fileNum.replace(/[^0-9]/g, ""); 
+		   	    attachFiles[no].is_delete = true;
+		   		$('#file' + fileNum).remove();
+		   		fileCount --;
+		   	    console.log("delete attachFiles : "+attachFiles);
+	   	      },
+	   	      error: function () {
+	   	    		console.lg("파일 삭제 실패!!")
+	   	    return false;
+	   	      }
+	   	    }); //ajax end 
+	    
+	    
 	}
 	
 	//폼을 submit
@@ -1017,7 +1041,7 @@ $(function(){
 				<%-- 		<textarea name="content" id="content" required><c:out value="${vo.content}"></c:out></textarea> --%>
 					<span id= "contentLength"></span>/<span id="max_count">500</span><br/>
 				</li>
-				<li >
+				<li id="fileContainer" >
 					<label for="file" for="filename" class="label">첨부파일</label> <span id="notice">첨부파일은 최대 1MB, 최대 5개까지 업로드 가능합니다.</span> <br/>
 							<c:forEach var="file" items="${file}" varStatus="idx">
 								
@@ -1025,6 +1049,7 @@ $(function(){
 						<!-- 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 									<label for="initialFile" style="display:none;"></label>
 									<input type="text" value="${file}" name="initialFile" style="border:none;" id="initialFile" readonly/>
+									<input type="hidden" value="${initialFileLength}" id="initialFileLength"/>
 									<a class="delBtn" href="" onclick="return false;" style=" color:gray; ">⛝</a><br>
 								</div>
 								<input type="hidden" name="" value="${file}">

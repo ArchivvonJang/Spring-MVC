@@ -29,8 +29,13 @@
 		margin-bottom:15px; 
 	 }
 	#content, #commentContent{
+		 padding:10px; width: 100%; height:85px; border:1px solid lightgray; word-break:break-all; overflow:auto;
+		margin-bottom:15px; 
+	}
+	#summernote{
 		 padding:10px; width: 100%; height:500px auto; border:1px solid lightgray; word-break:break-all; overflow:auto;
 		margin-bottom:15px; 
+	
 	}
 	.note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false], .note-editor.note-frame .note-editing-area .note-editable[contenteditable=false] {
     background-color: white; min-height: 350px;
@@ -817,7 +822,7 @@ $(function(){
 			 <input type ="submit" value="댓글등록" id="commentBtn" class="btn" style="float:right;"><br/>
 		</div >
 			<label for="content"></label>
-			<textarea  id="content sub"  name="content"  class="wordCut"  title="content" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
+			<textarea  id="content"  name="content"  class="wordCut"  title="content" maxlength="150" style="margin-bottom:0px; height: 100px; width:100%;"></textarea><span id="commentLength"></span><!-- /<span id="max_count">150</span> -->
 				 <!-- name="content" -->
 		</form>
 		</div>

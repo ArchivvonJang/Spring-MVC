@@ -37,6 +37,7 @@ $(function(){
 	}); //delBtn  */
 	
 	//$('#filename').on('change',checkFileSize);
+
 	$('#filename').on('change',checkFile);
 	
 	
@@ -78,6 +79,7 @@ $(function(){
 	}
 	//파일 리스트 나오게 하기, 삭제는 주석처리함 
 	function checkFile(e){
+		
 		//$('#filename').val("");
 		var files = e.target.files;
 	    // 파일 배열 담기
@@ -87,8 +89,9 @@ $(function(){
 	    
 	    // 파일 개수 확인 및 제한
 	    if (fileCount + filesArr.length > totalCount) {
-	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
+	       	alert('AAA파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
 	        $("#filename").val("");  
+	        $(filesArr).val("");
 	      return false;
 	    } else {
 	    	 fileCount = fileCount + filesArr.length;
