@@ -54,7 +54,7 @@
  		select no, userid, subject, content, filename, orifilename, hit, to_char(writedate, 'YY/MM/DD HH:MI') as writedate from board where no=${param1}
  	</select>
  	<update id="boardUpdate" parameterType="com.myproject.myapp.vo.BoardVO">
- 		update board set subject=#{subject}, content=#{content}, userid=#{userid}, filename=#{filename} where no=${no} 
+ 		update board set subject=#{subject}, content=#{content}, userid=#{userid}, filename=#{file} where no=${no} 
  	</update>
  	<delete id="boardDelete">
  		delete from board where no=${param1}

@@ -28,6 +28,7 @@ $(function(){
 			$(this).prev().attr('name', '');
 			$(this).parent().next().attr('name', 'delFile');
 			$(this).parent().css('display','none');
+		
 			iniFileLength--;
 			console.log("intial file length BB : " + iniFileLength);
 	//	}
@@ -180,7 +181,7 @@ $(function(){
 		$(this).prev().css('display','none');
 		$(this).css('display','none'); 
 		
-	    $.ajax({
+	/*     $.ajax({
 	   	      url: "/boardEdit",
 	       	  data : $("#articlefileChange").val(),
 	   	      success: function (data) {
@@ -195,7 +196,7 @@ $(function(){
 	   	    return false;
 	   	      }
 	   	    }); //ajax end 
-	    
+	     */
 	    
 	}
 	
@@ -214,7 +215,7 @@ $(function(){
 
 	//파일업로드 multiple ajax처리
     
-/* 	 	$.ajax({
+   	$.ajax({
 	   	      type: "POST",
 	   	   	  enctype: "multipart/form-data",
 	   	      url: "/upload",
@@ -233,7 +234,7 @@ $(function(){
 	   	      }
 	   	    }); //ajax end 
 	   	    
-	   	    */ 
+	   	    
 	   	    
 	   	    return false;
 	} // function registerAction end
@@ -1049,7 +1050,6 @@ $(function(){
 						<!-- 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 									<label for="initialFile" style="display:none;"></label>
 									<input type="text" value="${file}" name="initialFile" style="border:none;" id="initialFile" readonly/>
-									<input type="hidden" value="${initialFileLength}" id="initialFileLength"/>
 									<a class="delBtn" href="" onclick="return false;" style=" color:gray; ">⛝</a><br>
 								</div>
 								<input type="hidden" name="" value="${file}">

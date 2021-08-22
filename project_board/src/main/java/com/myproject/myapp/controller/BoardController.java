@@ -382,8 +382,8 @@ public class BoardController {
 		ModelAndView mav = new ModelAndView();
 		
 		//원래올렸던 파일의 길이 구하기!!
-		int initialFileLength = req.getParameterValues("initialFile").length;
-		System.out.println("edit Ok initialFileLength  : " + initialFileLength );
+		//int initialFileLength = req.getParameterValues("initialFile").length;
+		//System.out.println("edit Ok initialFileLength  : " + initialFileLength );
 
 	try {	
 		//파일 업로드 수정
@@ -460,10 +460,13 @@ public class BoardController {
 			String delFile[] = req.getParameterValues("delFile");
 			if(delFile != null) {
 				for(String dFile : delFile) {
+				//	System.out.println("d length AA : " + dFile);
 					try {
 						System.out.println("<< boardEdit 파일 삭제 성공 >>" );
 						File dFileObj = new File(path, dFile);
+						//System.out.println("d length BB : " + dFile);
 						dFileObj.delete();
+						//System.out.println(" dFileObj 확인 :" +dFileObj);
 					}catch(Exception e) {
 						System.out.println("<< boardEdit 파일 삭제 실패 >>" );
 						e.printStackTrace();
