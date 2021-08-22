@@ -176,11 +176,11 @@ $(function(){
 	}
 	// 파일 부분 삭제 함수
 	function fileDelete(fileNum){
-		 $(this).prev().attr('name', ''); 
-		$(this).parent().next().attr('name', 'delFile');
-		$(this).prev().css('display','none');
-		$(this).css('display','none'); 
 		
+		$(this).prev().attr('name', '');
+		$(this).parent().next().attr('name', 'delFile');
+		$(this).parent().css('display','none');
+	
 	/*     $.ajax({
 	   	      url: "/boardEdit",
 	       	  data : $("#articlefileChange").val(),

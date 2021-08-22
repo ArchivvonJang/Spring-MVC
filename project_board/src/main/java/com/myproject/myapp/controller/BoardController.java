@@ -440,11 +440,31 @@ public class BoardController {
 			}// for mf end
 		}// if fileList null end
 		
+		//수정하면서 삭제된 파일들
+		String delFile[] = req.getParameterValues("delFile");
+		if(delFile != null) {
+			for(String dFile : delFile) {
+			//	System.out.println("d length AA : " + dFile);
+				try {
+					System.out.println("<< boardEdit 파일 삭제 성공 >>" );
+					File dFileObj = new File(path, dFile);
+					//System.out.println("d length BB : " + dFile);
+					dFileObj.delete();
+					//System.out.println(" dFileObj 확인 :" +dFileObj);
+				}catch(Exception e) {
+					System.out.println("<< boardEdit 파일 삭제 실패 >>" );
+					e.printStackTrace();
+				}
+			}
+		}// if delfile null end
+		
 		//기존에 남아있는 파일(초기 글쓰기에 첨부된 파일)들과 새로운 추가된 파일들
 		if(!newUpload.isEmpty()) {
 			String filename = "";
+			
 			for(int i=0; i<newUpload.size(); i++) {
 				filename = filename + newUpload.get(i)+"/";
+				System.out.println("newUplaod filename : "+filename);
 			}
 			vo.setFilename(filename);
 		}
@@ -455,25 +475,6 @@ public class BoardController {
 		int result = boardService.boardUpdate(vo);
 		//System.out.println("EditOk --> update result : " + result);
 		if(result>0) {
-		
-			//수정하면서 삭제된 파일들
-			String delFile[] = req.getParameterValues("delFile");
-			if(delFile != null) {
-				for(String dFile : delFile) {
-				//	System.out.println("d length AA : " + dFile);
-					try {
-						System.out.println("<< boardEdit 파일 삭제 성공 >>" );
-						File dFileObj = new File(path, dFile);
-						//System.out.println("d length BB : " + dFile);
-						dFileObj.delete();
-						//System.out.println(" dFileObj 확인 :" +dFileObj);
-					}catch(Exception e) {
-						System.out.println("<< boardEdit 파일 삭제 실패 >>" );
-						e.printStackTrace();
-					}
-				}
-			}// if delfile null end
-			//수정 시 첨부파일이 없으면 에러가 나므로 null을 setting
 		
 			mav.setViewName("redirect:/boardView");
 			System.out.println("controller : 수정성공");
