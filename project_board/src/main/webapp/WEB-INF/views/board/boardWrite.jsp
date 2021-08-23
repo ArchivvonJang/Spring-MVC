@@ -4,7 +4,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>write form</title>
+<title>글쓰기</title>
 <meta name="viewport" content ="width=device-width, initial-scale=1"/>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>	
 		<!-- include libraries(jQuery, bootstrap) -->
@@ -87,14 +87,18 @@ $(function(){
 	    //초기화
 	    $('#articlefileChange').html("");
 	    
+	    //업로드된 파일 갯수
+	    var fileTotalCount = parseInt(fileCount)-0 + parseInt(filesArr.length);
 	    // 파일 개수 확인 및 제한
-	    if (fileCount + filesArr.length > totalCount) {
-	       	alert('AAA파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
-	        $("#filename").val("");  
+	    if (fileTotalCount > totalCount) {
+	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
+	      //초기화
+	       	$("#filename").val("");  
 	        $(filesArr).val("");
+	    	fileCount = 0;
 	      return false;
 	    } else {
-	    	 fileCount = fileCount + filesArr.length;
+	    	 fileCount = fileTotalCount;
 	    }
 	    
 	 // 각각의 파일 배열담기 및 기타

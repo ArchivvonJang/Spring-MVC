@@ -69,13 +69,20 @@ $(function(){
 	    console.log("filearr 길이 : " + filesArr.length);
 	    //초기화
 	    $('#articlefileChange').html("");
+	    
+	    //업로드된 파일 갯수
+	    var fileTotalCount = parseInt(fileCount)-0 + parseInt(filesArr.length);
+	   	console.log("replywrite --> fileTotalCount : " + fileTotalCount);
 	    // 파일 개수 확인 및 제한
-	    if (fileCount + filesArr.length > totalCount) {
+	    if (fileTotalCount > totalCount) {
 	       	alert('파일은 최대 '+totalCount+'개까지 업로드 할 수 있습니다.\n다시 시도해주세요.');
-	        $("#filename").val("");  
+	      //초기화
+	       	$("#filename").val("");  
+	        $(filesArr).val("");
+	    	fileCount = 0;
 	      return false;
 	    } else {
-	    	 fileCount = fileCount + filesArr.length;
+	    	 fileCount = fileTotalCount;
 	    }
 	    
 	 // 각각의 파일 배열담기 및 기타

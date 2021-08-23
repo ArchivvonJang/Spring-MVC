@@ -25,9 +25,9 @@
 	.menu, h1{
 		color:#4289DB; font-weight:bold; text-align:center;
 	}
-	#boardList li:nth-child(7n+2){width:55%; text-align:left;}
+	#boardList li:nth-child(7n+2){width:54%; text-align:left;}
 	#boardList li:nth-child(7n+2) a{color:black; }
-	#boardList li:nth-child(7n+4){width:8%;}
+	#boardList li:nth-child(7n+4){width:9%;}
 	#boardList li:nth-child(7n+7){width:9%;}
 	.search_container{
 		text-align:right; line-height:30px;
