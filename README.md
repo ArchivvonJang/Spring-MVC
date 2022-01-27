@@ -1,4 +1,4 @@
-# Spring-MVC 
+# spring-mvc-board
 > spring mvc 패턴을 활용한 게시판 구현
 
 ### 프로젝트 소개
