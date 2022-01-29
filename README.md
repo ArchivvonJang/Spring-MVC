@@ -23,7 +23,7 @@
 
 * 확장성을 위한 객체지향의 기본 원리 DIP, OCP 준수
 * Spring framework의 IOC/DI , AOP의 활용
-* Runtime Exception 예외처리 선정과 그 종류에 따른 Http Status 응답 고려
+<!--* Runtime Exception 예외처리 선정과 그 종류에 따른 Http Status 응답 고려-->
 
 
 ### 상세기능 
