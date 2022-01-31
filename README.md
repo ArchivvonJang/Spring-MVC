@@ -38,3 +38,6 @@
 * 페이징
 
 
+## Result
+![board_thumb](https://user-images.githubusercontent.com/76926509/151764212-358cd1bb-85a8-46ae-9f40-1a374566cf5c.png)
+
